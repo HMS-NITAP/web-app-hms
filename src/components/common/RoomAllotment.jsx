@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, FlatList, StyleSheet, Modal } from 'react
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchHostelBlockRooms,fetchHostelBlockNames } from '../../services/operations/CommonAPI';
 import { useToast } from 'react-native-toast-notifications';
-import { setRegistrationData, setRegistrationStep } from '../../reducer/slices/AuthSlice';
+import { setRegistrationData, setRegistrationStep } from '../../reducers/slices/AuthSlice';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { createStudentAccount } from '../../services/operations/AuthAPI';
 

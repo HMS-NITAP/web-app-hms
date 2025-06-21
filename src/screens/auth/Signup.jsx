@@ -4,7 +4,7 @@ import MainButton from '../../components/common/MainButton'
 import { RadioButton } from 'react-native-paper'
 import { useForm, Controller } from 'react-hook-form'
 import {useDispatch} from 'react-redux';
-import { setSignUpData } from '../../reducer/slices/AuthSlice'
+import { setSignUpData } from '../../reducers/slices/AuthSlice'
 import { sendOTP } from '../../services/operations/AuthAPI'
 import { AccountType } from '../../static/AccountType'
 import { useToast } from "react-native-toast-notifications";

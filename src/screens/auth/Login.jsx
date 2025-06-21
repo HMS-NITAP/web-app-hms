@@ -5,16 +5,20 @@ import { useDispatch } from 'react-redux';
 import { toast } from 'react-hot-toast';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import MainButton from '../../components/common/MainButton';
+import { login } from '../../services/operations/AuthAPI';
+import { useNavigate } from 'react-router-dom';
 
-const Login = ({ navigate }) => {
+const Login = ({ }) => {
   const dispatch = useDispatch();
   const { control, handleSubmit, formState: { errors } } = useForm();
   const [secureText, setSecureText] = useState(true);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
+  const navigate = useNavigate();
+
   const onSubmit = async (data) => {
     setIsButtonDisabled(true);
-    // await dispatch(login(data.email, data.password, toast));
+    await dispatch(login(data.email, data.password, toast, navigate));
     setIsButtonDisabled(false);
   };
 

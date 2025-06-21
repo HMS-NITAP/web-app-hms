@@ -11,14 +11,13 @@ const App = () => {
   const {token} = useSelector((state) => state.Auth);
   const {user} = useSelector((state) => state.Profile);
 
-  console.log("TOKEN", token);
 
   return (
     <div className='w-[100vw] h-[100vh] overflow-hidden flex flex-col items-center bg-gray-100'>
       <Navbar />
       
       {
-        !token && (
+        (!token || !user) && (
           <Routes>
             {
               authRoutes.map((route) => {
@@ -39,12 +38,17 @@ const App = () => {
         token && user && user.accountType == USER_ROLES.ADMIN && (
           <Routes>
             {
-              adminRoutes.map((route) => {
-                if(!route.role) return <Route path={route.path} element={route.element} />
-                else return (
-                  <PrivateRoute allowedRoutes={route.role}>
-                    <Route path={route.path} element={route.element} />
-                  </PrivateRoute>
+              adminRoutes.map((route, index) => {
+                const element = !route.role
+                  ? route.element
+                  : <PrivateRoute allowedRoutes={route.role}>{route.element}</PrivateRoute>;
+
+                return (
+                  <Route
+                    key={index}
+                    path={route.path}
+                    element={element}
+                  />
                 )
               })
             }
@@ -57,12 +61,17 @@ const App = () => {
         token && user && user.accountType == USER_ROLES.STUDENT && (
           <Routes>
             {
-              studentRoutes.map((route) => {
-                if(!route.role) return <Route path={route.path} element={route.element} />
-                else return (
-                  <PrivateRoute allowedRoutes={route.role}>
-                    <Route path={route.path} element={route.element} />
-                  </PrivateRoute>
+              studentRoutes.map((route, index) => {
+                const element = !route.role
+                  ? route.element
+                  : <PrivateRoute allowedRoutes={route.role}>{route.element}</PrivateRoute>;
+
+                return (
+                  <Route
+                    key={index}
+                    path={route.path}
+                    element={element}
+                  />
                 )
               })
             }
@@ -75,12 +84,17 @@ const App = () => {
         token && user && user.accountType == USER_ROLES.OFFICIAL && (
           <Routes>
             {
-              officialRoutes.map((route) => {
-                if(!route.role) return <Route path={route.path} element={route.element} />
-                else return (
-                  <PrivateRoute allowedRoutes={route.role}>
-                    <Route path={route.path} element={route.element} />
-                  </PrivateRoute>
+              officialRoutes.map((route, index) => {
+                const element = !route.role
+                  ? route.element
+                  : <PrivateRoute allowedRoutes={route.role}>{route.element}</PrivateRoute>;
+
+                return (
+                  <Route
+                    key={index}
+                    path={route.path}
+                    element={element}
+                  />
                 )
               })
             }

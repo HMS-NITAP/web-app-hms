@@ -5,7 +5,7 @@ import MainButton from './MainButton';
 import {useSelector,useDispatch} from 'react-redux';
 import { verifyOtp } from '../../services/operations/AuthAPI';
 import { useToast } from 'react-native-toast-notifications';
-import { setRegistrationStep } from '../../reducer/slices/AuthSlice';
+import { setRegistrationStep } from '../../reducers/slices/AuthSlice';
 
 const OtpVerification = () => {
 

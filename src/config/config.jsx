@@ -22,7 +22,7 @@ import Login from '../screens/auth/Login';
 // import OutingApplication from '../screens/student/OutingApplication';
 // import RegisterComplaint from '../screens/student/RegisterComplaint';
 // import OtpInput from '../screens/auth/OtpInput';
-// import Gallery from '../screens/institute/Gallary';
+import Gallery from '../screens/institute/Gallary';
 // import LogoutModal from '../screens/common/LogoutModal';
 // import Announcements from '../screens/common/Announcements';
 // import OutingRequest from '../screens/official/OutingRequest';
@@ -58,14 +58,14 @@ export const USER_ROLES = {
 };
 
 export const authRoutes = [
-  { path: "/login", element: <Login />, label: "Login", icon: <FaRightToBracket />, role: null },
+  { path: "/", element: <Login />, label: "Login", icon: <FaRightToBracket />, role: null },
   // { path: "/student-registration", element: <StudentRegistration />, label: "Student Registration", icon: <FaAddressCard />, role: null },
   // { path: "/announcements", element: <Announcements />, label: "Announcements", icon: <FaBullhorn />, role: null },
   // { path: "/hostel-blocks", element: <HostelsBlocks />, label: "Hostel Blocks", icon: <FaBuilding />, role: null },
   // { path: "/mess-menu", element: <MessMenu />, label: "Mess Menu", icon: <FaBowlFood />, role: null },
   // { path: "/contact-us", element: <ContactUs />, label: "Contact Us", icon: <FaAddressBook />, role: null },
   // { path: "/development-team", element: <DevelopmentTeam />, label: "Development Team", icon: <FaUsers />, role: null },
-  // { path: "/gallery", element: <Gallery />, label: "Gallery", icon: <FaImage />, role: null },
+  { path: "/gallery", element: <Gallery />, label: "Gallery", icon: <FaImage />, role: null },
   // { path: "/view-feedback", element: <ViewMessFeedBack />, label: "View Mess Feedback", icon: <FaStar />, role: null },
 
   // { path: "/reset-password-email-sent", element: <ResetPasswordMailSent />, role: null, hidden: true },

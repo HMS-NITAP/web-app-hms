@@ -1,9 +1,8 @@
-import { setToken } from "../../reducer/slices/AuthSlice";
-import { setUser } from "../../reducer/slices/ProfileSlice";
+import { USER_ROLES } from "../../config/config";
+import { setToken } from "../../reducers/slices/AuthSlice";
+import { setUser } from "../../reducers/slices/ProfileSlice";
 import { APIconnector } from "../APIconnector";
 import { authEndPoints } from "../APIs";
-import localStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
 
 const {SENDOTP_API,SIGNUP_API,LOGIN_API,RESET_PASSWORD_TOKEN,RESET_PASSWORD,VERIFY_OTP,CREATE_STUDENT_ACCOUNT_API} = authEndPoints;
 
@@ -19,7 +18,7 @@ export const sendOTP = (email,navigation,toast) => {
             navigation.navigate("OtpInput");
         }catch(e){
             const errorMessage = e?.response?.data?.message || "OTP generation Unsuccessful";
-            toast.show(errorMessage);
+            toast.error(errorMessage);
             console.log(e);
         }
     }
@@ -49,29 +48,42 @@ export const signUp = (data,otp,navigation,toast) => {
     }
 }
 
-export const login = (email,password,toast) => {
+export const login = (email,password,toast,navigate) => {
     return async(dispatch) => {
-        let id = toast.show("Please Wait...", {type:"normal"});
+        let id = toast("Please Wait...");
         try{
             const response = await APIconnector("POST",LOGIN_API,{email,password});
 
+            console.log("RESPONSE", response?.data);
             if(!response.data.success){
                 toast.dismiss(id);
                 toast.error(response.data.message);
                 throw new Error(response.data.message);
             }
 
-            await dispatch(setToken(response?.data?.token));
-            await localStorage.setItem("token",JSON.stringify(response.data.token));
-            await localStorage.setItem("user",JSON.stringify(response?.data?.user));
-            await dispatch(setUser(response?.data?.user));
+            localStorage.setItem("token",JSON.stringify(response.data.token));
+            localStorage.setItem("user",JSON.stringify(response?.data?.user));
+            dispatch(setToken(response?.data?.token));
+            dispatch(setUser(response?.data?.user));
+
+            console.log(response?.data?.user?.accountType, response?.data?.user?.accountType === USER_ROLES.OFFICIAL);
+
+            if(response?.data?.user?.accountType === USER_ROLES.STUDENT){
+                navigate('/student/dashboard');
+            }else if(response?.data?.user?.accountType === USER_ROLES.OFFICIAL){
+                console.log("FDFDGFG");
+                navigate('/official/dashboard');
+            }else if(response?.data?.user?.accountType === USER_ROLES.ADMIN){
+                navigate('/admin/dashboard');
+            }
 
             toast.dismiss(id);
-            toast.show("Login Successful");
+            toast.success("Login Successful");
         }catch(e){
+            console.log("e", e);
             const errorMessage = e?.response?.data?.message || "Login Failed";
             toast.dismiss(id);
-            toast.show(errorMessage);
+            toast.error(errorMessage);
         }
     }
 }

@@ -2,7 +2,7 @@ import React from 'react'
 import { ScrollView, Text, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import MainButton from '../../components/common/MainButton';
-import { setRegistrationStep } from '../../reducer/slices/AuthSlice';
+import { setRegistrationStep } from '../../reducers/slices/AuthSlice';
 import { useToast } from 'react-native-toast-notifications';
 import ProgressIndicator from '../../components/common/ProgressIndicator';
 import StudentRegistrationForm from '../../components/common/StudentRegistrationForm';

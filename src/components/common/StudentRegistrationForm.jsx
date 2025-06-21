@@ -9,7 +9,7 @@ import DocumentPicker from 'react-native-document-picker';
 import { useToast } from 'react-native-toast-notifications';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import DatePicker from 'react-native-date-picker'
-import { setRegistrationData, setRegistrationStep } from '../../reducer/slices/AuthSlice';
+import { setRegistrationData, setRegistrationStep } from '../../reducers/slices/AuthSlice';
 import { sendOtpToStudent } from '../../services/operations/AuthAPI';
 
 const MAX_FILE_SIZE = 250 * 1024;

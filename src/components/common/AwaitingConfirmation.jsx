@@ -3,7 +3,7 @@ import { View, Text } from 'react-native'
 import MainButton from './MainButton'
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { setRegistrationData, setRegistrationStep } from '../../reducer/slices/AuthSlice';
+import { setRegistrationData, setRegistrationStep } from '../../reducers/slices/AuthSlice';
 
 const AwaitingConfirmation = ({}) => {
 
