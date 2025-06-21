@@ -2,7 +2,7 @@ import { setToken } from "../../reducer/slices/AuthSlice";
 import { setUser } from "../../reducer/slices/ProfileSlice";
 import { APIconnector } from "../APIconnector";
 import { authEndPoints } from "../APIs";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import localStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 const {SENDOTP_API,SIGNUP_API,LOGIN_API,RESET_PASSWORD_TOKEN,RESET_PASSWORD,VERIFY_OTP,CREATE_STUDENT_ACCOUNT_API} = authEndPoints;
@@ -62,8 +62,8 @@ export const login = (email,password,toast) => {
             }
 
             await dispatch(setToken(response?.data?.token));
-            await AsyncStorage.setItem("token",JSON.stringify(response.data.token));
-            await AsyncStorage.setItem("user",JSON.stringify(response?.data?.user));
+            await localStorage.setItem("token",JSON.stringify(response.data.token));
+            await localStorage.setItem("user",JSON.stringify(response?.data?.user));
             await dispatch(setUser(response?.data?.user));
 
             toast.dismiss(id);
@@ -129,8 +129,8 @@ export const logout = (toast) => {
         try{
             await dispatch(setToken(null));
             await dispatch(setUser(null));
-            await AsyncStorage.removeItem("token");
-            await AsyncStorage.removeItem("user");
+            await localStorage.removeItem("token");
+            await localStorage.removeItem("user");
             toast.show("Successfully Logged Out from Account");
         }catch(e){
             toast.show("Logout Unsuccessful");

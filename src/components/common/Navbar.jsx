@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Drawer from 'react-modern-drawer';
 import 'react-modern-drawer/dist/index.css';
-import { AiOutlineMenu } from 'react-icons/ai'; // ✅ React Icons
+import { AiOutlineMenu } from 'react-icons/ai';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,16 +10,13 @@ const Navbar = () => {
   return (
     <>
       <div className="w-full h-14 px-4 flex justify-between items-center backdrop-blur-md bg-black/40 border-b border-white/10 text-white shadow-md">
-        {/* Menu Icon */}
         <div className="cursor-pointer" onClick={toggleDrawer}>
           <AiOutlineMenu size={24} />
         </div>
 
-        {/* Simple Title */}
         <div className="text-lg font-medium tracking-wide">Profile</div>
       </div>
 
-      {/* Side Drawer */}
       <Drawer
         open={isOpen}
         onClose={toggleDrawer}
