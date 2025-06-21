@@ -1,77 +1,78 @@
-import React, { useCallback, useState } from 'react'
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
-import { useToast } from 'react-native-toast-notifications';
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchDashboardData } from '../../services/operations/AdminAPI';
-import { useFocusEffect } from '@react-navigation/native';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 
-const AdminDashboard = ({navigation}) => {
+const AdminDashboard = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { token } = useSelector((state) => state.Auth);
 
-    const dispatch = useDispatch();
-    const {token} = useSelector((state) => state.Auth);
-    const toast = useToast();
+  const [dashboardData, setDashboardData] = useState(null);
 
-    const [dashboardData, setDashboardData] = useState(null);
+  const fetchData = async () => {
+    setDashboardData(null);
+    const response = await dispatch(fetchDashboardData(token, toast));
+    setDashboardData(response);
+  };
 
-    const fetchData = async() => {
-        setDashboardData(null);
-        const response = await dispatch(fetchDashboardData(token,toast));
-        setDashboardData(response);
-    }
+  useEffect(() => {
+    fetchData();
+  }, [token]);
 
-    useFocusEffect(
-        useCallback(() => {
-          fetchData();
-        }, [token,toast])
-    );
-
-    const moveToBlock = (hostelBlockId,hostelBlockName,floors) => {
-        const floorCount = parseInt(floors);
-        navigation.navigate("Block Rooms",{hostelBlockId,hostelBlockName,floorCount});
-    }
+  const moveToBlock = (hostelBlockId, hostelBlockName, floors) => {
+    const floorCount = parseInt(floors);
+    navigate("/admin/block-rooms", {
+      state: { hostelBlockId, hostelBlockName, floorCount },
+    });
+  };
 
   return (
-    <ScrollView contentContainerStyle={{width:"100%", display:"flex", flexDirection:"column", padding:15, justifyContent:"center", alignItems:"center", gap:20}}>
-        {
-            dashboardData && (
-                <View style={{width:"100%", marginHorizontal:"auto", display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", gap:20}}>
-                    <View style={{width:"100%", marginHorizontal:"auto", padding:10, borderWidth:1, borderColor:"black", borderRadius:15, backgroundColor:"white", borderStyle:"dashed"}}>
-                        <Text style={{textAlign:"center", color:"black", fontSize:18, fontWeight:"700", marginBottom:10}}>OVERALL DATA</Text>
+    <div className="w-full min-h-screen p-6 bg-gray-100 flex flex-col items-center gap-6 overflow-y-auto">
+      {dashboardData && (
+        <div className="w-full max-w-4xl flex flex-col items-center gap-6">
+          {/* Overall Stats */}
+          <div className="w-full p-6 bg-white border border-dashed border-black rounded-xl shadow">
+            <h2 className="text-center text-lg font-bold mb-4 text-black">OVERALL DATA</h2>
 
-                        <Text style={{color:"black",fontSize:15, fontWeight:"600"}}>Total Registrations : <Text>{dashboardData?.activeStudentsCount + dashboardData?.freezedStudentsCount + dashboardData?.inactiveStudentsCount}</Text></Text>
-                        <Text style={{color:"black",fontSize:15, fontWeight:"600"}}>Completed Registrations : <Text>{dashboardData?.activeStudentsCount}</Text></Text>
-                        <Text style={{color:"black",fontSize:15, fontWeight:"600"}}>Freezed Registrations : <Text>{dashboardData?.freezedStudentsCount}</Text></Text>
-                        <Text style={{color:"black",fontSize:15, fontWeight:"600"}}>Pending Registrations : <Text>{dashboardData?.inactiveStudentsCount}</Text></Text>
+            <p className="text-black font-semibold">Total Registrations: {dashboardData.activeStudentsCount + dashboardData.freezedStudentsCount + dashboardData.inactiveStudentsCount}</p>
+            <p className="text-black font-semibold">Completed Registrations: {dashboardData.activeStudentsCount}</p>
+            <p className="text-black font-semibold">Freezed Registrations: {dashboardData.freezedStudentsCount}</p>
+            <p className="text-black font-semibold">Pending Registrations: {dashboardData.inactiveStudentsCount}</p>
 
-                        <Text style={{color:"black",fontSize:15, fontWeight:"600", marginTop:10}}>Total Cots : <Text>{dashboardData?.overallAvailableCots + dashboardData?.overallBlockedCots + dashboardData?.overallBookedCots}</Text></Text>
-                        <Text style={{color:"black",fontSize:15, fontWeight:"600"}}>Available Cots : <Text>{dashboardData?.overallAvailableCots}</Text></Text>
-                        <Text style={{color:"black",fontSize:15, fontWeight:"600"}}>Blocked Cots : <Text>{dashboardData?.overallBlockedCots}</Text></Text>
-                        <Text style={{color:"black",fontSize:15, fontWeight:"600"}}>Booked Cots : <Text>{dashboardData?.overallBookedCots}</Text></Text>
-                    </View>
+            <div className="mt-4" />
+            <p className="text-black font-semibold">Total Cots: {dashboardData.overallAvailableCots + dashboardData.overallBlockedCots + dashboardData.overallBookedCots}</p>
+            <p className="text-black font-semibold">Available Cots: {dashboardData.overallAvailableCots}</p>
+            <p className="text-black font-semibold">Blocked Cots: {dashboardData.overallBlockedCots}</p>
+            <p className="text-black font-semibold">Booked Cots: {dashboardData.overallBookedCots}</p>
+          </div>
 
-                    <Text style={{textAlign:"center", fontSize:20, fontWeight:800, color:"#6c757d"}}>HOSTEL BLOCKS</Text>
+          {/* Hostel Blocks */}
+          <h2 className="text-2xl font-extrabold text-gray-600 text-center">HOSTEL BLOCKS</h2>
 
-                    <View style={{width:"100%", display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", gap:15}}>
-                        {
-                            dashboardData?.formattedResult?.map((data,index) => (
-                                <TouchableOpacity onPress={() => moveToBlock(data?.blockId,data?.blockName,data?.floorCount)} key={index} style={{width:"100%", display:"flex", flexDirection:"column", padding:10, borderColor:"black", borderRadius:15, borderWidth:1}}>
-                                    <Text style={{textAlign:"center", fontWeight:"700", color:"black", fontSize:20}}>{data?.blockName}</Text>
-                                    <View style={{display:"flex", flexDirection:"column", justifyContent:"flex-start", gap:5, marginTop:10}}>
-                                        <Text style={{textAlign:"center", fontWeight:"700", color:"black", fontSize:15}}>Total Rooms: {data?.totalRooms}</Text>
-                                        <Text style={{textAlign:"center", fontWeight:"700", color:"black", fontSize:15}}>Total Cots: {data?.totalCots}</Text>
-                                        <Text style={{textAlign:"center", fontWeight:"700", color:"black", fontSize:15}}>Available Cots: {data?.availableCots}</Text>
-                                        <Text style={{textAlign:"center", fontWeight:"700", color:"black", fontSize:15}}>Blocked Cots: {data?.blockedCots}</Text>
-                                        <Text style={{textAlign:"center", fontWeight:"700", color:"black", fontSize:15}}>Booked Cots: {data?.bookedCots}</Text>
-                                    </View>
-                                </TouchableOpacity>
-                            ))
-                        }
-                    </View>
-                </View>
-            )
-        }
-    </ScrollView>
-  )
-}
+          <div className="w-full grid gap-4 grid-cols-1 md:grid-cols-2">
+            {dashboardData.formattedResult.map((data, index) => (
+              <div
+                key={index}
+                onClick={() => moveToBlock(data.blockId, data.blockName, data.floorCount)}
+                className="cursor-pointer p-4 bg-white border border-black rounded-lg hover:shadow-lg transition"
+              >
+                <h3 className="text-center text-xl font-bold text-black">{data.blockName}</h3>
+                <div className="mt-3 text-sm text-black space-y-1 text-center">
+                  <p>Total Rooms: {data.totalRooms}</p>
+                  <p>Total Cots: {data.totalCots}</p>
+                  <p>Available Cots: {data.availableCots}</p>
+                  <p>Blocked Cots: {data.blockedCots}</p>
+                  <p>Booked Cots: {data.bookedCots}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
-export default AdminDashboard
+export default AdminDashboard;

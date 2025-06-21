@@ -1,109 +1,89 @@
-import { useFocusEffect } from '@react-navigation/native';
-import React, { useCallback, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import { useToast } from 'react-native-toast-notifications';
+import React, { useCallback, useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDashboardData } from '../../services/operations/OfficialAPI';
 
 const OfficialDashboard = () => {
-    
     const [dashboardData, setDashboardData] = useState(null); 
     
-    const {token} = useSelector((state) => state.Auth);
-    const toast = useToast();
+    const { token } = useSelector((state) => state.Auth);
+    const dispatch = useDispatch();
 
-    const  dispatch = useDispatch();
+    const fetchData = useCallback(async () => {
+        try {
+            const response = await dispatch(fetchDashboardData(token, toast));
+            setDashboardData(response);
+        } catch (error) {
+            toast.error('Failed to fetch dashboard data');
+        }
+    }, [token, dispatch]);
 
-    const fetchData = async() => {
-        const response = await dispatch(fetchDashboardData(token,toast));
-        setDashboardData(response);
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
+
+    if (!dashboardData) {
+        return (
+            <div className="flex justify-center items-center mt-8">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto mb-4"></div>
+                    <p className="text-black text-lg font-bold">Please Wait...</p>
+                </div>
+            </div>
+        );
     }
 
-    useFocusEffect(
-        useCallback(() => {
-          fetchData();
-        }, [token,toast])
-    );
-
     return (
-        
-            !dashboardData ? (<View style={{marginTop:30, marginHorizontal:"auto"}}><Text style={{color:"black", textAlign:"center", fontSize:18, fontWeight:"700"}}>Please Wait...</Text></View>) : (
-                <ScrollView contentContainerStyle={styles.container}>
-                    <View style={styles.card}>
-                        <Text style={styles.label}>Name:</Text>
-                        <Text style={styles.value}>{dashboardData?.official?.name}</Text>
-                    </View>
-                    <View style={styles.card}>
-                        <Text style={styles.label}>Email:</Text>
-                        <Text style={styles.value}>{dashboardData?.email}</Text>
-                    </View>
-                    <View style={styles.card}>
-                        <Text style={styles.label}>Gender:</Text>
-                        <Text style={styles.value}>{dashboardData?.official?.gender==="M" ? "Male" : "Female"}</Text>
-                    </View>
-                    <View style={styles.card}>
-                        <Text style={styles.label}>Phone:</Text>
-                        <Text style={styles.value}>{dashboardData?.official?.phone}</Text>
-                    </View>
-                    <View style={styles.card}>
-                        <Text style={styles.label}>Designation:</Text>
-                        <Text style={styles.value}>{dashboardData?.official?.designation}</Text>
-                    </View>
-                    <View style={styles.card}>
-                        <Text style={styles.label}>Hostel Block:</Text>
-                        <Text style={[styles.value, dashboardData?.official?.hostelBlock ? styles.blockName : styles.noBlockAssigned]}>
+        <div className="w-full flex flex-col justify-center items-center my-5 px-4">
+            <div className="w-full max-w-2xl space-y-3">
+                <div className="w-full bg-white px-5 py-3 rounded-lg border border-green-300 flex justify-start items-center shadow-sm">
+                    <span className="font-bold text-base text-green-700">Name:</span>
+                    <span className="text-base ml-3 text-black font-medium">
+                        {dashboardData?.official?.name}
+                    </span>
+                </div>
+
+                <div className="w-full bg-white px-5 py-3 rounded-lg border border-green-300 flex justify-start items-center shadow-sm">
+                    <span className="font-bold text-base text-green-700">Email:</span>
+                    <span className="text-base ml-3 text-black font-medium">
+                        {dashboardData?.email}
+                    </span>
+                </div>
+
+                <div className="w-full bg-white px-5 py-3 rounded-lg border border-green-300 flex justify-start items-center shadow-sm">
+                    <span className="font-bold text-base text-green-700">Gender:</span>
+                    <span className="text-base ml-3 text-black font-medium">
+                        {dashboardData?.official?.gender === "M" ? "Male" : "Female"}
+                    </span>
+                </div>
+
+                <div className="w-full bg-white px-5 py-3 rounded-lg border border-green-300 flex justify-start items-center shadow-sm">
+                    <span className="font-bold text-base text-green-700">Phone:</span>
+                    <span className="text-base ml-3 text-black font-medium">
+                        {dashboardData?.official?.phone}
+                    </span>
+                </div>
+
+                <div className="w-full bg-white px-5 py-3 rounded-lg border border-green-300 flex justify-start items-center shadow-sm">
+                    <span className="font-bold text-base text-green-700">Designation:</span>
+                    <span className="text-base ml-3 text-black font-medium">
+                        {dashboardData?.official?.designation}
+                    </span>
+                </div>
+
+                <div className="w-full bg-white px-5 py-3 rounded-lg border border-green-300 flex justify-start items-center shadow-sm">
+                    <span className="font-bold text-base text-green-700">Hostel Block:</span>
+                    <span className={`text-base ml-3 font-semibold ${
+                        dashboardData?.official?.hostelBlock 
+                            ? 'text-green-600' 
+                            : 'text-red-600 text-sm'
+                    }`}>
                         {dashboardData?.official?.hostelBlock?.name || "NO HOSTEL BLOCK ASSIGNED"}
-                        </Text>
-                    </View>
-                </ScrollView>
-            )
-        
-      );
-}
+                    </span>
+                </div>
+            </div>
+        </div>
+    );
+};
 
-export default OfficialDashboard
-
-const styles = StyleSheet.create({
-    container: {
-      width:"100%",
-      display:"flex",
-      flexDirection:"column",
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginVertical:20,
-    },
-    card: {
-      width: '95%',
-      backgroundColor: '#fff',
-      paddingHorizontal: 20,
-      paddingVertical: 10,
-      marginBottom: 10,
-      borderRadius: 10,
-      borderWidth: 1,
-      borderColor: '#aed581', 
-      flexDirection: 'row',
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-    },
-    label: {
-      fontWeight: 'bold',
-      fontSize: 16,
-      color: '#388e3c', 
-    },
-    value: {
-      fontSize: 16,
-      marginLeft: 10,
-      color:"black",
-      fontWeight:"500",
-    },
-    blockName: {
-      color: '#38b000', 
-      fontWeight:"600",
-      fontSize:16,
-    },
-    noBlockAssigned: {
-      color: 'red',
-      fontWeight:"600",
-      fontSize:14
-    },
-  });
+export default OfficialDashboard;
