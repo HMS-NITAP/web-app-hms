@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-// import { login } from '../../services/operations/AuthAPI';
 import { toast } from 'react-hot-toast';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import { useNavigate } from 'react-router-dom';
 import MainButton from '../../components/common/MainButton';
 import { login } from '../../services/operations/AuthAPI';
-import { useNavigate } from 'react-router-dom';
 
-const Login = ({ }) => {
+const Login = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const { control, handleSubmit, formState: { errors } } = useForm();
   const [secureText, setSecureText] = useState(true);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-
-  const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     setIsButtonDisabled(true);
@@ -23,11 +22,12 @@ const Login = ({ }) => {
   };
 
   return (
-    <div className="w-full min-h-[calc(100vh-var(--header-height))] flex flex-col items-center justify-center bg-gray-100 p-4">
+    <div className="w-full min-h-screen flex items-center justify-center bg-gray-100 p-4">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-full max-w-md bg-white p-8 rounded-lg shadow-md space-y-6"
       >
+        {/* Email Field */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Email ID <span className="text-red-500">*</span>
@@ -51,6 +51,7 @@ const Login = ({ }) => {
           )}
         </div>
 
+        {/* Password Field */}
         <div className="relative">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Password <span className="text-red-500">*</span>
@@ -72,11 +73,7 @@ const Login = ({ }) => {
                   className="absolute right-3 top-9 cursor-pointer text-gray-400"
                   onClick={() => setSecureText(!secureText)}
                 >
-                  {secureText ? (
-                    <AiOutlineEyeInvisible size={20} />
-                  ) : (
-                    <AiOutlineEye size={20} />
-                  )}
+                  {secureText ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
                 </div>
               </>
             )}
@@ -86,29 +83,32 @@ const Login = ({ }) => {
           )}
         </div>
 
+        {/* Forgot Password */}
         <div className="text-right">
           <span
             className="text-sm text-blue-600 font-semibold cursor-pointer hover:underline"
-            onClick={() => navigate("Forgot Password")}
+            onClick={() => navigate("/forgot-password")}
           >
             Forgot Password?
           </span>
         </div>
 
+        {/* Submit Button */}
         <div>
           <MainButton
             text="Log In"
-            onPress={handleSubmit(onSubmit)}
+            type="submit"
             isButtonDisabled={isButtonDisabled}
           />
         </div>
 
+        {/* Register Link */}
         <div className="text-center mt-4">
           <p className="text-sm text-gray-700">
             Are you a student and haven't registered yet?{" "}
             <span
               className="text-blue-600 cursor-pointer font-semibold hover:underline"
-              onClick={() => navigate("Student Registration")}
+              onClick={() => navigate("/student-registration")}
             >
               Click here to register!
             </span>

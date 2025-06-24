@@ -1,11 +1,11 @@
 import React from 'react';
 
-const MainButton = ({ 
-  text, 
-  textColor = '#000000', 
-  backgroundColor = '#ffb703', 
-  onPress, 
-  isButtonDisabled = false 
+const MainButton = ({
+  text,
+  textColor = 'text-black',
+  backgroundColor = 'bg-yellow-400',
+  onPress,
+  isButtonDisabled = false
 }) => {
   return (
     <button
@@ -15,12 +15,9 @@ const MainButton = ({
         px-5 py-3 rounded-xl font-bold 
         flex justify-center items-center 
         transition-opacity duration-200
+        ${backgroundColor} ${textColor}
         ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-90'}
       `}
-      style={{
-        backgroundColor: backgroundColor,
-        color: textColor
-      }}
     >
       {text}
     </button>

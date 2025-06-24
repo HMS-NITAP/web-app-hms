@@ -1,62 +1,76 @@
-import React, {useEffect, useState} from 'react'
-import { StyleSheet, View, Text } from 'react-native'
-import OTPTextInput from 'react-native-otp-textinput';
-import MainButton from './MainButton';
-import {useSelector,useDispatch} from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { verifyOtp } from '../../services/operations/AuthAPI';
-import { useToast } from 'react-native-toast-notifications';
 import { setRegistrationStep } from '../../reducers/slices/AuthSlice';
+import { useToast } from 'react-toast-notifications';
+import MainButton from './MainButton';
 
 const OtpVerification = () => {
+  const dispatch = useDispatch();
+  const toast = useToast();
 
-    const toast = useToast();
+  const [otp, setOtp] = useState('');
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
-    const [otp, setOTP] = useState('');
-    const {registrationData} = useSelector((state) => state.Auth);
+  const { registrationData } = useSelector((state) => state.Auth);
 
-    const dispatch = useDispatch();
-
-    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-    
-    const submitHandler = async() => {
-        let formData = new FormData();
-        if(!registrationData){
-            return;
-        }
-        formData.append("email",registrationData?.email);
-        formData.append("password",registrationData?.password);
-        formData.append("confirmPassword",registrationData?.confirmPassword);
-        formData.append("otp",otp);
-        if(!otp || otp.length!=6){
-            toast.show("Enter Correct OTP", {type:"warning"});
-            return;
-        }
-
-        setIsButtonDisabled(true);
-        const response = await dispatch(verifyOtp(formData,toast));
-        if(response){
-            await dispatch(setRegistrationStep(3));
-        }
-        setIsButtonDisabled(false);
+  const submitHandler = async () => {
+    if (!otp || otp.length !== 6) {
+      toast.addToast('Enter a valid 6-digit OTP.', { appearance: 'warning' });
+      return;
     }
 
-  return (
-    <View style={{width:"100%", display:"flex", flexDirection:"column", justifyContent:"center",alignItems:"center",gap:25}}>
-        <View style={{width:"100%", backgroundColor:"#e9edc9", borderRadius:20, paddingHorizontal:15, paddingVertical:15}}>
-            <Text style={{textAlign:"center", fontSize:15, color:"black"}}>Please enter the OTP sent to your institute email ID, <Text style={{fontWeight:"800"}}>{registrationData?.email}</Text>, to complete the verification of your account.</Text>
-        </View>
-        <View style={{width:"100%", display:"flex", flexDirection:"column", justifyContent:"center",alignItems:"center", gap:40}}>
-            <OTPTextInput
-                    inputCount={6}
-                    tintColor={"#6c757d"}
-                    offTintColor={"#ced4da"}
-                    handleTextChange={(value) => setOTP(value)}
-                    textInputStyle={{ color: 'black', borderWidth: 1, width:"13%", height:"100%", borderColor: 'gray', borderRadius: 10 }}
-            />
-            <View style={{display:"flex",justifyContent:"center",alignItems:"center"}}><MainButton isButtonDisabled={isButtonDisabled} text={"Submit"} onPress={submitHandler} backgroundColor={"#eddea4"} /></View>
-        </View>
-    </View>
-  )
-}
+    const formData = new FormData();
+    formData.append('email', registrationData?.email);
+    formData.append('password', registrationData?.password);
+    formData.append('confirmPassword', registrationData?.confirmPassword);
+    formData.append('otp', otp);
 
-export default OtpVerification
+    setIsButtonDisabled(true);
+    const response = await dispatch(verifyOtp(formData, toast));
+    if (response) {
+      dispatch(setRegistrationStep(3));
+    }
+    setIsButtonDisabled(false);
+  };
+
+  return (
+    <div className="w-full flex flex-col items-center gap-8">
+      <div className="w-full bg-yellow-100 rounded-xl px-6 py-4 text-center text-black">
+        <p className="text-base">
+          Please enter the OTP sent to your institute email ID,{' '}
+          <span className="font-semibold">{registrationData?.email}</span>, to complete verification.
+        </p>
+      </div>
+
+      <div className="w-full flex flex-col items-center gap-10">
+        <div className="flex justify-center gap-2">
+          {[...Array(6)].map((_, index) => (
+            <input
+              key={index}
+              type="text"
+              maxLength={1}
+              value={otp[index] || ''}
+              onChange={(e) => {
+                const val = e.target.value.replace(/[^0-9]/g, '');
+                const newOtp = otp.split('');
+                newOtp[index] = val;
+                setOtp(newOtp.join('').slice(0, 6));
+              }}
+              className="w-10 h-12 text-center text-black border border-gray-400 rounded-lg text-lg"
+            />
+          ))}
+        </div>
+
+        <MainButton
+          isButtonDisabled={isButtonDisabled}
+          text="Submit"
+          onPress={submitHandler}
+          backgroundColor="#eddea4"
+        />
+      </div>
+    </div>
+  );
+};
+
+export default OtpVerification;

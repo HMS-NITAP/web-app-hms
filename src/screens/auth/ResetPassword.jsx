@@ -1,162 +1,100 @@
-import React, { useState } from 'react'
-import { View, Text, TextInput, StyleSheet } from 'react-native'
-import MainButton from '../../components/common/MainButton'
-import { useForm,Controller } from 'react-hook-form'
-import {useDispatch} from 'react-redux'
-import { resetPassword } from '../../services/operations/AuthAPI'
-import { useToast } from 'react-native-toast-notifications'
+import React, { useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { resetPassword } from '../../services/operations/AuthAPI';
+import { useNavigate } from 'react-router-dom';
+import MainButton from '../../components/common/MainButton';
 
-const ResetPassword = ({navigation}) => {
-
+const ResetPassword = () => {
   const { control, handleSubmit, formState: { errors } } = useForm();
   const dispatch = useDispatch();
-  const toast = useToast();
+  const navigate = useNavigate();
 
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
-  const onSubmit = async(data) => {
+  const onSubmit = async (data) => {
     setIsButtonDisabled(true);
-    await dispatch(resetPassword(data.token,data.newPassword,data.confirmNewPassword,navigation,toast));
+    await dispatch(resetPassword(
+      data.token,
+      data.newPassword,
+      data.confirmNewPassword,
+      navigate
+    ));
     setIsButtonDisabled(false);
-  }
-  
+  };
+
   return (
-    <View style={styles.container}>
-      <View style={styles.form}>
-        <View style={styles.subFormView}>
-          <Text style={styles.label} >Token <Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+    <div className="w-full min-h-screen flex flex-col items-center justify-start pt-20 px-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md flex flex-col gap-8">
+        <div className="flex flex-col gap-3">
+          <label className="font-medium text-gray-800">
+            Token <span className="text-red-600 text-sm">*</span>
+          </label>
           <Controller
             control={control}
-            rules={{ required: true }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={styles.input}
-                placeholder="Token received in Email"
-                placeholderTextColor={"#adb5bd"}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
             name="token"
-            defaultValue=""
-          />
-          {errors.token && <Text style={styles.errorText}>Token is required.</Text>}
-        </View>
-        <View style={styles.subFormView}>
-          <Text style={styles.label} >New Password<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-          <Controller
-            control={control}
             rules={{ required: true }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={styles.input}
-                placeholder="Enter your New Password"
-                placeholderTextColor={"#adb5bd"}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
+            render={({ field }) => (
+              <input
+                {...field}
+                placeholder="Token received in Email"
+                className="w-full p-3 border border-gray-300 rounded-lg text-black"
               />
             )}
+          />
+          {errors.token && <p className="text-sm text-red-500">Token is required.</p>}
+        </div>
+
+        <div className="flex flex-col gap-3">
+          <label className="font-medium text-gray-800">
+            New Password <span className="text-red-600 text-sm">*</span>
+          </label>
+          <Controller
+            control={control}
             name="newPassword"
-            defaultValue=""
-          />
-          {errors.newPassword && <Text style={styles.errorText}>New Password is required.</Text>}
-        </View>
-        <View style={styles.subFormView}>
-          <Text style={styles.label} >Confirm New Password<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-          <Controller
-            control={control}
             rules={{ required: true }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={styles.input}
-                placeholder="Re Type your New Password"
-                placeholderTextColor={"#adb5bd"}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
+            render={({ field }) => (
+              <input
+                {...field}
+                type="password"
+                placeholder="Enter your New Password"
+                className="w-full p-3 border border-gray-300 rounded-lg text-black"
               />
             )}
-            name="confirmNewPassword"
-            defaultValue=""
           />
-          {errors.confirmNewPassword && <Text style={styles.errorText}>This field is required.</Text>}
-        </View>
-        <View style={styles.subFormView}>
-          <MainButton isButtonDisabled={isButtonDisabled} text={"Reset Your Password"} onPress={handleSubmit(onSubmit)} />
-        </View>
-      </View>
-    </View>
-  )
-}
+          {errors.newPassword && <p className="text-sm text-red-500">New Password is required.</p>}
+        </div>
 
-const styles = StyleSheet.create({
-    container:{
-      display:'flex',
-      flexDirection:'column',
-      justifyContent:'start',
-      alignItems:'center',
-      width:'100%',
-      height:'100%',
-    },
-    heading:{
-      width:'100%',
-      backgroundColor:'#ffb703',
-      paddingVertical:15,
-      textAlign:'center',
-      display:'flex',
-      justifyContent:'center',
-      alignItems:'center',
-      fontSize:100,
-    },
-    form:{
-      paddingTop:60,
-      paddingBottom:30,
-      width:"80%",
-      display:'flex',
-      justifyContent:'center',
-      alignItems:'start',
-      flexDirection:'column',
-      gap:30,
-    },
-    subFormView:{
-      width:"100%",
-      display:'flex',
-      justifyContent:'center',
-      flexDirection:'column',
-      alignItems:'start',
-      gap:10,
-    },
-    label:{
-      fontSize:15,
-      fontWeight:'500',
-      color:'#000000',
-      marginBottom:10,
-    },
-    input:{
-      width:"100%",
-      padding:10,
-      paddingHorizontal:10,
-      borderWidth:1,
-      borderRadius:10,
-      borderColor:"#adb5bd",
-      color:"black",
-    },
-    button:{
-      textAlign:'center',
-      borderRadius:30,
-      fontSize:15,
-      fontWeight:'800',
-      color:"black"
-    },
-    createAccount:{
-      textAlign:'center',
-      fontSize:15,
-      fontWeight:'500',
-      color:"#4a4e69",
-    }
-  })
-  
+        <div className="flex flex-col gap-3">
+          <label className="font-medium text-gray-800">
+            Confirm New Password <span className="text-red-600 text-sm">*</span>
+          </label>
+          <Controller
+            control={control}
+            name="confirmNewPassword"
+            rules={{ required: true }}
+            render={({ field }) => (
+              <input
+                {...field}
+                type="password"
+                placeholder="Re-type your New Password"
+                className="w-full p-3 border border-gray-300 rounded-lg text-black"
+              />
+            )}
+          />
+          {errors.confirmNewPassword && <p className="text-sm text-red-500">This field is required.</p>}
+        </div>
 
-export default ResetPassword
+        <div className="flex justify-center">
+          <MainButton
+            isButtonDisabled={isButtonDisabled}
+            text="Reset Your Password"
+            onPress={handleSubmit(onSubmit)}
+          />
+        </div>
+      </form>
+    </div>
+  );
+};
+
+export default ResetPassword;

@@ -1,263 +1,168 @@
-import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import MainButton from '../../components/common/MainButton'
-import { RadioButton } from 'react-native-paper'
-import { useForm, Controller } from 'react-hook-form'
-import {useDispatch} from 'react-redux';
-import { setSignUpData } from '../../reducers/slices/AuthSlice'
-import { sendOTP } from '../../services/operations/AuthAPI'
-import { AccountType } from '../../static/AccountType'
-import { useToast } from "react-native-toast-notifications";
-import Icon from 'react-native-vector-icons/FontAwesome6';
+import React, { useEffect, useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { setSignUpData } from '../../reducers/slices/AuthSlice';
+import { sendOTP } from '../../services/operations/AuthAPI';
+import { AccountType } from '../../static/AccountType';
+import { useNavigate } from 'react-router-dom';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import MainButton from '../../components/common/MainButton';
 
-const Signup = ({navigation}) => {
-
-  const toast = useToast();
-
-  const { control,setValue, handleSubmit, formState: { errors } } = useForm();
-
+const Signup = () => {
+  const { control, setValue, handleSubmit, formState: { errors } } = useForm();
   const [accountType, setAccountType] = useState('');
+  const [secureText1, setSecureText1] = useState(true);
+  const [secureText2, setSecureText2] = useState(true);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    setValue("email","");
-    setValue("password","");
-    setValue("confirmPassword","");
+    setValue("email", "");
+    setValue("password", "");
+    setValue("confirmPassword", "");
     setAccountType("");
-  }, []);
+  }, [setValue]);
 
   const handleRadioPress = (value) => {
     setAccountType(value);
   };
 
   const handlePress = () => {
-    navigation.navigate("Login");
+    navigate("/login");
   };
 
-  const onSubmit = async(data) => {
-    if(data.password != data.confirmPassword){
-      toast.show("Both passwords are not Matching", {type: "danger"});
-    }else{
-      const signupData = {
-        ...data,accountType
-      }
-      toast.show("Please Wait...",{type: "normal"});
+  const onSubmit = async (data) => {
+    if (data.password !== data.confirmPassword) {
+      alert("Both passwords are not Matching");
+    } else {
+      const signupData = { ...data, accountType };
+      alert("Please wait...");
       await dispatch(setSignUpData(signupData));
-      await dispatch(sendOTP(data.email,navigation,toast));
+      await dispatch(sendOTP(data.email, navigate, { show: alert }));
     }
   };
 
-  const [secureText1, setSecureText1] = useState(true);
-  const [secureText2, setSecureText2] = useState(true);
-
   return (
-    <>
-      <View style={styles.container}>
-        <View style={styles.form}>
-          <View style={styles.subFormView}>
-            <Text style={styles.label}>Email ID<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-            <Controller
-              control={control}
-              rules={{ required: true }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  style={styles.input}
-                  placeholder="Enter your college Email ID"
-                  placeholderTextColor={"#adb5bd"}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
+    <div className="w-full h-full flex flex-col items-center justify-start p-6 bg-white">
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md space-y-6">
+        
+        {/* Email */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Email ID<span className="text-red-500 text-xs">*</span>:
+          </label>
+          <Controller
+            control={control}
+            name="email"
+            rules={{ required: true }}
+            render={({ field }) => (
+              <input
+                type="email"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md text-black placeholder-gray-400"
+                placeholder="Enter your college Email ID"
+                {...field}
+              />
+            )}
+          />
+          {errors.email && <p className="text-red-500 text-sm mt-1">Email is required.</p>}
+        </div>
+
+        {/* Password */}
+        <div className="relative">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Password<span className="text-red-500 text-xs">*</span>:
+          </label>
+          <Controller
+            control={control}
+            name="password"
+            rules={{ required: true }}
+            render={({ field }) => (
+              <>
+                <input
+                  type={secureText1 ? "password" : "text"}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md text-black placeholder-gray-400"
+                  placeholder="Enter your password"
+                  {...field}
                 />
-              )}
-              name="email"
-              defaultValue=""
-            />
-            {errors.email && <Text style={styles.errorText}>Email is required.</Text>}
-          </View>
-          <View style={styles.subFormView}>
-            <Text style={styles.label}>Password<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-            <Controller
-              control={control}
-              rules={{ required: true }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Enter your password"
-                    placeholderTextColor={"#adb5bd"}
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    value={value}
-                    secureTextEntry={secureText1}
-                  />
-                  <TouchableOpacity
-                    style={styles.iconContainer}
-                    onPress={() => setSecureText1(!secureText1)}
-                  >
-                    <Icon name={secureText1 ? 'eye-slash' : 'eye'} size={20} color="#adb5bd" />
-                  </TouchableOpacity>
-                </>
-              )}
-              name="password"
-              defaultValue=""
-            />
-            {errors.password && <Text style={styles.errorText}>Password is required.</Text>}
-          </View>
-          <View style={styles.subFormView}>
-            <Text style={styles.label}>Confirm Password<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-            <Controller
-              control={control}
-              rules={{ required: true }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Re-Enter your password"
-                    placeholderTextColor={"#adb5bd"}
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    value={value}
-                    secureTextEntry={secureText2}
-                  />
-                  <TouchableOpacity
-                    style={styles.iconContainer}
-                    onPress={() => setSecureText2(!secureText2)}
-                  >
-                    <Icon name={secureText2 ? 'eye-slash' : 'eye'} size={20} color="#adb5bd" />
-                  </TouchableOpacity>
-                </>
-              )}
-              name="confirmPassword"
-              defaultValue=""
-            />
-            {errors.confirmPassword && <Text style={styles.errorText}>Please confirm your password.</Text>}
-          </View>
-          <View style={styles.subFormView}>
-            <Text style={styles.label}>Account Type<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-            <View style={styles.radioGroup}>
-              {
-                AccountType.map((account,index) => (
-                <View key={index} style={styles.radioButtonContainer}>
-                  <RadioButton.Android
-                    value={account.value}
-                    status={accountType === account.value ? 'checked' : 'unchecked'}
-                    onPress={() => handleRadioPress(account.value)}
-                  />
-                  <Text style={styles.radioLabel}>{account.name}</Text>
-                </View>
-              ))
-              }
-            </View>
-          </View>
-          <View style={styles.subFormView}>
-            <MainButton text="Sign Up" onPress={handleSubmit(onSubmit)} />
-          </View>
-        </View>
-        <Text style={styles.createAccount} onPress={handlePress}>Already have an Account? Click Here</Text>
-      </View>
-    </>
-  )
-}
+                <button
+                  type="button"
+                  onClick={() => setSecureText1(!secureText1)}
+                  className="absolute top-9 right-3 text-gray-500"
+                >
+                  {secureText1 ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </>
+            )}
+          />
+          {errors.password && <p className="text-red-500 text-sm mt-1">Password is required.</p>}
+        </div>
 
-const styles = StyleSheet.create({
-  container:{
-    display:'flex',
-    flexDirection:'column',
-    justifyContent:'start',
-    alignItems:'center',
-    width:'100%',
-    height:'100%',
-  },
-  heading:{
-    width:'100%',
-    backgroundColor:'#ffb703',
-    paddingVertical:15,
-    textAlign:'center',
-    display:'flex',
-    justifyContent:'center',
-    alignItems:'center',
-    fontSize:100,
-  },
-  headingText:{
-    fontSize:30,
-    fontWeight:"700",
-    color:"black",
-  },
-  form:{
-    paddingTop:60,
-    paddingBottom:30,
-    width:"90%",
-    display:'flex',
-    justifyContent:'center',
-    alignItems:'start',
-    flexDirection:'column',
-    gap:20,
-  },
-  subFormView:{
-    width:"100%",
-    display:'flex',
-    justifyContent:'center',
-    flexDirection:'column',
-    alignItems:'start',
-    gap:0,
-  },
-  label:{
-    fontSize:15,
-    fontWeight:'500',
-    color:'#000000',
-    marginBottom:10,
-  },
-  input:{
-    width:"100%",
-    padding:10,
-    paddingHorizontal:10,
-    borderWidth:1,
-    borderRadius:10,
-    borderColor:"#adb5bd",
-    color:"black",
-  },
-  button:{
-    textAlign:'center',
-    borderRadius:30,
-    fontSize:15,
-    fontWeight:'800',
-    color:"black"
-  },
-  createAccount:{
-    textAlign:'center',
-    fontSize:15,
-    fontWeight:'500',
-    color:"#4a4e69",
-  },
-  radioGroup: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    flexWrap:"wrap",
-  },
-  radioButtonContainer: {
-    display:"flex",
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent:"flex-start",
-    flexWrap:"wrap",
-  },
-  radioLabel: {
-    fontSize: 16,
-    marginLeft: 5,
-    color:"black"
-  },
-  errorText:{
-    fontSize:14,
-    color:"red",
-  },
-  iconContainer: {
-    position:"absolute",
-    bottom: Platform.OS === 'ios' ? 10 : 15,
-    right:10,
-    zIndex:10,
-    elevation:100,
-  },
-})
+        {/* Confirm Password */}
+        <div className="relative">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Confirm Password<span className="text-red-500 text-xs">*</span>:
+          </label>
+          <Controller
+            control={control}
+            name="confirmPassword"
+            rules={{ required: true }}
+            render={({ field }) => (
+              <>
+                <input
+                  type={secureText2 ? "password" : "text"}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md text-black placeholder-gray-400"
+                  placeholder="Re-enter your password"
+                  {...field}
+                />
+                <button
+                  type="button"
+                  onClick={() => setSecureText2(!secureText2)}
+                  className="absolute top-9 right-3 text-gray-500"
+                >
+                  {secureText2 ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </>
+            )}
+          />
+          {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">Please confirm your password.</p>}
+        </div>
 
-export default Signup
+        {/* Account Type */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Account Type<span className="text-red-500 text-xs">*</span>:
+          </label>
+          <div className="flex flex-wrap gap-4">
+            {AccountType.map((account, index) => (
+              <label key={index} className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  value={account.value}
+                  checked={accountType === account.value}
+                  onChange={() => handleRadioPress(account.value)}
+                  className="form-radio text-blue-600"
+                />
+                <span className="text-sm text-gray-800">{account.name}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        {/* Submit Button */}
+        <div>
+          <MainButton text="Sign Up" type="submit" />
+        </div>
+      </form>
+
+      <p
+        className="mt-6 text-center text-sm text-blue-600 cursor-pointer hover:underline"
+        onClick={handlePress}
+      >
+        Already have an Account? Click Here
+      </p>
+    </div>
+  );
+};
+
+export default Signup;
