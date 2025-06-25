@@ -1,152 +1,74 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, Animated, TouchableOpacity, ScrollView, Linking, Platform, ActivityIndicator } from 'react-native';
 
 const AnimatedCardHostelBlock = ({ data }) => {
-    const [isExpanded, setIsExpanded] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
-    const animatedHeight = useState(new Animated.Value(140))[0];
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-    const toggleCard = () => {
-        setIsExpanded(!isExpanded);
-        Animated.timing(animatedHeight, {
-            toValue: isExpanded ? 140 : 300,
-            duration: 250,
-            useNativeDriver: false,
-        }).start();
-    };
+  const toggleCard = () => {
+    setIsExpanded(!isExpanded);
+  };
 
-    return (
-        <Animated.View style={[styles.card, { height: animatedHeight }]}>
-            <View style={styles.header}>
-                <View style={styles.imageContainer}>
-                    {isLoading && (
-                        <ActivityIndicator size="small" color="#0000ff" style={styles.loadingIndicator} />
-                    )}
-                    <Image 
-                        source={{ uri: data.image }} 
-                        style={styles.image} 
-                        onLoadStart={() => setIsLoading(true)}
-                        onLoad={() => setIsLoading(false)}
-                    />
-                </View>
-                <View style={styles.headerTextContainer}>
-                    <Text style={styles.name}>Name : <Text style={{color:"black"}}>{data.name}</Text></Text>
-                    <Text style={styles.designation}>Room Type : <Text style={{color:"black"}}>{data.roomType}</Text></Text>
-                </View>
-            </View>
-            {isExpanded && (
-                <ScrollView contentContainerStyle={styles.details}>
-                    <Text style={{fontSize:16, fontWeight:"700", color:"#051923"}}>Capacity : <Text style={{fontSize:16, fontWeight:"700", color:"#051923"}}>{data?.capacity} students</Text></Text>
-                    <Text style={{fontSize:16, fontWeight:"700", color:"#051923"}}>Floor Count : <Text style={{fontSize:16, fontWeight:"700", color:"#051923"}}>{data?.floorCount === "2" ? "G+2" : "G+4"}</Text></Text>
-                    <Text style={{color:"black", fontWeight:"600", fontSize:16}}>Year Assigned to : <Text style={{color:"black", fontWeight:"500", fontSize:15}}>{data.year}</Text></Text>
-                    {
-                        data?.wardens.length === 0 ? <View style={{width:"100%", justifyContent:"center"}}><Text style={{textAlign:"center", fontWeight:"700", fontSize:15, color:"#c1121f"}}>No Warden Assigned</Text></View>
-                            :
-                            <View style={{marginTop:10}}>
-                                <Text style={{fontSize:17, fontWeight:"800", color:"#14213d", marginBottom:5}}>Warden(s) :</Text>
-                                {
-                                    data?.wardens.map((warden,index) => (
-                                    <Text style={{fontSize:16, fontWeight:"700",color:"#003554"}} selectable={true}>{index+1}) {warden.name}    ( +91 {warden.phone} )</Text>
-                                    ))
-                                }
-                                <Text style={{fontSize:17, fontWeight:"800", color:"#14213d", marginBottom:5}}>Warden(s) :</Text>
-                                <Text style={{fontSize:17, fontWeight:"800", color:"#14213d", marginBottom:5}}>Warden(s) :</Text>
-                                <Text style={{fontSize:17, fontWeight:"800", color:"#14213d", marginBottom:5}}>Warden(s) :</Text>
-                                <Text style={{fontSize:17, fontWeight:"800", color:"#14213d", marginBottom:5}}>Warden(s) :</Text>
-                            </View>
-                    }
-                </ScrollView>
-            )}
-            <Animated.View style={styles.moreInfoButtonContainer}>
-                <TouchableOpacity style={styles.moreInfoButton} onPress={toggleCard}>
-                    <Text style={styles.moreInfoButtonText}>{isExpanded ? 'Hide Info' : 'More Info'}</Text>
-                </TouchableOpacity>
-            </Animated.View>
-        </Animated.View>
-    );
+  return (
+    <div className={`w-full max-w-xl border border-black rounded-xl bg-white overflow-hidden shadow-lg transition-all duration-300 ${isExpanded ? 'h-auto' : 'h-40'} relative`}>
+      {/* Header */}
+      <div className="flex items-center gap-4 p-3">
+        {/* Image */}
+        <div className="w-20 h-20 rounded-full overflow-hidden flex justify-center items-center relative">
+          {isLoading && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+            </div>
+          )}
+          <img
+            src={data.image}
+            alt={data.name}
+            className="w-full h-full object-cover"
+            onLoadStart={() => setIsLoading(true)}
+            onLoad={() => setIsLoading(false)}
+          />
+        </div>
+
+        {/* Header Text */}
+        <div className="flex flex-col">
+          <h2 className="text-lg font-bold text-gray-700">Name: <span className="text-black">{data.name}</span></h2>
+          <p className="text-gray-600 font-semibold">Room Type: <span className="text-black">{data.roomType}</span></p>
+        </div>
+      </div>
+
+      {/* Expanded Details */}
+      {isExpanded && (
+        <div className="px-3 py-4">
+          <p className="text-base font-bold text-[#051923]">Capacity: <span className="font-bold">{data.capacity} students</span></p>
+          <p className="text-base font-bold text-[#051923]">Floor Count: <span className="font-bold">{data.floorCount === "2" ? "G+2" : "G+4"}</span></p>
+          <p className="text-base font-semibold text-black">Year Assigned to: <span className="font-medium">{data.year}</span></p>
+
+          {/* Wardens */}
+          {data?.wardens?.length === 0 ? (
+            <p className="text-center font-bold text-[#c1121f] mt-2">No Warden Assigned</p>
+          ) : (
+            <div className="mt-3">
+              <p className="text-lg font-extrabold text-[#14213d] mb-2">Warden(s):</p>
+              {data.wardens.map((warden, index) => (
+                <p key={index} className="text-base font-bold text-[#003554]">
+                  {index + 1}) {warden.name} (+91 {warden.phone})
+                </p>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Toggle Button */}
+      <div className="absolute bottom-0 left-0 w-full">
+        <button
+          onClick={toggleCard}
+          className="w-full bg-[#415a77] text-white font-bold py-2 rounded-b-xl hover:bg-[#324c6e] transition"
+        >
+          {isExpanded ? 'Hide Info' : 'More Info'}
+        </button>
+      </div>
+    </div>
+  );
 };
-
-const styles = StyleSheet.create({
-    card: {
-        width: '100%',
-        borderColor: 'black',
-        borderWidth: 1,
-        borderRadius: 10,
-        backgroundColor: '#fff',
-        marginVertical: 10,
-        ...Platform.select({
-            ios: {
-                shadowColor: 'black',
-                shadowOffset: { width: 0, height: 10 },
-                shadowOpacity: 0.3,
-                shadowRadius: 20,
-            },
-            android: {
-                elevation: 10,
-            },
-        }),
-        overflow: 'hidden',
-    },
-    header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 10,
-        gap:10,
-    },
-    imageContainer: {
-        width: 80,
-        height: 80,
-        borderRadius: 40,
-        overflow: 'hidden',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    image: {
-        width: 80,
-        height: 80,
-    },
-    loadingIndicator: {
-        position: 'absolute',
-        zIndex: 1,
-    },
-    headerTextContainer: {
-        flexDirection: 'column',
-    },
-    name: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: 'gray',
-    },
-    designation: {
-        fontSize: 14,
-        color: 'gray',
-        fontWeight:"600",
-    },
-    details: {
-        paddingHorizontal: 10,
-        flexGrow: 1,
-        paddingVertical: 20,
-    },
-    detailText: {
-        fontSize: 14,
-        marginVertical: 5,
-    },
-    moreInfoButtonContainer: {
-        position: 'absolute',
-        bottom: 0,
-        width: '100%',
-    },
-    moreInfoButton: {
-        padding: 10,
-        backgroundColor: '#415a77',
-        borderBottomLeftRadius: 10,
-        borderBottomRightRadius: 10,
-    },
-    moreInfoButtonText: {
-        color: '#fff',
-        textAlign: 'center',
-        fontWeight: 'bold',
-    },
-});
 
 export default AnimatedCardHostelBlock;
