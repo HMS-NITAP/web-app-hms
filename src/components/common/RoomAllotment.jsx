@@ -1,376 +1,190 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, FlatList, StyleSheet, Modal } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchHostelBlockRooms,fetchHostelBlockNames } from '../../services/operations/CommonAPI';
-import { useToast } from 'react-native-toast-notifications';
-import { setRegistrationData, setRegistrationStep } from '../../reducers/slices/AuthSlice';
-import Icon from 'react-native-vector-icons/FontAwesome6';
+import { fetchHostelBlockRooms, fetchHostelBlockNames } from '../../services/operations/CommonAPI';
 import { createStudentAccount } from '../../services/operations/AuthAPI';
+import { setRegistrationStep } from '../../reducers/slices/AuthSlice';
+import { useToast } from 'react-toast-notifications';
+import { FaArrowsRotate } from 'react-icons/fa6';
 
-const RoomAllotment = ({}) => {
-
+const RoomAllotmentWeb = () => {
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
-  const [hostelBlocks, setHostelBlocks] = useState(null);
-  const [hostelBlockRooms, setHostelBlockRooms] = useState(null);
+  const [hostelBlocks, setHostelBlocks] = useState([]);
+  const [hostelBlockRooms, setHostelBlockRooms] = useState([]);
   const [selectedBlock, setSelectedBlock] = useState(null);
   const [selectedFloor, setSelectedFloor] = useState(null);
-  const [floorRooms, setFloorRooms] = useState(null);
+  const [floorRooms, setFloorRooms] = useState([]);
   const [selectedCot, setSelectedCot] = useState(null);
 
-  const [submitDetails, setSubmitDetails] = useState({roomNo: null, floorNo: null, blockName: null, cotNo: null});
-
+  const [submitDetails, setSubmitDetails] = useState({ roomNo: null, floorNo: null, blockName: null, cotNo: null });
   const [floorCount, setFloorCount] = useState(null);
-  const floorsArray = Array.from({ length: floorCount + 1 }, (_, index) => ({
-    id : index,
-  }));
 
   const toast = useToast();
   const dispatch = useDispatch();
-
-  const {registrationData} = useSelector((state) => state.Auth);
-
-  const fetchHostelBlocks = async() => {
-    const response = await dispatch(fetchHostelBlockNames(toast));
-    if(!registrationData){
-      return;
-    }
-    if(response && response.length>0){
-      const filteredBlocks = response.filter((block) => block?.gender==registrationData?.gender && block?.year==registrationData?.year);
-      setHostelBlocks(filteredBlocks);
-    }
-  }
-
-  const fetchRooms = async() => {
-    setIsButtonDisabled(true);
-    setSelectedCot(null);
-    const filterData = hostelBlocks.filter((block) => block.id === selectedBlock);
-    const floors = parseInt(filterData[0].floorCount);
-    setFloorCount(floors);
-    const response = await dispatch(fetchHostelBlockRooms(selectedBlock,toast));
-    setHostelBlockRooms(response);
-    setSubmitDetails({
-      blockName: filterData[0].name,
-      cotNo : null,
-      floorNo : null,
-      roomNo : null,
-    });
-    setIsButtonDisabled(false);
-  }
+  const { registrationData } = useSelector((state) => state.Auth);
 
   useEffect(() => {
-    if(selectedBlock){
-      fetchRooms();
-    }
-  },[selectedBlock]);
-
-  useEffect(() => {
-    const filterRoomsFloorWise = () => {
-      if(!hostelBlockRooms){
-        return;
+    const fetchBlocks = async () => {
+      const response = await dispatch(fetchHostelBlockNames(toast));
+      if (registrationData && response?.length > 0) {
+        const filtered = response.filter(block => block.gender === registrationData.gender && block.year === registrationData.year);
+        setHostelBlocks(filtered);
       }
-      const filterRooms = hostelBlockRooms.filter((room) => room?.floorNumber===selectedFloor);
-      setFloorRooms(filterRooms);
-    }
-    filterRoomsFloorWise();
-  },[selectedFloor,hostelBlockRooms]);
+      setLoading(false);
+    };
+    fetchBlocks();
+  }, []);
 
   useEffect(() => {
-    fetchHostelBlocks();
-    setLoading(false);
-  },[]);
+    const fetchRooms = async () => {
+      if (!selectedBlock) return;
+      setIsButtonDisabled(true);
+      setSelectedCot(null);
+      const block = hostelBlocks.find(b => b.id === selectedBlock);
+      setFloorCount(parseInt(block.floorCount));
+      const response = await dispatch(fetchHostelBlockRooms(selectedBlock, toast));
+      setHostelBlockRooms(response);
+      setSubmitDetails({ blockName: block.name, cotNo: null, floorNo: null, roomNo: null });
+      setIsButtonDisabled(false);
+    };
+    fetchRooms();
+  }, [selectedBlock]);
 
-  const selectCot = (cot,room) => {
-    if(cot?.status === "BOOKED" || cot?.status === "BLOCKED"){
-      return;
-    }
-    setSelectedCot(cot?.id);
-    setSubmitDetails((prevDetails) => ({
-      ...prevDetails,
-      cotNo: cot?.cotNo,
-      roomNo: room?.roomNumber,
-      floorNo: room?.floorNumber,
-    }));
+  useEffect(() => {
+    if (!selectedFloor || !hostelBlockRooms.length) return;
+    const filtered = hostelBlockRooms.filter(room => room.floorNumber === selectedFloor);
+    setFloorRooms(filtered);
+  }, [selectedFloor, hostelBlockRooms]);
+
+  const selectCot = (cot, room) => {
+    if (cot.status === 'BOOKED' || cot.status === 'BLOCKED') return;
+    setSelectedCot(cot.id);
+    setSubmitDetails(prev => ({ ...prev, cotNo: cot.cotNo, roomNo: room.roomNumber, floorNo: room.floorNumber }));
     setModalVisible(true);
-  }
+  };
 
-  const cancelHandler = () => {
-    setModalVisible(false);
-    setSelectedCot(null);
-  }
-
-  const handleSubmit = async() => {
-    if(!registrationData){
-      return;
-    }
-
+  const handleSubmit = async () => {
+    if (!registrationData) return;
     setIsButtonDisabled(true);
-
     const formdata = new FormData();
-    formdata.append("email",registrationData?.email);
-    formdata.append("password",registrationData?.password);
-    formdata.append("confirmPassword",registrationData?.confirmPassword);
-    formdata.append("name",registrationData?.name);
-    formdata.append("regNo",registrationData?.regNo);
-    formdata.append("rollNo",registrationData?.rollNo);
-    formdata.append("year",registrationData?.year);
-    formdata.append("branch",registrationData?.branch);
-    formdata.append("gender",registrationData?.gender);
-    formdata.append("pwd",registrationData?.pwd);
-    formdata.append("community",registrationData?.community);
-    formdata.append("aadhaarNumber",registrationData?.aadhaarNumber);
-    formdata.append("dob",registrationData?.dob);
-    formdata.append("bloodGroup",registrationData?.bloodGroup);
-    formdata.append("fatherName",registrationData?.fatherName);
-    formdata.append("motherName",registrationData?.motherName);
-    formdata.append("phone",registrationData?.phone);
-    formdata.append("parentsPhone",registrationData?.parentsPhone);
-    formdata.append("emergencyPhone",registrationData?.emergencyPhone);
-    formdata.append("address",registrationData?.address);
-    formdata.append("hostelBlockId",selectedBlock);
-    formdata.append("cotId",selectedCot);
-    formdata.append("image",{uri:registrationData?.image[0]?.uri, type:registrationData?.image[0]?.type, name:registrationData?.image[0]?.name});
-    if(registrationData?.instituteFeeReceipt?.[0]){
-      formdata.append("instituteFeeReceipt", {uri: registrationData.instituteFeeReceipt[0].uri, type: registrationData.instituteFeeReceipt[0].type, name: registrationData.instituteFeeReceipt[0].name});
+    for (let key in registrationData) {
+      if (key === 'image' || key === 'instituteFeeReceipt' || key === 'hostelFeeReceipt') {
+        const file = registrationData[key]?.[0];
+        if (file) formdata.append(key, file);
+      } else {
+        formdata.append(key, registrationData[key]);
+      }
     }
-    formdata.append("hostelFeeReceipt",{uri:registrationData?.hostelFeeReceipt[0]?.uri, type:registrationData?.hostelFeeReceipt[0]?.type, name:registrationData?.hostelFeeReceipt[0]?.name});
-    formdata.append("paymentMode",registrationData?.paymentMode);
-    formdata.append("paymentDate",registrationData?.paymentDate);
-    formdata.append("amountPaid",registrationData?.amountPaid);
+    formdata.append("hostelBlockId", selectedBlock);
+    formdata.append("cotId", selectedCot);
 
-    const response = await dispatch(createStudentAccount(formdata,toast));
-    if(response){
+    const response = await dispatch(createStudentAccount(formdata, toast));
+    if (response) {
       setModalVisible(false);
       await dispatch(setRegistrationStep(4));
-    }else{
-      toast.show("Refresh the page from the above icon to check if the room is already booked by someone else.",{type:"warning"});
+    } else {
+      toast.show("Refresh the page to check if the room is already booked.", { type: "warning" });
       setModalVisible(false);
     }
     setIsButtonDisabled(false);
-  }
+  };
 
   return (
-    <>
-      {
-        loading ? (<View><Text style={{fontWeight:"800",fontSize:18}}>Data Loading...</Text></View>) : 
-          <View style={styles.container}>
-            {
-              (!hostelBlocks || hostelBlocks.length===0) ? (
-                <View style={{width:"100%", backgroundColor:"#ff928b", borderRadius:20, paddingHorizontal:15, paddingVertical:15}}>
-                  <Text style={{textAlign:"center", fontSize:15, color:"black", fontWeight:"800"}}>No Hostel Blocks Alloted as per your Requirements.</Text>
-                </View>
-              ) : (
-                <View style={styles.filterContainer}>
-                  <Text style={styles.filterLabel}>Select Block :</Text>
-                  <View style={{display:"flex", maxWidth:"70%", gap:10, flexDirection:"row", flexWrap:"wrap", justifyContent:"flex-start", alignItems:"center"}}>
-                    {
-                      hostelBlocks?.map((hostel,index) => (
-                        <TouchableOpacity onPress={() => setSelectedBlock(hostel.id)} style={{padding:8, borderRadius:8, backgroundColor: selectedBlock === hostel?.id ? '#b5e48c' : 'white', borderWidth:0.5, borderColor:selectedBlock === hostel?.id ? 'transparent' : 'black'}} key={index}>
-                          <Text style={styles.filterButtonText}>{hostel?.name}</Text>
-                        </TouchableOpacity>
-                      )) 
-                    }
-                  </View>
-                </View>
-              )
-            }
-
-            {
-              floorCount && (
-                <View style={styles.filterContainer}>
-                  <Text style={styles.filterLabel}>Select Floor :</Text>
-                  <View style={{display:"flex", maxWidth:"70%", gap:10, flexDirection:"row", flexWrap:"wrap", justifyContent:"center", alignItems:"center"}}>
-                    {
-                      floorsArray?.map((floor,index) => (
-                        <TouchableOpacity onPress={() => setSelectedFloor(floor?.id)} style={{paddingHorizontal:10, paddingVertical:5, borderRadius:1000, backgroundColor: selectedFloor === floor?.id ? '#b5e48c' : 'white', borderWidth:0.5, borderColor:selectedFloor === floor?.id ? 'transparent' : 'black'}} key={index}>
-                          <Text style={styles.filterButtonText}>{floor?.id}</Text>
-                        </TouchableOpacity>
-                      )) 
-                    }
-                  </View>
-                </View>
-              )
-            }
-
-            {
-              selectedBlock && selectedFloor!==null && <View style={{width:"90%",marginHorizontal:"auto",display:"flex",flexDirection:"row",justifyContent:"flex-end",alignItems:"center"}}><TouchableOpacity disabled={isButtonDisabled} onPress={() => fetchRooms()}><Icon name="arrows-rotate" style={{color:"#003049",fontSize:20}} /></TouchableOpacity></View>
-            }
-
-            {
-              (!floorRooms || floorRooms.length==0) ? (<View><Text style={{color:"red", fontSize:16, fontWeight:"500"}}>No Rooms Are Present With This Requirements</Text></View>) : (
-                <View style={{width:"100%", display:"flex", flexDirection:"column", gap:15, justifyContent:"center", alignItems:"center"}}>
-                  {
-                    floorRooms.map((room,index) => (
-                      <View key={index} style={{width:"90%", borderStyle:"dashed", marginHorizontal:"auto", gap:20, borderWidth:1.5, borderColor:"black", borderRadius:10, display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", paddingHorizontal:15, paddingVertical:15}}>
-                        <Text style={{textAlign:"center", fontWeight:"800", color:"red", fontSize:16, color:"#1b263b"}}>Room {room?.roomNumber}</Text>
-                        <View style={{display:"flex", flexDirection:"row", justifyContent:"center", alignItems:"center", flexWrap:"wrap", gap:10}}>
-                          {
-                            room.cots.map((cot,index) => (
-                              <TouchableOpacity onPress={() => selectCot(cot,room)} key={index} style={{borderWidth:1, borderStyle:"dotted",borderColor:"black",borderRadius:8, paddingHorizontal:8, paddingVertical:8, backgroundColor:selectedCot===cot?.id ? "#ffdd00" : cot?.status==="AVAILABLE" ? "transparent" : "#adb5bd"}}>
-                                <Text style={{color:"black", fontWeight:"600", fontSize:16}}>Cot {cot?.cotNo}</Text>
-                              </TouchableOpacity>
-                            ))
-                          }
-                        </View>
-                      </View>
-                    ))
-                  }
-                </View>
-              )
-            }
-
-          </View>
-      }
-      <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => setModalVisible(false)}
-        >
-            <View style={styles.modalOverlay}>
-            <View style={styles.modalContainer}>
-                <Text style={styles.modalText}>Verify your selected Room Details and submit your Application</Text>
-                <View style={{display:"flex",flexDirection:"column",justifyContent:"flex-start",alignItems:"center",gap:5}}>
-                  <Text style={{fontSize:16,fontWeight:"600",color:"black"}}>Block Name : <Text style={{fontSize:16,fontWeight:"400",color:"black"}}>{submitDetails?.blockName}</Text></Text>
-                  <Text style={{fontSize:16,fontWeight:"600",color:"black"}}>Floor No : <Text style={{fontSize:16,fontWeight:"400",color:"black"}}>{submitDetails?.floorNo}</Text></Text>
-                  <Text style={{fontSize:16,fontWeight:"600",color:"black"}}>Room No : <Text style={{fontSize:16,fontWeight:"400",color:"black"}}>{submitDetails?.roomNo}</Text></Text>
-                  <Text style={{fontSize:16,fontWeight:"600",color:"black"}}>Cot No : <Text style={{fontSize:16,fontWeight:"400",color:"black"}}>{submitDetails?.cotNo}</Text></Text>
-                </View>
-                <View style={styles.modalButtons}>
-                  <TouchableOpacity 
-                      disabled={isButtonDisabled}
-                      style={[styles.confirmButton, { opacity:isButtonDisabled?0.5:1 }]}
-                      onPress={handleSubmit}
+    <div className="w-full flex flex-col items-center gap-6">
+      {loading ? <p className="font-bold text-lg">Data Loading...</p> : (
+        <>
+          {hostelBlocks.length === 0 ? (
+            <div className="bg-red-200 rounded-xl px-6 py-4">
+              <p className="text-center font-bold text-black">No Hostel Blocks Allotted as per your Requirements.</p>
+            </div>
+          ) : (
+            <div className="w-full max-w-4xl">
+              <p className="font-semibold text-black">Select Block :</p>
+              <div className="flex flex-wrap gap-3 mt-2">
+                {hostelBlocks.map((block, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedBlock(block.id)}
+                    className={`px-3 py-2 rounded-lg border ${selectedBlock === block.id ? 'bg-lime-300' : 'bg-white border-black'}`}
                   >
-                      <Text style={styles.buttonText}>Submit</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity 
-                      disabled={isButtonDisabled}
-                      style={[styles.cancelButton, {opacity:isButtonDisabled?0.5:1}]} 
-                      onPress={cancelHandler}
+                    {block.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {floorCount !== null && (
+            <div className="w-full max-w-4xl">
+              <p className="font-semibold text-black">Select Floor :</p>
+              <div className="flex flex-wrap gap-3 mt-2">
+                {Array.from({ length: floorCount + 1 }, (_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setSelectedFloor(i)}
+                    className={`px-4 py-1 rounded-full border ${selectedFloor === i ? 'bg-lime-300' : 'bg-white border-black'}`}
                   >
-                      <Text style={styles.buttonText}>Cancel</Text>
-                  </TouchableOpacity>
-                </View>
-            </View>
-            </View>
-        </Modal>
-    </>
+                    {i}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {selectedBlock && selectedFloor !== null && (
+            <div className="w-[90%] flex justify-end">
+              <button onClick={() => setSelectedBlock(selectedBlock)} disabled={isButtonDisabled}>
+                <FaArrowsRotate className="text-blue-900 text-xl" />
+              </button>
+            </div>
+          )}
+
+          {floorRooms.length === 0 ? (
+            <p className="text-red-500 font-semibold text-base">No Rooms Are Present With This Requirements</p>
+          ) : (
+            <div className="w-full flex flex-col gap-6 items-center">
+              {floorRooms.map((room, index) => (
+                <div key={index} className="w-[90%] border-dashed border-2 border-black rounded-xl px-6 py-4 flex flex-col items-center gap-4">
+                  <p className="text-lg font-bold text-slate-900">Room {room.roomNumber}</p>
+                  <div className="flex flex-wrap gap-3 justify-center">
+                    {room.cots.map((cot, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => selectCot(cot, room)}
+                        className={`px-3 py-2 rounded-lg border-dotted border ${selectedCot === cot.id ? 'bg-yellow-300' : cot.status === 'AVAILABLE' ? 'bg-white' : 'bg-gray-300'}`}
+                      >
+                        Cot {cot.cotNo}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {modalVisible && (
+            <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+              <div className="bg-white p-6 rounded-xl shadow-xl w-full max-w-md">
+                <p className="text-center font-semibold text-lg mb-4">Verify Room Details and Submit</p>
+                <div className="space-y-2 text-black">
+                  <p><span className="font-bold">Block Name:</span> {submitDetails.blockName}</p>
+                  <p><span className="font-bold">Floor No:</span> {submitDetails.floorNo}</p>
+                  <p><span className="font-bold">Room No:</span> {submitDetails.roomNo}</p>
+                  <p><span className="font-bold">Cot No:</span> {submitDetails.cotNo}</p>
+                </div>
+                <div className="flex justify-end mt-4 gap-4">
+                  <button disabled={isButtonDisabled} onClick={handleSubmit} className="bg-green-400 px-4 py-2 rounded-xl text-black font-bold disabled:opacity-50">Submit</button>
+                  <button disabled={isButtonDisabled} onClick={() => setModalVisible(false)} className="bg-red-300 px-4 py-2 rounded-xl text-black font-bold disabled:opacity-50">Cancel</button>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      )}
+    </div>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    display:"flex",
-    flexDirection:"column",
-    gap:20,
-    width:"100%",
-    paddingHorizontal:10,
-  },
-  filterContainer: {
-    display:"flex",
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap:20,
-  },
-  filterLabel: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: 'black',
-  },
-  filterButtonText: {
-    color: 'black',
-    fontWeight: '700',
-  },
-  roomContainer: {
-    backgroundColor: '#ffffffcc',
-    padding: 15, 
-    marginBottom: 20, 
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  roomText: {
-    fontSize: 18, 
-    fontWeight: 'bold',
-    marginBottom: 10, 
-  },
-  cotContainer: {
-    backgroundColor: 'lightgreen',
-    padding: 8, 
-    margin: 5, 
-    borderRadius: 5,
-  },
-  cotText: {
-    fontSize: 14,
-    color: 'black',
-  },
-  roomsList: {
-    alignItems: 'center',
-    paddingBottom: 20, 
-  },
-  noRoomsText: {
-    fontSize: 16,
-    textAlign: 'center',
-    marginTop: 20,
-    color: 'red',
-    fontWeight: 'bold',
-  },
-  filterButton: {
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 5,
-    marginHorizontal: 5,
-  },
-  modalOverlay: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)"
-  },
-  modalContainer: {
-    width: 300,
-    backgroundColor: "white",
-    borderRadius: 10,
-    padding: 20,
-    alignItems: "center",
-    display:"flex",
-    flexDirection:"column",
-    justifyContent:"center",
-    alignItems:"center",
-    gap:15
-  },
-  modalText: {
-    color:"#6c757d",
-    fontSize: 18,
-    textAlign: "center"
-  },
-  modalButtons: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%"
-  },
-  confirmButton: {
-    flex: 1,
-    backgroundColor: "#76c893",
-    padding: 10,
-    borderRadius: 5,
-    alignItems: "center",
-    marginRight: 10,
-  },
-  cancelButton: {
-    flex: 1,
-    backgroundColor: "#6c757d",
-    padding: 10,
-    borderRadius: 5,
-    alignItems: "center",
-    marginLeft: 10
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 16
-  },
-});
-
-export default RoomAllotment;
+export default RoomAllotmentWeb;
