@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllAnnouncements } from '../../services/operations/CommonAPI';
 import { deleteAnnouncement } from '../../services/operations/AdminAPI';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import { FaTrash } from 'react-icons/fa6';
 
 const Announcements = () => {

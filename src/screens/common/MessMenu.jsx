@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { fetchCurrentSessionMessMenu } from '../../services/operations/CommonAPI';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
 const getCurrentSession = () => {
@@ -49,7 +49,7 @@ const MessMenu = () => {
   }, [currentDay, currentSession]);
 
   const navigateToMenu = () => {
-    navigate('/detailed-mess-menu'); // Update this path based on your routing
+    navigate('/detailed-mess-menu');
   };
 
   return (

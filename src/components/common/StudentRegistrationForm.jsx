@@ -1,10 +1,9 @@
-import React, {  useState } from 'react';
+import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 import { setRegistrationData, setRegistrationStep } from '../../reducers/slices/AuthSlice';
 import { sendOtpToStudent } from '../../services/operations/AuthAPI';
+import toast from 'react-hot-toast';
 
 const MAX_FILE_SIZE = 250 * 1024;
 
@@ -15,14 +14,14 @@ const StudentRegistrationForm = () => {
   const [imageResponse, setImageResponse] = useState(null);
   const [hostelFeeReceipt, setHostelFeeReceipt] = useState(null);
   const [instituteFeeReceipt, setInstituteFeeReceipt] = useState(null);
-  const [dob, setDob] = useState(null);
-  const [paymentDate, setPaymentDate] = useState(null);
+  const [dob, setDob] = useState('');
+  const [paymentDate, setPaymentDate] = useState('');
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const handleFileChange = (e, setter, limitKB = 250) => {
     const file = e.target.files[0];
     if (file && file.size > limitKB * 1024) {
-      alert(`File size should not exceed ${limitKB}KB.`);
+      toast.error(`File size should not exceed ${limitKB}KB.`);
       return;
     }
     setter(file);
@@ -30,17 +29,17 @@ const StudentRegistrationForm = () => {
 
   const onSubmit = async (data) => {
     if (!data.email.endsWith('@student.nitandhra.ac.in')) {
-      alert('Use institute email ID');
+      toast.error('Use institute email ID');
       return;
     }
 
     if (data.password !== data.confirmPassword) {
-      alert("Passwords don't match");
+      toast.error("Passwords don't match");
       return;
     }
 
     if (!imageResponse || !hostelFeeReceipt || !dob || !paymentDate) {
-      alert('Please complete all required fields including uploads and dates');
+      toast.error('Please complete all required fields including uploads and dates');
       return;
     }
 
@@ -55,7 +54,7 @@ const StudentRegistrationForm = () => {
 
     setIsButtonDisabled(true);
     await dispatch(setRegistrationData(registrationData));
-    const response = await dispatch(sendOtpToStudent(data.email));
+    const response = await dispatch(sendOtpToStudent(data.email, toast));
     if (response) dispatch(setRegistrationStep(2));
     setIsButtonDisabled(false);
   };
@@ -67,6 +66,7 @@ const StudentRegistrationForm = () => {
     >
       <h2 className="text-2xl font-bold text-center text-gray-800">Student Registration Form</h2>
 
+      {/* Name */}
       <div>
         <label className="block font-medium">Student Name *</label>
         <Controller
@@ -78,6 +78,7 @@ const StudentRegistrationForm = () => {
         {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
       </div>
 
+      {/* Email */}
       <div>
         <label className="block font-medium">Institute Email *</label>
         <Controller
@@ -89,6 +90,7 @@ const StudentRegistrationForm = () => {
         {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
       </div>
 
+      {/* Password & Confirm Password */}
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="block font-medium">Password *</label>
@@ -112,47 +114,51 @@ const StudentRegistrationForm = () => {
         </div>
       </div>
 
+      {/* DOB */}
       <div>
         <label className="block font-medium">Date of Birth *</label>
-        <DatePicker
-          selected={dob}
-          onChange={(date) => setDob(date)}
-          dateFormat="yyyy-MM-dd"
+        <input
+          type="date"
+          value={dob}
+          onChange={(e) => setDob(e.target.value)}
+          max={new Date().toISOString().split('T')[0]}
           className="input"
-          maxDate={new Date()}
-          placeholderText="Select DOB"
         />
       </div>
 
+      {/* Payment Date */}
       <div>
         <label className="block font-medium">Payment Date *</label>
-        <DatePicker
-          selected={paymentDate}
-          onChange={(date) => setPaymentDate(date)}
-          dateFormat="yyyy-MM-dd"
+        <input
+          type="date"
+          value={paymentDate}
+          onChange={(e) => setPaymentDate(e.target.value)}
           className="input"
-          placeholderText="Select payment date"
         />
       </div>
 
+      {/* Profile Image */}
       <div>
         <label className="block font-medium">Profile Image (Max 250KB) *</label>
         <input type="file" accept="image/*" onChange={(e) => handleFileChange(e, setImageResponse)} />
         {imageResponse && <p className="text-green-600">{imageResponse.name}</p>}
       </div>
 
+      {/* Hostel Fee Receipt */}
       <div>
         <label className="block font-medium">Hostel Fee Receipt (PDF, Max 250KB) *</label>
         <input type="file" accept="application/pdf" onChange={(e) => handleFileChange(e, setHostelFeeReceipt)} />
         {hostelFeeReceipt && <p className="text-green-600">{hostelFeeReceipt.name}</p>}
       </div>
 
+      {/* Institute Fee Receipt */}
       <div>
         <label className="block font-medium">Institute Fee Receipt (PDF, Max 250KB)</label>
         <input type="file" accept="application/pdf" onChange={(e) => handleFileChange(e, setInstituteFeeReceipt)} />
         {instituteFeeReceipt && <p className="text-green-600">{instituteFeeReceipt.name}</p>}
       </div>
 
+      {/* Submit */}
       <button
         type="submit"
         className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded disabled:opacity-50"

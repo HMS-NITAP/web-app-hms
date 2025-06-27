@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { fetchDetailedMessMenu } from '../../services/operations/CommonAPI';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const meals = ['Breakfast', 'Lunch', 'Snacks', 'Dinner'];

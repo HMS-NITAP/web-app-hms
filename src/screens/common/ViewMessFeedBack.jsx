@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCurrentDateRatingsAndReviews } from '../../services/operations/CommonAPI';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { FaPlusCircle } from 'react-icons/fa';
-import { Rating } from 'react-simple-star-rating';
+import Rating from 'react-rating';
 
 const ViewMessFeedBack = () => {
   const [data, setData] = useState([]);
@@ -12,7 +12,6 @@ const ViewMessFeedBack = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const { token } = useSelector((state) => state.Auth);
   const { user } = useSelector((state) => state.Profile);
 
   const fetchData = useCallback(async () => {
@@ -56,9 +55,10 @@ const ViewMessFeedBack = () => {
               <div className="flex flex-col items-center">
                 <Rating
                   readonly
-                  initialValue={Number(session.averageRating)}
-                  size={30}
-                  allowFraction
+                  initialRating={Number(session.averageRating)}
+                  emptySymbol={<span className="text-gray-300 text-2xl">☆</span>}
+                  fullSymbol={<span className="text-yellow-500 text-2xl">★</span>}
+                  fractions={2}
                 />
                 <p className="font-bold text-black text-center">{session.averageRating.toFixed(2)}</p>
               </div>
@@ -70,12 +70,15 @@ const ViewMessFeedBack = () => {
                       key={idx}
                       className="min-w-[200px] border border-dashed border-black rounded-xl p-4 flex flex-col items-center gap-2"
                     >
-                      <p className="text-center font-medium">{review.createdBy.name} ({review.createdBy.rollNo})</p>
+                      <p className="text-center font-medium">
+                        {review.createdBy.name} ({review.createdBy.rollNo})
+                      </p>
                       <Rating
                         readonly
-                        initialValue={Number(review.rating)}
-                        size={20}
-                        allowFraction
+                        initialRating={Number(review.rating)}
+                        emptySymbol={<span className="text-gray-300 text-xl">☆</span>}
+                        fullSymbol={<span className="text-yellow-500 text-xl">★</span>}
+                        fractions={2}
                       />
                       <p className="text-center text-black font-semibold">{review.review}</p>
                     </div>

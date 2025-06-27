@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../services/operations/AuthAPI';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import MainButton from '../../components/common/MainButton';
 import { useNavigate } from 'react-router-dom';
 

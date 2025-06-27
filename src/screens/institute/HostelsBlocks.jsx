@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import AnimatedCardHostelBlock from '../../components/common/AnimatedCardHostelBlock';
 import { useDispatch } from 'react-redux';
 import { fetchHostelData } from '../../services/operations/CommonAPI';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 
 const HostelBlocks = () => {
   const [loading, setLoading] = useState(true);
