@@ -1,90 +1,96 @@
-import { useFocusEffect } from '@react-navigation/native';
-import React, { useCallback, useState } from 'react'
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCurrentDateRatingsAndReviews, fetchMessAndFeedBackData } from '../../services/operations/CommonAPI';
-import { useToast } from 'react-native-toast-notifications';
-import { AirbnbRating } from 'react-native-ratings';
-import Icon from 'react-native-vector-icons/FontAwesome6';
+import { fetchCurrentDateRatingsAndReviews } from '../../services/operations/CommonAPI';
+import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import { FaPlusCircle } from 'react-icons/fa';
+import Rating from 'react-rating';
 
-const ViewMessFeedBack = ({navigation}) => {
-
-  const [data,setData] = useState([]);
-  const [loading,setLoading] = useState(false);
+const ViewMessFeedBack = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
-  const toast = useToast();
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.Profile);
 
-  const {token} = useSelector((state) => state.Auth);
-  const {user} = useSelector((state) => state.Profile);
-
-  const fetchData = async() => {
-    const data = await dispatch(fetchCurrentDateRatingsAndReviews(toast));
-    if(!data) return;
-    setData(data);
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    const result = await dispatch(fetchCurrentDateRatingsAndReviews(toast));
+    if (result) setData(result);
     setLoading(false);
-  }
+  }, [dispatch]);
 
-  useFocusEffect(
-    useCallback(() => {
-      fetchData();
-    }, [])
-);
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   return (
-    <ScrollView contentContainerStyle={{width:"100%", paddingVertical:25, paddingHorizontal:20, display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", gap:20}}>
-      <Text style={{color:"grey", fontSize:22, fontWeight:"700"}}>Today's Feedback</Text>
-      {
-        toast && user && user?.accountType==="STUDENT" && (
-          <View style={{width:"100%", display:"flex", flexDirection:"row", justifyContent:"flex-end"}}>
-            <TouchableOpacity onPress={() => navigation.navigate("Give Mess Feedback")} style={{display:"flex", padding:10, flexDirection:"row", justifyContent:"flex-end", alignItems:"center", gap:5, borderRadius:15, backgroundColor:"#ccd5ae"}}>
-              <Icon name="circle-plus" size={20} color="grey" solid />
-              <Text style={{color:"black", textAlign:"right", fontSize:16, fontWeight:"600"}}>Give Feedback</Text>
-            </TouchableOpacity>
-          </View>
-        )
-      }
-      {
-        loading ? (<Text style={{textAlign:"center", fontWeight:"700", fontSize:18}}>Please Wait...</Text>) : (
-          <View style={{width:"100%", display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", gap:15}}>
-            {
-              data.map((session,index) => (
-                <ScrollView key={index} contentContainerStyle={{width:"100%", display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", gap:20, borderColor:"black", borderStyle:"dotted", borderWidth:1 , borderRadius:20, padding:20}}>
-                  <Text style={{color:"black", textAlign:"center", fontWeight:"700", fontSize:18}}>{session?.session}</Text>
-                  <View style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", gap:0}}>
-                    <AirbnbRating
-                      defaultRating={Math.round(parseFloat(session?.averageRating, 10))}
-                      isDisabled
-                      showRating={false}
-                      size={30}
-                    />
-                    <Text style={{fontWeight:"800", color:"black", textAlign:"center", fontSize:16}}>{session?.averageRating.toFixed(2)}</Text>
-                  </View>
-                  <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{gap:15, display:"flex", flexDirection:"row", justifyContent:"center", alignItems:"center"}}>
-                    {
-                      session?.reviews.map((review,index) => (
-                        <View key={index} style={{padding:10, width:200, borderStyle:"dashed", borderRadius:15, borderColor:"black", borderWidth:1, display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center"}}>
-                            <Text style={{fontSize:15, textAlign:"center", fontWeight:"500"}}>{review?.createdBy?.name} ({review?.createdBy?.rollNo})</Text>
-                            <AirbnbRating
-                              defaultRating={Math.round(parseFloat(review?.rating, 10))}
-                              isDisabled
-                              showRating={false}
-                              size={20}
-                            />
-                            <Text style={{textAlign:"center", color:"black", fontSize:16, fontWeight:"600"}}>{review?.review}</Text>
-                        </View>
-                      ))
-                    }
-                  </ScrollView>
-                </ScrollView>
-              ))
-            }
-          </View>
-        )
-      }
-    </ScrollView>
-  )
-}
+    <div className="w-full px-5 py-8 flex flex-col items-center gap-6">
+      <h2 className="text-2xl font-bold text-gray-700">Today's Feedback</h2>
 
-export default ViewMessFeedBack
+      {user?.accountType === 'STUDENT' && (
+        <div className="w-full flex justify-end">
+          <button
+            onClick={() => navigate('/give-mess-feedback')}
+            className="flex items-center gap-2 bg-green-200 px-4 py-2 rounded-xl text-black font-semibold"
+          >
+            <FaPlusCircle className="text-gray-700" />
+            Give Feedback
+          </button>
+        </div>
+      )}
 
+      {loading ? (
+        <p className="text-lg font-bold">Please Wait...</p>
+      ) : (
+        <div className="w-full flex flex-col items-center gap-8">
+          {data.map((session, index) => (
+            <div
+              key={index}
+              className="w-full border border-dotted border-black rounded-xl p-5 flex flex-col items-center gap-4"
+            >
+              <h3 className="text-lg font-bold text-black text-center">{session.session}</h3>
+
+              <div className="flex flex-col items-center">
+                <Rating
+                  readonly
+                  initialRating={Number(session.averageRating)}
+                  emptySymbol={<span className="text-gray-300 text-2xl">☆</span>}
+                  fullSymbol={<span className="text-yellow-500 text-2xl">★</span>}
+                  fractions={2}
+                />
+                <p className="font-bold text-black text-center">{session.averageRating.toFixed(2)}</p>
+              </div>
+
+              <div className="w-full overflow-x-auto">
+                <div className="flex gap-4">
+                  {session.reviews.map((review, idx) => (
+                    <div
+                      key={idx}
+                      className="min-w-[200px] border border-dashed border-black rounded-xl p-4 flex flex-col items-center gap-2"
+                    >
+                      <p className="text-center font-medium">
+                        {review.createdBy.name} ({review.createdBy.rollNo})
+                      </p>
+                      <Rating
+                        readonly
+                        initialRating={Number(review.rating)}
+                        emptySymbol={<span className="text-gray-300 text-xl">☆</span>}
+                        fullSymbol={<span className="text-yellow-500 text-xl">★</span>}
+                        fractions={2}
+                      />
+                      <p className="text-center text-black font-semibold">{review.review}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ViewMessFeedBack;

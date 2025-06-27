@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { sendResetPasswordEmail } from '../../services/operations/AuthAPI';
 import { useNavigate } from 'react-router-dom';
 import MainButton from '../../components/common/MainButton';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 
 const ForgotPassword = () => {
   const { control, handleSubmit, formState: { errors } } = useForm();
@@ -21,11 +21,6 @@ const ForgotPassword = () => {
 
   return (
     <div className="w-full min-h-screen flex justify-start items-center flex-col px-4">
-      {/* Heading - optional */}
-      {/* <div className="w-full bg-yellow-400 py-4 text-center">
-        <h1 className="text-3xl font-bold text-black">Forgot Password</h1>
-      </div> */}
-
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-full max-w-md flex flex-col justify-center items-start gap-10 pt-24 pb-10"

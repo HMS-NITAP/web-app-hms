@@ -1,105 +1,72 @@
-import React from 'react'
-import { ScrollView, StyleSheet, View, Text, TouchableOpacity, Linking } from 'react-native'
-import {hostelCommiteeData,medicalAndSecurityOfficerData,securitySepervisorsData,hostelOfficeStaffData} from '../../static/ContactUsData'
-import AnimatedCardPerson from '../../components/common/AnimatedCardPerson'
+import React from 'react';
+import { hostelCommiteeData, medicalAndSecurityOfficerData, securitySepervisorsData, hostelOfficeStaffData } from '../../static/ContactUsData';
+import AnimatedCardPerson from '../../components/common/AnimatedCardPerson';
 
 const ContactUs = () => {
-
   return (
-    <ScrollView>
-        {/* <View style={styles.heading}>
-            <Text style={{fontSize:30,fontWeight:'700',color:'#000000'}}>Contact Us</Text>
-        </View> */}
-        <View style={styles.container}>
-            <View style={styles.subContainer}>
-                <Text style={{fontSize:18,fontWeight:'700',color:'#000000', textAlign:'center'}}>NIT Andhra Pradesh Hostel Committee</Text>
-                <View style={styles.cardContainer}>
-                    {
-                        hostelCommiteeData.map((data,index) => (
-                            <AnimatedCardPerson key={index} data={data} />
-                        ))
-                    }  
-                </View>
-            </View>
-            <View style={styles.hr} />
-            <View style={styles.subContainer}>
-                <Text style={{fontSize:18,fontWeight:'700',color:'#000000', textAlign:'center'}}>Hostel Office Staff</Text>
-                <View style={styles.cardContainer}>
-                    {
-                        hostelOfficeStaffData.map((data,index) => (
-                            <AnimatedCardPerson key={index} data={data} />
-                        ))
-                    }  
-                </View>
-            </View>
-            <View style={styles.hr} />
-            <View style={styles.subContainer}>
-                <Text style={{fontSize:18,fontWeight:'700',color:'#000000', textAlign:'center'}}>Medical and Security Officer</Text>
-                <View style={styles.cardContainer}>
-                    {
-                        medicalAndSecurityOfficerData.map((data,index) => (
-                            <AnimatedCardPerson key={index} data={data} />
-                        ))
-                    }  
-                </View>
-            </View>
-            <View style={styles.hr} />
-            <View style={styles.subContainer}>
-                <Text style={{fontSize:18,fontWeight:'700',color:'#000000', textAlign:'center'}}>Security Supervisors</Text>
-                <View style={styles.cardContainer}>
-                    {
-                        securitySepervisorsData.map((data,index) => (
-                            <AnimatedCardPerson key={index} data={data} />
-                        ))
-                    }  
-                </View>
-            </View>
-        </View>
-        <View style={{marginVertical:10, marginHorizontal:40}}>
-            <Text style={{color:"#4a4e69", textAlign:"center"}}>If you want to delete your account, please contact us on <TouchableOpacity style={{color:"blue"}} onPress={() => Linking.openURL("mailto:hmsnitap@gmail.com")}><Text style={{color:"blue"}}>hmsnitap@gmail.com</Text></TouchableOpacity> from your registered mail ID and reason for account deletion.</Text>
-        </View>
-    </ScrollView>
-  )
-}
+    <div className="w-full max-h-screen overflow-y-auto px-0 py-4 flex flex-col items-start gap-12">
 
-export default ContactUs
+      {/* Hostel Committee */}
+      <div className="w-full flex flex-col items-center">
+        <h2 className="text-lg font-bold text-black text-center">NIT Andhra Pradesh Hostel Committee</h2>
+        <div className="w-[90%] flex flex-col gap-6 py-6">
+          {hostelCommiteeData.map((data, index) => (
+            <AnimatedCardPerson key={index} data={data} />
+          ))}
+        </div>
+      </div>
 
-const styles = StyleSheet.create({
-    heading:{
-        width:'100%',
-        backgroundColor:'#ffb703',
-        paddingVertical:15,
-        textAlign:'center',
-        display:'flex',
-        justifyContent:'center',
-        alignItems:'center',
-    },
-    container:{
-        width:'100%',
-        display:'flex',
-        justifyContent:'center',
-        alignItems:'flex-start',
-        paddingVertical:15,
-        paddingHorizontal:0,
-        gap:30,
-    },
-    subContainer:{
-        width:'100%',
-        display:'flex',
-        flexDirection:"column",
-        justifyContent:'center',
-        alignItems:'center',
-    },
-    cardContainer:{
-        width:"90%",
-        gap:20,
-        paddingVertical:30,
-        paddingHorizontal:0,
-    },
-    hr:{
-        width : "100%",
-        height : 2,
-        backgroundColor : "#495057",
-        borderRadius : 100,
-    }
-})
+      <div className="w-full h-[2px] bg-gray-600 rounded-full"></div>
+
+      {/* Hostel Office Staff */}
+      <div className="w-full flex flex-col items-center">
+        <h2 className="text-lg font-bold text-black text-center">Hostel Office Staff</h2>
+        <div className="w-[90%] flex flex-col gap-6 py-6">
+          {hostelOfficeStaffData.map((data, index) => (
+            <AnimatedCardPerson key={index} data={data} />
+          ))}
+        </div>
+      </div>
+
+      <div className="w-full h-[2px] bg-gray-600 rounded-full"></div>
+
+      {/* Medical and Security Officer */}
+      <div className="w-full flex flex-col items-center">
+        <h2 className="text-lg font-bold text-black text-center">Medical and Security Officer</h2>
+        <div className="w-[90%] flex flex-col gap-6 py-6">
+          {medicalAndSecurityOfficerData.map((data, index) => (
+            <AnimatedCardPerson key={index} data={data} />
+          ))}
+        </div>
+      </div>
+
+      <div className="w-full h-[2px] bg-gray-600 rounded-full"></div>
+
+      {/* Security Supervisors */}
+      <div className="w-full flex flex-col items-center">
+        <h2 className="text-lg font-bold text-black text-center">Security Supervisors</h2>
+        <div className="w-[90%] flex flex-col gap-6 py-6">
+          {securitySepervisorsData.map((data, index) => (
+            <AnimatedCardPerson key={index} data={data} />
+          ))}
+        </div>
+      </div>
+
+      {/* Account Deletion Notice */}
+      <div className="my-4 mx-10">
+        <p className="text-center text-[#4a4e69]">
+          If you want to delete your account, please contact us at{" "}
+          <a
+            href="mailto:hmsnitap@gmail.com"
+            className="text-blue-600 underline"
+          >
+            hmsnitap@gmail.com
+          </a>{" "}
+          from your registered mail ID along with the reason for account deletion.
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default ContactUs;

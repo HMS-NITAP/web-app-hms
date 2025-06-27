@@ -1,101 +1,72 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, View, Text } from 'react-native';
-import HostelBlockCard from '../../components/institute/HostelBlockCard';
-import { useDispatch } from 'react-redux';
-import { useToast } from 'react-native-toast-notifications';
-import { fetchHostelData } from '../../services/operations/CommonAPI';
 import AnimatedCardHostelBlock from '../../components/common/AnimatedCardHostelBlock';
+import { useDispatch } from 'react-redux';
+import { fetchHostelData } from '../../services/operations/CommonAPI';
+import { toast } from 'react-hot-toast';
 
 const HostelBlocks = () => {
+  const [loading, setLoading] = useState(true);
+  const [boysHostelData, setBoysHostelData] = useState([]);
+  const [girlsHostelData, setGirlsHostelData] = useState([]);
 
-    const [loading,setLoading] = useState(true);
-    const [boysHostelData, setBoysHostelData] = useState([]);
-    const [girlsHostelData, setGirlsHostelData] = useState([]);
+  const dispatch = useDispatch();
 
-    const dispatch = useDispatch();
-    const toast = useToast();
+  useEffect(() => {
+    const fetchHostelBlockData = async () => {
+      try {
+        const data = await dispatch(fetchHostelData(toast));
+        if (!data) {
+          toast.error('Failed to fetch hostel data');
+          return;
+        }
 
-    useEffect(() => {
-        const fetchHostelBlockData = async() => {
-            const data = await dispatch(fetchHostelData(toast));
-            if (!data) return;
-        
-            setBoysHostelData(data.filter((item) => item.gender === 'M'));
-            setGirlsHostelData(data.filter((item) => item.gender === 'F'));
+        setBoysHostelData(data.filter((item) => item.gender === 'M'));
+        setGirlsHostelData(data.filter((item) => item.gender === 'F'));
+        toast.success('Hostel data loaded successfully');
+      } catch (error) {
+        toast.error('Something went wrong while fetching hostel data');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-            setLoading(false);
-        };
-        fetchHostelBlockData();
-    },[]);
+    fetchHostelBlockData();
+  }, [dispatch]);
+
+  if (loading) {
+    return (
+      <div className="w-full flex justify-center items-center py-10">
+        <p className="text-lg font-semibold">Loading Hostel Data...</p>
+      </div>
+    );
+  }
 
   return (
-    <>
-        {
-            loading ? "" :
-            <ScrollView>
-                <View style={styles.container}>
-                    <View style={styles.subContainer}>
-                    <Text style={{ fontSize: 18, fontWeight: '700', color: '#000000', textAlign: 'center' }}>Girls Hostel Blocks</Text>
-                    <View style={styles.cardContainer}>
-                        {girlsHostelData && girlsHostelData.map((data, index) => (
-                        <AnimatedCardHostelBlock key={index} data={data} />
-                        ))}
-                    </View>
-                    </View>
-                    <View style={styles.hr} />
-                    <View style={styles.subContainer}>
-                    <Text style={{ fontSize: 18, fontWeight: '700', color: '#000000', textAlign: 'center' }}>Boys Hostel Blocks</Text>
-                    <View style={styles.cardContainer}>
-                        {boysHostelData && boysHostelData.map((data, index) => (
-                        <AnimatedCardHostelBlock key={index} data={data} />
-                        ))}
-                    </View>
-                    </View>
-                </View>
-            </ScrollView>
-        }
-    </>
+    <div className="w-full flex flex-col items-start px-4 py-6 gap-12">
+      {/* Girls Hostel Blocks */}
+      <div className="w-full flex flex-col items-center">
+        <h2 className="text-xl font-bold text-black text-center mb-4">Girls Hostel Blocks</h2>
+        <div className="w-[90%] flex flex-col gap-6">
+          {girlsHostelData.map((data, index) => (
+            <AnimatedCardHostelBlock key={index} data={data} />
+          ))}
+        </div>
+      </div>
+
+      {/* Divider */}
+      <div className="w-full h-1 bg-gray-600 rounded-full"></div>
+
+      {/* Boys Hostel Blocks */}
+      <div className="w-full flex flex-col items-center">
+        <h2 className="text-xl font-bold text-black text-center mb-4">Boys Hostel Blocks</h2>
+        <div className="w-[90%] flex flex-col gap-6">
+          {boysHostelData.map((data, index) => (
+            <AnimatedCardHostelBlock key={index} data={data} />
+          ))}
+        </div>
+      </div>
+    </div>
   );
 };
 
 export default HostelBlocks;
-
-const styles = StyleSheet.create({
-  heading: {
-    width: '100%',
-    backgroundColor: '#ffb703',
-    paddingVertical: 15,
-    textAlign: 'center',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  container: {
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    paddingVertical: 15,
-    paddingHorizontal: 10,
-    gap: 30,
-  },
-  subContainer: {
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  cardContainer: {
-    width: '90%',
-    gap: 20,
-    paddingVertical: 30,
-    paddingHorizontal: 0,
-  },
-  hr: {
-    width: '100%',
-    height: 2,
-    backgroundColor: '#495057',
-    borderRadius: 100,
-  },
-});

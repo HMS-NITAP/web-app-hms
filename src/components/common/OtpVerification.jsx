@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { verifyOtp } from '../../services/operations/AuthAPI';
 import { setRegistrationStep } from '../../reducers/slices/AuthSlice';
-import { useToast } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
 import MainButton from './MainButton';
 
 const OtpVerification = () => {
   const dispatch = useDispatch();
-  const toast = useToast();
-
   const [otp, setOtp] = useState('');
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
@@ -16,7 +14,7 @@ const OtpVerification = () => {
 
   const submitHandler = async () => {
     if (!otp || otp.length !== 6) {
-      toast.addToast('Enter a valid 6-digit OTP.', { appearance: 'warning' });
+      toast.error('Enter a valid 6-digit OTP.');
       return;
     }
 
@@ -32,6 +30,13 @@ const OtpVerification = () => {
       dispatch(setRegistrationStep(3));
     }
     setIsButtonDisabled(false);
+  };
+
+  const handleInputChange = (e, index) => {
+    const val = e.target.value.replace(/[^0-9]/g, '');
+    const newOtp = otp.split('');
+    newOtp[index] = val;
+    setOtp(newOtp.join('').slice(0, 6));
   };
 
   return (
@@ -51,12 +56,7 @@ const OtpVerification = () => {
               type="text"
               maxLength={1}
               value={otp[index] || ''}
-              onChange={(e) => {
-                const val = e.target.value.replace(/[^0-9]/g, '');
-                const newOtp = otp.split('');
-                newOtp[index] = val;
-                setOtp(newOtp.join('').slice(0, 6));
-              }}
+              onChange={(e) => handleInputChange(e, index)}
               className="w-10 h-12 text-center text-black border border-gray-400 rounded-lg text-lg"
             />
           ))}

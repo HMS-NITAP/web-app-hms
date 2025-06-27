@@ -1,124 +1,104 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { fetchDetailedMessMenu } from '../../services/operations/CommonAPI';
-import { useToast } from 'react-native-toast-notifications';
-import { useFocusEffect } from '@react-navigation/native';
+import { toast } from 'react-hot-toast';
 
-const days = [ 'Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const meals = ['Breakfast', 'Lunch', 'Snacks', 'Dinner'];
 
 const getCurrentSession = () => {
-    const now = new Date();
-    const currentHour = now.getHours();
+  const now = new Date();
+  const currentHour = now.getHours();
 
-    if(currentHour >= 0 && currentHour < 10){
-        return 'Breakfast';
-    }else if(currentHour >= 10 && currentHour < 15){
-        return 'Lunch';
-    }else if(currentHour >= 15 && currentHour < 18){
-        return 'Snacks';
-    }else{
-        return 'Dinner';
-    }
+  if (currentHour >= 0 && currentHour < 10) return 'Breakfast';
+  else if (currentHour >= 10 && currentHour < 15) return 'Lunch';
+  else if (currentHour >= 15 && currentHour < 18) return 'Snacks';
+  else return 'Dinner';
 };
 
 const DetailedMessMenu = () => {
+  const [selectedDay, setSelectedDay] = useState(days[new Date().getDay()]);
+  const [mealPeriod, setMealPeriod] = useState(getCurrentSession());
+  const [detailedMessMenu, setDetailedMessMenu] = useState(null);
+  const [menu, setMenu] = useState(null);
 
-    const [selectedDay, setSelectedDay] = useState(days[new Date().getDay()]);
-    const [mealPeriod, setMealPeriod] = useState(getCurrentSession());
-    const [detailedMessMenu, setDetailedMessMenu] = useState(null);
-    const [menu, setMenu] = useState(null);
+  const dispatch = useDispatch();
 
-    const dispatch = useDispatch();
-    const toast = useToast();
+  const fetchData = async () => {
+    const response = await dispatch(fetchDetailedMessMenu(toast));
+    setDetailedMessMenu(response);
+  };
 
-    const fetchData = async() => {
-        const response = await dispatch(fetchDetailedMessMenu(toast));
-        setDetailedMessMenu(response);
+  useEffect(() => {
+    setSelectedDay(days[new Date().getDay()]);
+    setMealPeriod(getCurrentSession());
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (detailedMessMenu && selectedDay && mealPeriod) {
+      setMenu(detailedMessMenu[selectedDay]?.[mealPeriod]);
     }
+  }, [selectedDay, mealPeriod, detailedMessMenu]);
 
-    useFocusEffect(
-        useCallback(() => {
-            setSelectedDay(days[new Date().getDay()]);
-            setMealPeriod(getCurrentSession());
-            fetchData();
-        }, [toast])
-    );
+  return (
+    <div className="w-full flex flex-col items-center px-4 py-6 gap-8">
+      {/* Day Selection */}
+      <div className="w-full">
+        <p className="text-lg font-bold text-black mb-2">Select Day :</p>
+        <div className="flex flex-wrap gap-2 justify-center">
+          {days.map((day, index) => (
+            <button
+              key={index}
+              onClick={() => setSelectedDay(day)}
+              className={`px-3 py-2 rounded-lg text-sm font-semibold ${
+                selectedDay === day ? 'bg-blue-900 text-white' : 'bg-lime-300 text-black'
+              }`}
+            >
+              {day}
+            </button>
+          ))}
+        </div>
+      </div>
 
-    useEffect(() => {
-        if(detailedMessMenu!==null && selectedDay && mealPeriod){
-            setMenu(detailedMessMenu[selectedDay][mealPeriod]);
-        }
-    },[selectedDay,mealPeriod,detailedMessMenu]);
+      {/* Meal Selection */}
+      <div className="w-full">
+        <p className="text-lg font-bold text-black mb-2">Select Meal Session :</p>
+        <div className="flex flex-wrap gap-2 justify-center">
+          {meals.map((meal, index) => (
+            <button
+              key={index}
+              onClick={() => setMealPeriod(meal)}
+              className={`px-3 py-2 rounded-lg text-sm font-semibold ${
+                mealPeriod === meal ? 'bg-blue-900 text-white' : 'bg-lime-300 text-black'
+              }`}
+            >
+              {meal}
+            </button>
+          ))}
+        </div>
+      </div>
 
-    return (
-        <ScrollView contentContainerStyle={{display:"flex", flexDirection:"column", justifyContent:"flex-start", alignItems:"center", width:"100%", gap:30, paddingHorizontal:20, paddingVertical:15}}>
-            <View style={{display:"flex", width:"100%"}}>
-                <Text style={{fontSize:16, fontWeight:"700", color:"black", marginBottom:10}}>Select Day :</Text>
-                <View style={{width:"100%", display : "flex", flexDirection:"row", gap:10, justifyContent:"space-around", flexWrap:"wrap", justifyContent: 'center', alignItems: 'center'}}>
-                    {days.map((day, index) => (
-                        <TouchableOpacity
-                            key={index}
-                            style={{backgroundColor:selectedDay===day ? '#0d3b66' : '#99d98c', padding: 7, alignItems: 'center', borderRadius: 10}}
-                            onPress={() => setSelectedDay(day)}
-                        >
-                            <Text style={{fontSize: 16, color:selectedDay===day ? "white" : "black", fontWeight: "600"}}>{day}</Text>
-                        </TouchableOpacity>
-                    ))}
-                </View>
-            </View>
-            <View style={{display:"flex", width:"100%"}}>
-                <Text style={{fontSize:16, fontWeight:"700", color:"black", marginBottom:10}}>Select Meal Session :</Text>
-                <View style={{width:"100%", display : "flex", flexDirection:"row", gap:10, justifyContent:"space-around", flexWrap:"wrap", justifyContent: 'center', alignItems: 'center'}}>
-                    {meals.map((meal, index) => (
-                        <TouchableOpacity
-                            key={index}
-                            style={{backgroundColor:mealPeriod===meal ? '#0d3b66' : '#99d98c', padding: 7, alignItems: 'center', borderRadius: 10}}
-                            onPress={() => setMealPeriod(meal)}
-                        >
-                            <Text style={{fontSize: 16, color:mealPeriod===meal ? "white" : "black", fontWeight: "600"}}>{meal}</Text>
-                        </TouchableOpacity>
-                    ))}
-                </View>
-            </View>
-            <View style={{display:"flex", width:"100%"}}>
-                <Text style={{fontSize:16, fontWeight:"600", color:"black", marginBottom:10}}>Menu Items :</Text>
-                <View contentContainerStyle={styles.menuContainer}>
-                    {menu && menu.map((menuItem, index) => (
-                        <View key={index} style={styles.menuItem}>
-                            <Text style={styles.menuText}>{menuItem}</Text>
-                        </View>
-                    ))}
-                </View>
-            </View>
-        </ScrollView>
-    );
+      {/* Menu Items */}
+      <div className="w-full">
+        <p className="text-lg font-semibold text-black mb-2">Menu Items :</p>
+        <div className="space-y-3">
+          {menu && menu.length > 0 ? (
+            menu.map((menuItem, index) => (
+              <div
+                key={index}
+                className="w-full bg-green-100 border border-black rounded-xl px-4 py-3 text-center text-base text-black font-medium shadow"
+              >
+                {menuItem}
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-600">No items available for this selection.</p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 };
-
-const styles = StyleSheet.create({
-    menuContainer: {
-        flexGrow: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        paddingHorizontal: 20,
-    },
-    menuItem: {
-        backgroundColor: '#E8F5E9',
-        borderRadius: 20,
-        borderColor:"black",
-        borderWidth:0.25,
-        padding: 15,
-        marginBottom: 15,
-        width: '100%',
-        alignItems: 'center'
-    },
-    menuText: {
-        fontSize: 18,
-        color: 'black',
-        textAlign: 'center',
-        fontWeight:"500",
-    }
-});
 
 export default DetailedMessMenu;

@@ -7,37 +7,37 @@ import {
 } from "react-icons/fa6";
 
 import Login from '../screens/auth/Login';
-// import Signup from '../screens/auth/Signup';
+import Signup from '../screens/auth/Signup';
 // import LogoutModal from '../components/common/LogoutModal';
 // import CreateAnnouncement from '../screens/official/CreateAnnouncement';
-// import HostelsBlocks from '../screens/institute/HostelsBlocks';
-// import ContactUs from '../screens/institute/ContactUs';
-// import DevelopmentTeam from '../screens/institute/DevelopmentTeam';
-// import ForgotPassword from '../screens/auth/ForgotPassword';
-// import ResetPasswordMailSent from '../screens/auth/ResetPasswordMailSent';
-// import ResetPassword from '../screens/auth/ResetPassword';
-// import ResetPasswordSuccess from '../screens/auth/ResetPasswordSuccess';
+import HostelsBlocks from '../screens/institute/HostelsBlocks';
+import ContactUs from '../screens/institute/ContactUs';
+import DevelopmentTeam from '../screens/institute/DevelopmentTeam';
+import ForgotPassword from '../screens/auth/ForgotPassword';
+import ResetPasswordMailSent from '../screens/auth/ResetPasswordMailSent';
+import ResetPassword from '../screens/auth/ResetPassword';
+import ResetPasswordSuccess from '../screens/auth/ResetPasswordSuccess';
 // import StudentDashboard from '../screens/student/StudentDashboard';
 // import AttendanceHistory from '../screens/student/AttendanceHistory';
 // import OutingApplication from '../screens/student/OutingApplication';
 // import RegisterComplaint from '../screens/student/RegisterComplaint';
 // import OtpInput from '../screens/auth/OtpInput';
 import Gallery from '../screens/institute/Gallary';
-// import LogoutModal from '../screens/common/LogoutModal';
-// import Announcements from '../screens/common/Announcements';
+import LogoutModal from '../screens/common/LogoutModal';
+import Announcements from '../screens/common/Announcements';
 // import OutingRequest from '../screens/official/OutingRequest';
 // import ApplicationHistory from '../screens/student/ApplicationHistory';
 // import RegisterComplaints from '../screens/student/RegisteredComplaints';
 // import HostelComplaints from '../screens/official/HostelComplaints';
 // import TakeAttendance from '../screens/official/TakeAttendance';
 // import ManageHostels from '../screens/admin/ManageHostels';
-// import MessMenu from '../screens/common/MessMenu';
-// import DetailedMessMenu from '../screens/common/DetailedMessMenu';
-// import ViewMessFeedBack from '../screens/common/ViewMessFeedBack';
+import MessMenu from '../screens/common/MessMenu';
+import DetailedMessMenu from '../screens/common/DetailedMessMenu';
+import ViewMessFeedBack from '../screens/common/ViewMessFeedBack';
 // import ManageOfficialAccounts from '../screens/admin/ManageOfficialAccounts';
 // import CreateHostelBlock from '../screens/admin/CreateHostelBlock';
 // import CreateOfficialAccount from '../screens/admin/CreateOfficialAccount';
-// import StudentRegistration from '../screens/auth/StudentRegistration';
+import StudentRegistration from '../screens/auth/StudentRegistration';
 // import StudentRegistrationApplications from '../screens/admin/StudentRegistrationApplications';
 import OfficialDashboard from '../screens/official/OfficialDashboard';
 // import GiveMessFeedback from '../screens/student/GiveMessFeedback';
@@ -59,20 +59,21 @@ export const USER_ROLES = {
 
 export const authRoutes = [
   { path: "/", element: <Login />, label: "Login", icon: <FaRightToBracket />, role: null },
-  // { path: "/student-registration", element: <StudentRegistration />, label: "Student Registration", icon: <FaAddressCard />, role: null },
-  // { path: "/announcements", element: <Announcements />, label: "Announcements", icon: <FaBullhorn />, role: null },
-  // { path: "/hostel-blocks", element: <HostelsBlocks />, label: "Hostel Blocks", icon: <FaBuilding />, role: null },
-  // { path: "/mess-menu", element: <MessMenu />, label: "Mess Menu", icon: <FaBowlFood />, role: null },
-  // { path: "/contact-us", element: <ContactUs />, label: "Contact Us", icon: <FaAddressBook />, role: null },
-  // { path: "/development-team", element: <DevelopmentTeam />, label: "Development Team", icon: <FaUsers />, role: null },
+  { path: "/student-registration", element: <StudentRegistration />, label: "Student Registration", icon: <FaAddressCard />, role: null },
+  { path: "/announcements", element: <Announcements />, label: "Announcements", icon: <FaBullhorn />, role: null },
+  { path: "/hostel-blocks", element: <HostelsBlocks />, label: "Hostel Blocks", icon: <FaBuilding />, role: null },
+  { path: "/mess-menu", element: <MessMenu />, label: "Mess Menu", icon: <FaBowlFood />, role: null },
+  { path: "/logout", element: <LogoutModal />, label: "Logout", icon: <FaUserGear />, role: null },
+  { path: "/contact-us", element: <ContactUs />, label: "Contact Us", icon: <FaAddressBook />, role: null },
+  { path: "/development-team", element: <DevelopmentTeam />, label: "Development Team", icon: <FaUsers />, role: null },
   { path: "/gallery", element: <Gallery />, label: "Gallery", icon: <FaImage />, role: null },
-  // { path: "/view-feedback", element: <ViewMessFeedBack />, label: "View Mess Feedback", icon: <FaStar />, role: null },
+  { path: "/view-feedback", element: <ViewMessFeedBack />, label: "View Mess Feedback", icon: <FaStar />, role: null },
 
-  // { path: "/reset-password-email-sent", element: <ResetPasswordMailSent />, role: null, hidden: true },
-  // { path: "/reset-password", element: <ResetPassword />, role: null, hidden: true },
-  // { path: "/reset-password-success", element: <ResetPasswordSuccess />, role: null, hidden: true },
-  // { path: "/forgot-password", element: <ForgotPassword />, role: null, hidden: true },
-  // { path: "/detailed-mess-menu", element: <DetailedMessMenu />, role: null, hidden: true },
+  { path: "/reset-password-email-sent", element: <ResetPasswordMailSent />, role: null, hidden: true },
+  { path: "/reset-password", element: <ResetPassword />, role: null, hidden: true },
+  { path: "/reset-password-success", element: <ResetPasswordSuccess />, role: null, hidden: true },
+  { path: "/forgot-password", element: <ForgotPassword />, role: null, hidden: true },
+  { path: "/detailed-mess-menu", element: <DetailedMessMenu />, role: null, hidden: true },
 ]
 
 export const adminRoutes = [

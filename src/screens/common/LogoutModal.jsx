@@ -1,63 +1,39 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import MainButton from '../../components/common/MainButton'
-import { useDispatch, useSelector } from 'react-redux'
-import { logout } from '../../services/operations/AuthAPI'
-import { useToast } from 'react-native-toast-notifications'
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../services/operations/AuthAPI';
+import { toast } from 'react-hot-toast';
+import MainButton from '../../components/common/MainButton';
+import { useNavigate } from 'react-router-dom';
 
-const LogoutModal = ({navigation}) => {
-    
-    const dispatch = useDispatch();
-    const toast = useToast();
+const LogoutModal = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.Profile);
 
-    const {user} = useSelector((state) => state.Profile);
+  const logOutHandler = async () => {
+    await dispatch(logout(navigate, toast));
+  };
 
-    const logOutHandler = async() => {
-        await(dispatch(logout(navigation,toast)));
+  const goBackHandler = () => {
+    if (user.accountType === 'STUDENT') {
+      navigate('/student-dashboard');
+    } else if (user.accountType === 'OFFICIAL') {
+      navigate('/create-announcement');
     }
-
-    const goBackHandler = async() => {
-      if(user.accountType === "STUDENT"){
-        navigation.navigate("StudentDashboard");
-      }else if(user.accountType === "OFFICIAL"){
-        navigation.navigate("CreateAnnouncement");
-      }
-    }
-
+  };
 
   return (
-    <View style={{display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center",gap:20,marginHorizontal:20,marginVertical:40}}>
-        <Text style={{fontSize:20,fontWeight:"800",color:"black", textAlign:"center"}}>Do you want to logout from your Account? </Text>
-        <View style={{display:"flex", flexDirection:"row", justifyContent:"center",alignItems:"center",gap:20}}>
-            <MainButton text="Continue" onPress={logOutHandler} />
-            <MainButton text="Go Back" backgroundColor={"#57cc99"} onPress={goBackHandler} />
-        </View>
-    </View>
-  )
-}
+    <div className="w-full flex flex-col items-center gap-6 px-4 py-10">
+      <p className="text-xl font-bold text-black text-center">
+        Do you want to logout from your Account?
+      </p>
 
-export default LogoutModal
+      <div className="flex gap-4 justify-center items-center">
+        <MainButton text="Continue" onClick={logOutHandler} />
+        <MainButton text="Go Back" backgroundColor="#57cc99" onClick={goBackHandler} />
+      </div>
+    </div>
+  );
+};
 
-const styles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-});
+export default LogoutModal;

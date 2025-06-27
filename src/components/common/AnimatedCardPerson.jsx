@@ -1,126 +1,76 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, Animated, TouchableOpacity, ScrollView, Linking, Platform } from 'react-native';
 
 const AnimatedCardPerson = ({ data }) => {
-    const [isExpanded, setIsExpanded] = useState(false);
-    const animatedHeight = useState(new Animated.Value(140))[0];
+  const [isExpanded, setIsExpanded] = useState(false);
 
-    const toggleCard = () => {
-        setIsExpanded(!isExpanded);
-        Animated.timing(animatedHeight, {
-            toValue: isExpanded ? 140 : 300,
-            duration: 250,
-            useNativeDriver: false,
-        }).start();
-    };
+  const toggleCard = () => {
+    setIsExpanded(!isExpanded);
+  };
 
-    return (
-        <Animated.View style={[styles.card, { height: animatedHeight }]}>
-            <View style={styles.header}>
-                <Image source={data.image} style={styles.image} />
-                <View style={styles.headerTextContainer}>
-                    <Text style={styles.name}>{data.name}</Text>
-                    <Text style={styles.designation}>{data.designation}</Text>
-                </View>
-            </View>
-            {
-                isExpanded && 
-                <ScrollView contentContainerStyle={styles.details}>
-                    <Text style={styles.detailText}>Full Name: {data.name}</Text>
-                    {
-                        data.email && <Text style={styles.detailText}>Email: <Text style={styles.link} onPress={() => Linking.openURL(`mailto:${data.email}`)}>{data.email}</Text></Text>
-                    }
-                    {
-                        data.phone && <Text style={styles.detailText}>Phone: <Text style={styles.link} onPress={() => Linking.openURL(`tel:${data.phone}`)}>{data.phone}</Text></Text>
-                    }
-                    {
-                        data.linkedIn && <Text style={styles.detailText}>LinkedIn: <Text style={styles.link} onPress={() => Linking.openURL(data.linkedIn)}>{data.linkedIn}</Text></Text>
-                    }
-                </ScrollView>
-            }
-            <Animated.View style={styles.moreInfoButtonContainer}>
-                <TouchableOpacity style={styles.moreInfoButton} onPress={toggleCard}>
-                    <Text style={styles.moreInfoButtonText}>{isExpanded ? 'Hide Info' : 'More Info'}</Text>
-                </TouchableOpacity>
-            </Animated.View>
-        </Animated.View>
-    );
+  return (
+    <div
+      className={`w-full border border-black rounded-lg bg-white shadow-md overflow-hidden transition-all duration-200 ${
+        isExpanded ? 'h-auto' : 'h-[140px]'
+      } relative mb-4`}
+    >
+      {/* Header Section */}
+      <div className="flex items-center p-3 gap-3">
+        <img
+          src={data.image}
+          alt={data.name}
+          className="w-20 h-20 rounded-full object-cover"
+        />
+        <div className="flex flex-col">
+          <h3 className="text-lg font-bold text-black">{data.name}</h3>
+          <p className="text-gray-600 text-sm font-medium">{data.designation}</p>
+        </div>
+      </div>
+
+      {/* Expanded Details */}
+      {isExpanded && (
+        <div className="px-4 py-3 flex flex-col gap-2 text-gray-700 text-[16px]">
+          <p><span className="font-semibold text-black">Full Name:</span> {data.name}</p>
+
+          {data.email && (
+            <p>
+              <span className="font-semibold text-black">Email:</span>{' '}
+              <a href={`mailto:${data.email}`} className="text-blue-600 underline">
+                {data.email}
+              </a>
+            </p>
+          )}
+
+          {data.phone && (
+            <p>
+              <span className="font-semibold text-black">Phone:</span>{' '}
+              <a href={`tel:${data.phone}`} className="text-blue-600 underline">
+                {data.phone}
+              </a>
+            </p>
+          )}
+
+          {data.linkedIn && (
+            <p>
+              <span className="font-semibold text-black">LinkedIn:</span>{' '}
+              <a href={data.linkedIn} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+                {data.linkedIn}
+              </a>
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* Toggle Button */}
+      <div className="absolute bottom-0 w-full">
+        <button
+          onClick={toggleCard}
+          className="w-full bg-[#415a77] text-white py-2 text-sm font-bold rounded-b-lg"
+        >
+          {isExpanded ? 'Hide Info' : 'More Info'}
+        </button>
+      </div>
+    </div>
+  );
 };
-
-const styles = StyleSheet.create({
-    card: {
-        width: '100%',
-        borderColor: 'black',
-        borderWidth: 1,
-        borderRadius: 10,
-        backgroundColor: '#fff',
-        marginVertical: 10,
-        ...Platform.select({
-            ios: {
-                shadowColor: 'black',
-                shadowOffset: { width: 0, height: 10 },
-                shadowOpacity: 0.3,
-                shadowRadius: 20,
-            },
-            android: {
-                elevation: 10,
-            },
-        }),
-        overflow: 'hidden',
-    },
-    header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 10,
-    },
-    image: {
-        width: 80,
-        height: 80,
-        borderRadius: 1000,
-        marginRight: 10,
-    },
-    headerTextContainer: {
-        flexDirection: 'column',
-    },
-    name: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color:"black",
-    },
-    designation: {
-        fontSize: 14,
-        color: 'gray',
-    },
-    details: {
-        paddingHorizontal: 10,
-        flexGrow: 1,
-        paddingVertical:10,
-    },
-    detailText: {
-        fontSize: 16,
-        marginVertical: 5,
-        color:"grey",
-    },
-    link: {
-        color: 'blue',
-        textDecorationLine: 'underline',
-    },
-    moreInfoButtonContainer: {
-        position: 'absolute',
-        bottom: 0,
-        width: '100%',
-    },
-    moreInfoButton: {
-        padding: 10,
-        backgroundColor: '#415a77',
-        borderBottomLeftRadius: 10,
-        borderBottomRightRadius: 10,
-    },
-    moreInfoButtonText: {
-        color: '#fff',
-        textAlign: 'center',
-        fontWeight: 'bold',
-    },
-});
 
 export default AnimatedCardPerson;
