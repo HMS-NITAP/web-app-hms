@@ -1,280 +1,189 @@
-import React, { useState } from 'react'
-import { acceptPendingOutingApplication, approvePendingOutingApplication, markCompletedWithDelayOutingApplication, markCompletedWithoutDelayOutingApplication, rejectPendingOutingApplication } from '../../services/operations/OfficialAPI';
-import { Text, TextInput, TouchableOpacity, View } from 'react-native';
-import MainButton from '../common/MainButton';
-import { Modal } from 'react-native';
-import { Controller, useForm } from 'react-hook-form';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useForm, Controller } from 'react-hook-form';
+import { acceptPendingOutingApplication, markCompletedWithDelayOutingApplication, markCompletedWithoutDelayOutingApplication, rejectPendingOutingApplication } from '../../services/operations/OfficialAPI';
+import MainButton from '../common/MainButton';
 
-const OutingRequestCard = ({application,token,toast,fetchOutingRequest}) => {
+const OutingRequestCard = ({ application, token, toast, fetchOutingRequest }) => {
+  const { control, handleSubmit, formState: { errors } } = useForm();
+  const dispatch = useDispatch();
 
-    const { control, handleSubmit, reset, formState: { errors } } = useForm();
+  const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false);
+  const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
+  const [isReturnWithDelayModalOpen, setIsReturnWithDelayModalOpen] = useState(false);
+  const [isReturnWithoutDelayModalOpen, setIsReturnWithoutDelayModalOpen] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
-    const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false);
-    const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
-    const [isReturnWithDelayModalOpen, setIsReturnWithDelayModalOpen] = useState(false);
-    const [isReturnWithoutDelayModalOpen, setIsReturnWithoutDelayModalOpen] = useState(false);
+  const getDateFormat = (date) => new Date(date).toLocaleString();
 
-    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const handleAccept = async () => {
+    setIsButtonDisabled(true);
+    const res = await dispatch(acceptPendingOutingApplication(application?.id, token, toast));
+    if (res) fetchOutingRequest();
+    setIsAcceptModalOpen(false);
+    setIsButtonDisabled(false);
+  };
 
-    const dispatch = useDispatch();
+  const handleReject = async (data) => {
+    setIsButtonDisabled(true);
+    const formData = new FormData();
+    formData.append('applicationId', application?.id);
+    formData.append('remarks', data?.remarks);
+    const res = await dispatch(rejectPendingOutingApplication(formData, token, toast));
+    if (res) fetchOutingRequest();
+    setIsRejectModalOpen(false);
+    setIsButtonDisabled(false);
+  };
 
+  const handleReturnWithoutDelay = async () => {
+    setIsButtonDisabled(true);
+    const res = await dispatch(markCompletedWithoutDelayOutingApplication(application?.id, token, toast));
+    if (res) fetchOutingRequest();
+    setIsReturnWithoutDelayModalOpen(false);
+    setIsButtonDisabled(false);
+  };
 
-    const getDateFormat = (date) => {
-        const newDate = new Date(date);
-        return newDate.toLocaleString();
-    }
+  const handleReturnWithDelay = async (data) => {
+    setIsButtonDisabled(true);
+    const formData = new FormData();
+    formData.append('applicationId', application?.id);
+    formData.append('remarks', data?.remarks);
+    const res = await dispatch(markCompletedWithDelayOutingApplication(formData, token, toast));
+    if (res) fetchOutingRequest();
+    setIsReturnWithDelayModalOpen(false);
+    setIsButtonDisabled(false);
+  };
 
-    const acceptPendingApplicationHandler = async () => {
-        setIsButtonDisabled(true);
-        const response = await dispatch(acceptPendingOutingApplication(application?.id,token,toast));
-        if(response){
-            fetchOutingRequest();
-        }
-        setIsAcceptModalOpen(false);
-        setIsButtonDisabled(false);
-    }
-
-    const rejectPendingApplicationHandler = async(data) => {
-        setIsButtonDisabled(true);
-        const formData = new FormData();
-        formData.append("applicationId",application?.id);
-        formData.append("remarks",data?.remarks);
-        const response = await dispatch(rejectPendingOutingApplication(formData,token,toast));
-        if(response){
-            fetchOutingRequest();
-        }
-        setIsRejectModalOpen(false);
-        setIsButtonDisabled(false);
-    }
-
-    const markCompletedWithoutDelay = async () => {
-        setIsButtonDisabled(true);
-        const response = await dispatch(markCompletedWithoutDelayOutingApplication(application?.id,token,toast));
-        if(response){
-            fetchOutingRequest();
-        }
-        setIsReturnWithoutDelayModalOpen(false);
-        setIsButtonDisabled(false);
-    }
-
-    const markCompletedWithDelay = async(data) => {
-        setIsButtonDisabled(true);
-        const formData = new FormData();
-        formData.append("applicationId",application?.id);
-        formData.append("remarks",data?.remarks);
-        const response = await dispatch(markCompletedWithDelayOutingApplication(formData,token,toast));
-        if(response){
-            fetchOutingRequest();
-        }
-        setIsReturnWithDelayModalOpen(false);
-        setIsButtonDisabled(false);
-    }
-
+  const StatusColor = {
+    PENDING: 'text-orange-500',
+    INPROGRESS: 'text-green-600',
+    COMPLETED: 'text-green-600',
+    RETURNED: 'text-red-500',
+  };
 
   return (
-    <View style={{ width: "100%", paddingHorizontal: 10, paddingVertical: 15, borderRadius: 10, borderColor: "black", borderWidth: 1 }}>
-        <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-            Created On: <Text style={{ fontWeight: 'normal', color: 'black' }}>{getDateFormat(application.createdAt)}</Text>
-        </Text>
-        <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-            Name: <Text style={{ fontWeight: 'normal', color: 'black' }}>{application?.instituteStudent?.name}</Text>
-        </Text>
-        <View style={{display:"flex", flexDirection:"row", marginBottom: 4, justifyContent:"flex-start", alignItems:"center", gap:15, flexWrap:"wrap"}}>
-            <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#333' }}>
-                Room no: <Text style={{ fontWeight: 'normal', color: 'black' }}>{application?.instituteStudent?.cot?.room?.roomNumber}</Text>
-            </Text>
-            <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#333' }}>
-                Cot no: <Text style={{ fontWeight: 'normal', color: 'black' }}>{application?.instituteStudent?.cot?.cotNo}</Text>
-            </Text>
-        </View>
-        <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-            Reg No: <Text style={{ fontWeight: 'normal', color: 'black' }}>{application?.instituteStudent?.regNo}</Text>
-        </Text>
-        <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-            Roll No: <Text style={{ fontWeight: 'normal', color: 'black' }}>{application?.instituteStudent?.rollNo}</Text>
-        </Text>
-        <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-            From: <Text style={{ fontWeight: 'normal', color: 'black' }}>{getDateFormat(application.from)}</Text>
-        </Text>
-        <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-            To: <Text style={{ fontWeight: 'normal', color: 'black' }}>{getDateFormat(application.to)}</Text>
-        </Text>
-        <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-            Purpose: <Text style={{ fontWeight: 'normal', color: 'black' }}>{application.purpose}</Text>
-        </Text>
-        <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-            Place of Visit: <Text style={{ fontWeight: 'normal', color: 'black' }}>{application.placeOfVisit}</Text>
-        </Text>
-        {
-            application?.status !== "PENDING" && (
-                <>
-                    <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>Verified By: <Text style={{ fontWeight: 'normal', color: 'black' }}>{application?.verifiedBy?.name} ({application?.verifiedBy?.designation})</Text></Text>
-                    <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>Verified On: <Text style={{ fontWeight: 'normal', color: 'black' }}>{getDateFormat(application?.verifiedOn)}</Text></Text>
-                </>
-            )
-        }
-        {
-            (application?.status === "RETURNED" || application?.status ==="COMPLETED") && (
-                <>
-                    <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>Returned On: <Text style={{ fontWeight: 'normal', color: 'black' }}>{getDateFormat(application?.returnedOn)}</Text></Text>
-                    {
-                        application?.remarks!==null && <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>Remarks: <Text style={{ fontWeight: 'normal', color: 'black' }}>{application?.remarks} (MARKED DELAYED)</Text></Text>
-                    }
-                </>
-            )
-        }
-        <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-            Status: <Text style={{ fontWeight: '800', color: application?.status==="PENDING" ? "orange"  : application?.status==="INPROGRESS" ? "green" : application?.status==="COMPLETED" ? "green" : "red"}}>{application.status}</Text>
-        </Text>
-        {
-            application?.status==="PENDING" && (
-                <View style={{display:"flex", marginTop:10, flexDirection:"row", justifyContent:"space-evenly", alignItems:"center"}}>
-                    <MainButton isButtonDisabled={isButtonDisabled} text="Accept" backgroundColor={"#99d98c"} onPress={() => setIsAcceptModalOpen(true)} />
-                    <MainButton isButtonDisabled={isButtonDisabled} text="Reject" backgroundColor={"#f27059"} onPress={() => setIsRejectModalOpen(true)} />
-                </View>
-            )
-        }
-        {
-            application?.status==="RETURNED" && (
-                <View style={{display:"flex", marginTop:10, flexDirection:"column", justifyContent:"center", alignItems:"center", gap:10}}>
-                    <MainButton isButtonDisabled={isButtonDisabled} text="Returned Without Delay" backgroundColor={"#99d98c"} onPress={() => setIsReturnWithoutDelayModalOpen(true)} />
-                    <MainButton isButtonDisabled={isButtonDisabled} text="Returned With Delay" backgroundColor={"#f27059"} onPress={() => setIsReturnWithDelayModalOpen(true)} />
-                </View>
-            )
-        }
-        
+    <div className="w-full p-4 border border-black rounded-lg space-y-2 bg-white shadow">
+      <p><strong>Created On:</strong> {getDateFormat(application.createdAt)}</p>
+      <p><strong>Name:</strong> {application?.instituteStudent?.name}</p>
+      <div className="flex flex-wrap gap-4">
+        <p><strong>Room no:</strong> {application?.instituteStudent?.cot?.room?.roomNumber}</p>
+        <p><strong>Cot no:</strong> {application?.instituteStudent?.cot?.cotNo}</p>
+      </div>
+      <p><strong>Reg No:</strong> {application?.instituteStudent?.regNo}</p>
+      <p><strong>Roll No:</strong> {application?.instituteStudent?.rollNo}</p>
+      <p><strong>From:</strong> {getDateFormat(application.from)}</p>
+      <p><strong>To:</strong> {getDateFormat(application.to)}</p>
+      <p><strong>Purpose:</strong> {application.purpose}</p>
+      <p><strong>Place of Visit:</strong> {application.placeOfVisit}</p>
+
+      {application?.status !== 'PENDING' && (
         <>
-            <Modal
-                animationType="zoom"
-                transparent={true}
-                visible={isAcceptModalOpen}
-                onRequestClose={() => {
-                    setIsAcceptModalOpen(!isAcceptModalOpen);
-                }}
-            >
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}>
-                    <View style={{ width: '80%', backgroundColor: 'white', padding: 20, borderRadius: 10 }}>
-                        <Text style={{ fontSize: 18, textAlign:"center", fontWeight: '500', marginBottom: 10, color:"black" }}>Are you sure, this application will be accepted.</Text>
-                        <View style={{width : "100%", display:"flex", flexDirection: 'row', marginTop:15, justifyContent: 'space-evenly', alignItems:"center" }}>
-                            <TouchableOpacity disabled={isButtonDisabled} onPress={acceptPendingApplicationHandler} style={{ padding: 10, backgroundColor: '#aacc00', borderRadius: 8, opacity:isButtonDisabled?0.5:1 }}>
-                                <Text style={{ fontSize: 16, color: 'black', fontWeight:"600" }}>Accept</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity disabled={isButtonDisabled} onPress={() => setIsAcceptModalOpen(false)} style={{ padding: 10, backgroundColor: '#ccc', borderRadius: 8, opacity:isButtonDisabled?0.5:1 }}>
-                                <Text style={{ fontSize: 16, color:"black", fontWeight:"600" }}>Cancel</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
-
-            <Modal
-                animationType="zoom"
-                transparent={true}
-                visible={isReturnWithoutDelayModalOpen}
-                onRequestClose={() => {
-                    setIsReturnWithoutDelayModalOpen(!isReturnWithoutDelayModalOpen);
-                }}
-            >
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}>
-                    <View style={{ width: '80%', backgroundColor: 'white', padding: 20, borderRadius: 10 }}>
-                        <Text style={{ fontSize: 18, textAlign:"center", fontWeight: '500', marginBottom: 10, color:"black" }}>Are you sure, this student has returned to hostel.</Text>
-                        <View style={{width : "100%", display:"flex", flexDirection: 'row', marginTop:15, justifyContent: 'space-evenly', alignItems:"center" }}>
-                            <TouchableOpacity disabled={isButtonDisabled} onPress={markCompletedWithoutDelay} style={{ padding: 10, backgroundColor: '#aacc00', borderRadius: 8, opacity:isButtonDisabled?0.5:1 }}>
-                                <Text style={{ fontSize: 16, color: 'black', fontWeight:"600" }}>Yes</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity disabled={isButtonDisabled} onPress={() => setIsReturnWithoutDelayModalOpen(false)} style={{ padding: 10, backgroundColor: '#ccc', borderRadius: 8, opacity:isButtonDisabled?0.5:1 }}>
-                                <Text style={{ fontSize: 16, color:"black", fontWeight:"600" }}>No</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
-
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={isRejectModalOpen}
-                onRequestClose={() => {
-                    setIsRejectModalOpen(!isRejectModalOpen);
-                }}
-            >
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}>
-                    <View style={{ width: '80%', backgroundColor: 'white', padding: 20, borderRadius: 10 }}>
-                        <Text style={{ fontSize: 18, fontWeight: '600', marginBottom: 10,textAlign:"center", color:"black" }}>Are you sure, this Application will Rejected.</Text>
-                        <Text style={{ fontSize: 14, color:"black", fontWeight: '400', marginBottom: 3 }}>Reason for Rejection</Text>
-                        <Controller
-                            control={control}
-                            render={({ field: { onChange, onBlur, value } }) => (
-                                <TextInput
-                                    style={{ padding: 10, paddingHorizontal: 10, borderWidth: 1, borderRadius: 10, borderColor: "#adb5bd", color:"black", }}
-                                    onBlur={onBlur}
-                                    onChangeText={onChange}
-                                    value={value}
-                                    placeholder="Enter reason for rejection"
-                                    numberOfLines={2}
-                                    multiline
-                                />
-                            )}
-                            name="remarks"
-                            defaultValue=""
-                        />
-                        {errors.remarks && <Text style={{fontSize:14, color:"red"}}>Remarks is required.</Text>}
-                        <View style={{width : "100%", display:"flex", flexDirection: 'row', marginTop:15, justifyContent: 'space-evenly', alignItems:"center" }}>
-                            <TouchableOpacity disabled={isButtonDisabled} onPress={handleSubmit(rejectPendingApplicationHandler)} style={{ padding: 10, backgroundColor: '#c9184a', borderRadius: 8, opacity:isButtonDisabled?0.5:1 }}>
-                                <Text style={{ fontSize: 16, color: 'white', fontWeight:"600" }}>Reject</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity disabled={isButtonDisabled} onPress={() => setIsRejectModalOpen(false)} style={{ padding: 10, backgroundColor: '#ccc', borderRadius: 8, opacity:isButtonDisabled?0.5:1 }}>
-                                <Text style={{ fontSize: 16, color:"black", fontWeight:"600" }}>Cancel</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
-
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={isReturnWithDelayModalOpen}
-                onRequestClose={() => {
-                    setIsReturnWithDelayModalOpen(false);
-                }}
-            >
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}>
-                    <View style={{ width: '80%', backgroundColor: 'white', padding: 20, borderRadius: 10 }}>
-                        <Text style={{ fontSize: 18, fontWeight: '600', marginBottom: 10,textAlign:"center", color:"black" }}>Are you sure, this student has returned to hostel with delay.</Text>
-                        <Text style={{ fontSize: 14, color:"black", fontWeight: '400', marginBottom: 3 }}>Reason for Delay</Text>
-                        <Controller
-                            control={control}
-                            render={({ field: { onChange, onBlur, value } }) => (
-                                <TextInput
-                                    style={{ padding: 10, paddingHorizontal: 10, borderWidth: 1, borderRadius: 10, borderColor: "#adb5bd", color:"black", }}
-                                    onBlur={onBlur}
-                                    onChangeText={onChange}
-                                    value={value}
-                                    placeholder="Enter reason for delay"
-                                    numberOfLines={2}
-                                    multiline
-                                />
-                            )}
-                            name="remarks"
-                            defaultValue=""
-                        />
-                        {errors.remarks && <Text style={{fontSize:14, color:"red"}}>Remarks is required.</Text>}
-                        <View style={{width : "100%", display:"flex", flexDirection: 'row', marginTop:15, justifyContent: 'space-evenly', alignItems:"center" }}>
-                            <TouchableOpacity disabled={isButtonDisabled} onPress={handleSubmit(markCompletedWithDelay)} style={{ padding: 10, backgroundColor: '#c9184a', borderRadius: 8, opacity:isButtonDisabled?0.5:1 }}>
-                                <Text style={{ fontSize: 16, color: 'white', fontWeight:"600" }}>Yes</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity disabled={isButtonDisabled} onPress={() => setIsReturnWithDelayModalOpen(false)} style={{ padding: 10, backgroundColor: '#ccc', borderRadius: 8, opacity:isButtonDisabled?0.5:1 }}>
-                                <Text style={{ fontSize: 16, color:"black", fontWeight:"600" }}>No</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
+          <p><strong>Verified By:</strong> {application?.verifiedBy?.name} ({application?.verifiedBy?.designation})</p>
+          <p><strong>Verified On:</strong> {getDateFormat(application?.verifiedOn)}</p>
         </>
-    </View>
-  )
-}
+      )}
 
-export default OutingRequestCard
+      {(application?.status === 'RETURNED' || application?.status === 'COMPLETED') && (
+        <>
+          <p><strong>Returned On:</strong> {getDateFormat(application?.returnedOn)}</p>
+          {application?.remarks && (
+            <p><strong>Remarks:</strong> {application?.remarks} (MARKED DELAYED)</p>
+          )}
+        </>
+      )}
+
+      <p><strong>Status:</strong> <span className={`font-bold ${StatusColor[application?.status]}`}>{application?.status}</span></p>
+
+      {/* Action Buttons */}
+      {application?.status === 'PENDING' && (
+        <div className="flex justify-evenly mt-3">
+          <MainButton isButtonDisabled={isButtonDisabled} text="Accept" backgroundColor="#99d98c" onPress={() => setIsAcceptModalOpen(true)} />
+          <MainButton isButtonDisabled={isButtonDisabled} text="Reject" backgroundColor="#f27059" onPress={() => setIsRejectModalOpen(true)} />
+        </div>
+      )}
+
+      {application?.status === 'RETURNED' && (
+        <div className="flex flex-col items-center gap-2 mt-3">
+          <MainButton isButtonDisabled={isButtonDisabled} text="Returned Without Delay" backgroundColor="#99d98c" onPress={() => setIsReturnWithoutDelayModalOpen(true)} />
+          <MainButton isButtonDisabled={isButtonDisabled} text="Returned With Delay" backgroundColor="#f27059" onPress={() => setIsReturnWithDelayModalOpen(true)} />
+        </div>
+      )}
+
+      {/* Accept Modal */}
+      {isAcceptModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-md space-y-4">
+            <p className="text-center font-semibold">Are you sure you want to accept this application?</p>
+            <div className="flex justify-evenly">
+              <button disabled={isButtonDisabled} onClick={handleAccept} className={`px-4 py-2 rounded bg-lime-400 font-semibold ${isButtonDisabled && 'opacity-50'}`}>Accept</button>
+              <button disabled={isButtonDisabled} onClick={() => setIsAcceptModalOpen(false)} className={`px-4 py-2 rounded bg-gray-300 font-semibold ${isButtonDisabled && 'opacity-50'}`}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Reject Modal */}
+      {isRejectModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-md space-y-4">
+            <p className="text-center font-semibold">Are you sure you want to reject this application?</p>
+            <form onSubmit={handleSubmit(handleReject)} className="space-y-2">
+              <Controller
+                name="remarks"
+                control={control}
+                rules={{ required: 'Remarks required' }}
+                render={({ field }) => (
+                  <textarea {...field} placeholder="Enter reason for rejection" className="w-full p-2 border rounded text-black" rows={2} />
+                )}
+              />
+              {errors.remarks && <p className="text-red-500 text-sm">{errors.remarks.message}</p>}
+              <div className="flex justify-evenly">
+                <button disabled={isButtonDisabled} type="submit" className={`px-4 py-2 rounded bg-red-600 text-white ${isButtonDisabled && 'opacity-50'}`}>Reject</button>
+                <button disabled={isButtonDisabled} type="button" onClick={() => setIsRejectModalOpen(false)} className={`px-4 py-2 rounded bg-gray-300 ${isButtonDisabled && 'opacity-50'}`}>Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Return Without Delay Modal */}
+      {isReturnWithoutDelayModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-md space-y-4">
+            <p className="text-center font-semibold">Confirm student returned without delay?</p>
+            <div className="flex justify-evenly">
+              <button disabled={isButtonDisabled} onClick={handleReturnWithoutDelay} className={`px-4 py-2 rounded bg-lime-400 font-semibold ${isButtonDisabled && 'opacity-50'}`}>Yes</button>
+              <button disabled={isButtonDisabled} onClick={() => setIsReturnWithoutDelayModalOpen(false)} className={`px-4 py-2 rounded bg-gray-300 font-semibold ${isButtonDisabled && 'opacity-50'}`}>No</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Return With Delay Modal */}
+      {isReturnWithDelayModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-md space-y-4">
+            <p className="text-center font-semibold">Confirm student returned with delay?</p>
+            <form onSubmit={handleSubmit(handleReturnWithDelay)} className="space-y-2">
+              <Controller
+                name="remarks"
+                control={control}
+                rules={{ required: 'Remarks required' }}
+                render={({ field }) => (
+                  <textarea {...field} placeholder="Enter reason for delay" className="w-full p-2 border rounded text-black" rows={2} />
+                )}
+              />
+              {errors.remarks && <p className="text-red-500 text-sm">{errors.remarks.message}</p>}
+              <div className="flex justify-evenly">
+                <button disabled={isButtonDisabled} type="submit" className={`px-4 py-2 rounded bg-red-600 text-white ${isButtonDisabled && 'opacity-50'}`}>Yes</button>
+                <button disabled={isButtonDisabled} type="button" onClick={() => setIsReturnWithDelayModalOpen(false)} className={`px-4 py-2 rounded bg-gray-300 ${isButtonDisabled && 'opacity-50'}`}>No</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default OutingRequestCard;

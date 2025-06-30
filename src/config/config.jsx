@@ -9,7 +9,7 @@ import {
 import Login from '../screens/auth/Login';
 import Signup from '../screens/auth/Signup';
 // import LogoutModal from '../components/common/LogoutModal';
-// import CreateAnnouncement from '../screens/official/CreateAnnouncement';
+import CreateAnnouncement from '../screens/official/CreateAnnouncement';
 import HostelsBlocks from '../screens/institute/HostelsBlocks';
 import ContactUs from '../screens/institute/ContactUs';
 import DevelopmentTeam from '../screens/institute/DevelopmentTeam';
@@ -21,15 +21,15 @@ import ResetPasswordSuccess from '../screens/auth/ResetPasswordSuccess';
 // import AttendanceHistory from '../screens/student/AttendanceHistory';
 // import OutingApplication from '../screens/student/OutingApplication';
 // import RegisterComplaint from '../screens/student/RegisterComplaint';
-// import OtpInput from '../screens/auth/OtpInput';
+import OtpInput from '../screens/auth/OtpInput';
 import Gallery from '../screens/institute/Gallary';
 import LogoutModal from '../screens/common/LogoutModal';
 import Announcements from '../screens/common/Announcements';
-// import OutingRequest from '../screens/official/OutingRequest';
+import OutingRequest from '../screens/official/OutingRequest';
 // import ApplicationHistory from '../screens/student/ApplicationHistory';
 // import RegisterComplaints from '../screens/student/RegisteredComplaints';
-// import HostelComplaints from '../screens/official/HostelComplaints';
-// import TakeAttendance from '../screens/official/TakeAttendance';
+import HostelComplaints from '../screens/official/HostelComplaints';
+import TakeAttendance from '../screens/official/TakeAttendance';
 // import ManageHostels from '../screens/admin/ManageHostels';
 import MessMenu from '../screens/common/MessMenu';
 import DetailedMessMenu from '../screens/common/DetailedMessMenu';
@@ -105,8 +105,8 @@ export const studentRoutes = [
 
 export const officialRoutes = [
   { path: "/official/dashboard", element: <OfficialDashboard />, label: "Dashboard", icon: <FaIdBadge />, role: [USER_ROLES.OFFICIAL] },
-  // { path: "/official/create-announcement", element: <CreateAnnouncement />, label: "Create Announcement", icon: <FaBullhorn />, role: [USER_ROLES.OFFICIAL] },
-  // { path: "/official/outing-request", element: <OutingRequest />, label: "Outing Request", icon: <FaWpforms />, role: [USER_ROLES.OFFICIAL] },
-  // { path: "/official/take-attendance", element: <TakeAttendance />, label: "Take Attendance", icon: <FaPeopleRoof />, role: [USER_ROLES.OFFICIAL] },
-  // { path: "/official/hostel-complaints", element: <HostelComplaints />, label: "Hostel Complaints", icon: <FaCircleExclamation />, role: [USER_ROLES.OFFICIAL] },
+  { path: "/official/create-announcement", element: <CreateAnnouncement />, label: "Create Announcement", icon: <FaBullhorn />, role: [USER_ROLES.OFFICIAL] },
+  { path: "/official/outing-request", element: <OutingRequest />, label: "Outing Request", icon: <FaWpforms />, role: [USER_ROLES.OFFICIAL] },
+  { path: "/official/take-attendance", element: <TakeAttendance />, label: "Take Attendance", icon: <FaPeopleRoof />, role: [USER_ROLES.OFFICIAL] },
+  { path: "/official/hostel-complaints", element: <HostelComplaints />, label: "Hostel Complaints", icon: <FaCircleExclamation />, role: [USER_ROLES.OFFICIAL] },
 ];

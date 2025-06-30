@@ -1,61 +1,90 @@
-import React, { useCallback, useState } from 'react'
-import { ScrollView, Text, View, TouchableOpacity } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllPendingApplicationByHostelBlock, rejectPendingOutingApplication, approvePendingOutingApplication, getAllInprogressApplicationByHostelBlock, getAllCompletedApplicationByHostelBlock, getAllReturnedApplicationByHostelBlock } from '../../services/operations/OfficialAPI';
-import MainButton from '../../components/common/MainButton';
-import { useToast } from 'react-native-toast-notifications';
-import { useFocusEffect } from '@react-navigation/native';
+import {
+  getAllPendingApplicationByHostelBlock,
+  getAllInprogressApplicationByHostelBlock,
+  getAllCompletedApplicationByHostelBlock,
+  getAllReturnedApplicationByHostelBlock,
+} from '../../services/operations/OfficialAPI';
 import OutingRequestCard from '../../components/official/OutingRequestCard';
 
 const OutingRequest = () => {
+  const [applicationType, setApplicationType] = useState('PENDING');
+  const [outingApplication, setOutingApplication] = useState(null);
 
-    const [applicationType, setApplicationType] = useState("PENDING");
-    const [outingApplication,setOutingApplication] = useState([]);
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.Auth);
 
-    const {token} = useSelector((state) => state.Auth);
-    const toast = useToast();
+  const fetchOutingRequest = useCallback(async () => {
+    setOutingApplication(null);
+    let data = [];
 
-    const fetchOutingRequest = async() => {
-        setOutingApplication(null);
-        let data;
-        if(applicationType === "PENDING"){
-            data = await dispatch(getAllPendingApplicationByHostelBlock(token,toast));
-        }else if(applicationType === "INPROGRESS"){
-            data = await dispatch(getAllInprogressApplicationByHostelBlock(token,toast));
-        }else if(applicationType === "COMPLETED"){
-            data = await dispatch(getAllCompletedApplicationByHostelBlock(token,toast));
-        }else if(applicationType === "RETURNED"){
-            data = await dispatch(getAllReturnedApplicationByHostelBlock(token,toast));
-        }
-        setOutingApplication(data);
+    try {
+      if (applicationType === 'PENDING') {
+        data = await dispatch(getAllPendingApplicationByHostelBlock(token, toast));
+      } else if (applicationType === 'INPROGRESS') {
+        data = await dispatch(getAllInprogressApplicationByHostelBlock(token, toast));
+      } else if (applicationType === 'COMPLETED') {
+        data = await dispatch(getAllCompletedApplicationByHostelBlock(token, toast));
+      } else if (applicationType === 'RETURNED') {
+        data = await dispatch(getAllReturnedApplicationByHostelBlock(token, toast));
+      }
+      setOutingApplication(data);
+    } catch (error) {
+        console.log(error);
+      toast.error('Failed to fetch outing applications');
     }
+  }, [token, dispatch, applicationType]);
 
-    useFocusEffect(
-        useCallback(() => {
-          fetchOutingRequest();
-        }, [token, toast, applicationType])
-    );
+  useEffect(() => {
+    fetchOutingRequest();
+  }, [fetchOutingRequest]);
+
+  const buttons = [
+    { type: 'PENDING', label: 'Pending' },
+    { type: 'INPROGRESS', label: 'In Progress' },
+    { type: 'RETURNED', label: 'Returned' },
+    { type: 'COMPLETED', label: 'Completed' },
+  ];
 
   return (
-    <ScrollView contentContainerStyle={{width:"100%",display:"flex",justifyContent:"center", alignItems:"center", paddingHorizontal:15, paddingVertical:20,gap:20}}>
-        <View style={{width:"100%", marginHorizontal:"auto", display:"flex", flexDirection:"row", justifyContent:"center", alignItems:"center", overflow:'hidden', borderWidth:1, borderColor:"black", borderRadius:10}}>
-            <TouchableOpacity style={{width:"25%", textAlign:"center", paddingVertical:8, backgroundColor:applicationType==="PENDING" ? "#ffb703" : "white",}} onPress={() => setApplicationType("PENDING")}><Text style={{textAlign:'center', width:"100%", color:"black"}}>Pending</Text></TouchableOpacity>
-            <TouchableOpacity style={{width:"25%", textAlign:"center", paddingVertical:8, backgroundColor:applicationType==="INPROGRESS" ? "#ffb703" : "white",}} onPress={() => setApplicationType("INPROGRESS")}><Text style={{textAlign:'center', width:"100%", color:"black"}}>In Progress</Text></TouchableOpacity>
-            <TouchableOpacity style={{width:"25%", textAlign:"center", paddingVertical:8, backgroundColor:applicationType==="RETURNED" ? "#ffb703" : "white",}} onPress={() => setApplicationType("RETURNED")}><Text style={{textAlign:'center', width:"100%", color:"black"}}>Returned</Text></TouchableOpacity>
-            <TouchableOpacity style={{width:"25%", textAlign:"center", paddingVertical:8, backgroundColor:applicationType==="COMPLETED" ? "#ffb703" : "white",}} onPress={() => setApplicationType("COMPLETED")}><Text style={{textAlign:'center', width:"100%", color:"black"}}>Completed</Text></TouchableOpacity>
-        </View>
-        <View style={{width:"100%",display:"flex",justifyContent:"center", alignItems:"center", gap:10}}>
-            {
-                !outingApplication ? (<Text style={{fontWeight:"700", color:"black", fontSize:16}}>Please Wait...</Text>) : outingApplication.length===0 ? (<Text style={{fontWeight:"600", fontSize:16, color:"black"}}>No Applications Found</Text>) : (
-                    outingApplication.map((application,index) => (
-                        <OutingRequestCard key={index} application={application} toast={toast} token={token} fetchOutingRequest={fetchOutingRequest} />
-                    ))
-                )
-            }
-        </View>
-    </ScrollView>
-  )
-}
+    <div className="w-full flex flex-col items-center px-4 py-6 gap-6">
+      {/* Tabs */}
+      <div className="w-full max-w-3xl grid grid-cols-4 border border-black rounded-md overflow-hidden">
+        {buttons.map((btn) => (
+          <button
+            key={btn.type}
+            onClick={() => setApplicationType(btn.type)}
+            className={`py-2 text-center font-semibold ${
+              applicationType === btn.type ? 'bg-yellow-400' : 'bg-white'
+            } text-black border-r last:border-r-0`}
+          >
+            {btn.label}
+          </button>
+        ))}
+      </div>
 
-export default OutingRequest
+      {/* Applications List */}
+      <div className="w-full max-w-3xl flex flex-col items-center gap-4">
+        {!outingApplication ? (
+          <p className="font-bold text-black text-lg">Please Wait...</p>
+        ) : outingApplication.length === 0 ? (
+          <p className="font-semibold text-black text-base">No Applications Found</p>
+        ) : (
+          outingApplication.map((application, index) => (
+            <OutingRequestCard
+              key={index}
+              application={application}
+              token={token}
+              toast={toast}
+              fetchOutingRequest={fetchOutingRequest}
+            />
+          ))
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default OutingRequest;

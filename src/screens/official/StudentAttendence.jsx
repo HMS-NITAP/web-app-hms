@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
 const attendanceData = [
   { id: 1, presentDates: ['2022-04-15', '2022-04-17'], absentDates: ['2022-04-16'], studentId: 1 },
@@ -27,182 +26,131 @@ const StudentAttendance = () => {
   const [filteredAbsentStudents, setFilteredAbsentStudents] = useState([]);
 
   const fetchAttendance = () => {
-    // Filter attendance data based on selected date
-    const filteredAttendance = attendanceData.filter(item => item.presentDates.includes(date) || item.absentDates.includes(date));
-  
+    const filteredAttendance = attendanceData.filter(
+      (item) => item.presentDates.includes(date) || item.absentDates.includes(date)
+    );
+
     const present = filteredAttendance
-      .filter(item => item.presentDates.includes(date))
-      .map(item => ({
+      .filter((item) => item.presentDates.includes(date))
+      .map((item) => ({
         id: item.id,
-        presentDates: item.presentDates,
-        absentDates: item.absentDates,
-        student: studentData.find(student => student.student_id === item.studentId),
+        student: studentData.find((s) => s.student_id === item.studentId),
       }));
 
     const absent = filteredAttendance
-      .filter(item => item.absentDates.includes(date))
-      .map(item => ({
+      .filter((item) => item.absentDates.includes(date))
+      .map((item) => ({
         id: item.id,
-        presentDates: item.presentDates,
-        absentDates: item.absentDates,
-        student: studentData.find(student => student.student_id === item.studentId),
+        student: studentData.find((s) => s.student_id === item.studentId),
       }));
 
     setPresentStudents(present);
     setAbsentStudents(absent);
   };
 
-  const searchStudents = (query) => {
-    const lowerCaseQuery = query.toLowerCase();
-    const filteredPresent = presentStudents.filter(student => student.student.regd_no.toLowerCase().includes(lowerCaseQuery) || student.student.name.toLowerCase().includes(lowerCaseQuery));
-    const filteredAbsent = absentStudents.filter(student => student.student.regd_no.toLowerCase().includes(lowerCaseQuery) || student.student.name.toLowerCase().includes(lowerCaseQuery));
+  useEffect(() => {
+    const query = searchQuery.toLowerCase();
+
+    const filteredPresent = presentStudents.filter(
+      (s) =>
+        s.student.regd_no.toLowerCase().includes(query) ||
+        s.student.name.toLowerCase().includes(query)
+    );
+
+    const filteredAbsent = absentStudents.filter(
+      (s) =>
+        s.student.regd_no.toLowerCase().includes(query) ||
+        s.student.name.toLowerCase().includes(query)
+    );
+
     setFilteredPresentStudents(filteredPresent);
     setFilteredAbsentStudents(filteredAbsent);
-  };
-
-  useEffect(() => {
-    const searchStudents = (query) => {
-      const lowerCaseQuery = query.toLowerCase();
-      const filteredPresent = presentStudents.filter(student => student.student.regd_no.toLowerCase().includes(lowerCaseQuery) || student.student.name.toLowerCase().includes(lowerCaseQuery));
-      const filteredAbsent = absentStudents.filter(student => student.student.regd_no.toLowerCase().includes(lowerCaseQuery) || student.student.name.toLowerCase().includes(lowerCaseQuery));
-      setFilteredPresentStudents(filteredPresent);
-      setFilteredAbsentStudents(filteredAbsent);
-    };
-  
-    if (searchQuery !== '') {
-      searchStudents(searchQuery);
-    } else {
-      setFilteredPresentStudents(presentStudents);
-      setFilteredAbsentStudents(absentStudents);
-    }
   }, [searchQuery, presentStudents, absentStudents]);
-  
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.input}
+    <div className="w-full max-w-3xl mx-auto p-4 bg-gray-50 min-h-screen">
+      {/* Date Input */}
+      <input
+        type="text"
         placeholder="Enter Date (YYYY-MM-DD)"
         value={date}
-        keyboardType='NUMERIC'
-        onChangeText={setDate}
+        onChange={(e) => setDate(e.target.value)}
+        className="w-full border border-gray-300 rounded px-3 py-2 mb-3"
       />
-      <TouchableOpacity onPress={fetchAttendance} style={styles.button}>
-        <Text style={styles.buttonText}>Submit</Text>
-      </TouchableOpacity>
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={() => setViewing('present')} style={[styles.toggleButton, viewing === 'present' && styles.selectedButton]}>
-          <Text style={styles.toggleButtonText}>Present</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setViewing('absent')} style={[styles.toggleButton, viewing === 'absent' && styles.selectedButton]}>
-          <Text style={styles.toggleButtonText}>Absent</Text>
-        </TouchableOpacity>
-      </View>
+      {/* Submit Button */}
+      <button
+        onClick={fetchAttendance}
+        className="w-full bg-blue-600 text-white py-2 rounded mb-4 hover:bg-blue-700 transition"
+      >
+        Submit
+      </button>
 
-      <TextInput
-        style={styles.searchInput}
+      {/* View Toggle */}
+      <div className="flex justify-center gap-4 mb-4">
+        <button
+          onClick={() => setViewing('present')}
+          className={`px-4 py-2 rounded ${
+            viewing === 'present' ? 'bg-blue-600 text-white' : 'bg-gray-200'
+          }`}
+        >
+          Present
+        </button>
+        <button
+          onClick={() => setViewing('absent')}
+          className={`px-4 py-2 rounded ${
+            viewing === 'absent' ? 'bg-blue-600 text-white' : 'bg-gray-200'
+          }`}
+        >
+          Absent
+        </button>
+      </div>
+
+      {/* Search Bar */}
+      <input
+        type="text"
         placeholder="Search by Regd No or Name"
         value={searchQuery}
-        onChangeText={setSearchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        className="w-full border border-gray-300 rounded px-3 py-2 mb-4"
       />
 
-    <View style={styles.attendanceContainer}>
-    {viewing === 'present' && filteredPresentStudents.length > 0 ? (
-    <View>
-      <Text style={styles.title}>Present Students:</Text>
-      {filteredPresentStudents.map(student => (
-        <View key={student.id}>
-          <Text style={styles.studentText}>{student.student.name} - Room: {roomDetails.find(room => room.student_id.includes(student.student.student_id)).room_no}</Text>
-        </View>
-      ))}
-    </View>
-    ) : viewing === 'absent' && filteredAbsentStudents.length > 0 ? (
-    <View>
-      <Text style={styles.title}>Absent Students:</Text>
-      {filteredAbsentStudents.map(student => (
-        <View key={student.id}>
-          <Text style={styles.studentText}>{student.student.name} - Room: {roomDetails.find(room => room.student_id.includes(student.student.student_id)).room_no}</Text>
-        </View>
-      ))}
-    </View>
-     ) : (
-    <Text>No {viewing === 'present' ? 'present' : 'absent'} students found</Text>
-  )}
-        </View>
-    </View>
+      {/* Attendance List */}
+      <div>
+        {viewing === 'present' && filteredPresentStudents.length > 0 ? (
+          <div>
+            <h2 className="font-bold text-lg mb-2">Present Students:</h2>
+            {filteredPresentStudents.map((student) => {
+              const room = roomDetails.find((room) =>
+                room.student_id.includes(student.student.student_id)
+              );
+              return (
+                <div key={student.id} className="mb-2 text-black">
+                  {student.student.name} - Room: {room?.room_no || 'N/A'}
+                </div>
+              );
+            })}
+          </div>
+        ) : viewing === 'absent' && filteredAbsentStudents.length > 0 ? (
+          <div>
+            <h2 className="font-bold text-lg mb-2">Absent Students:</h2>
+            {filteredAbsentStudents.map((student) => {
+              const room = roomDetails.find((room) =>
+                room.student_id.includes(student.student.student_id)
+              );
+              return (
+                <div key={student.id} className="mb-2 text-black">
+                  {student.student.name} - Room: {room?.room_no || 'N/A'}
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <p className="text-gray-700">No {viewing} students found.</p>
+        )}
+      </div>
+    </div>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#f5f5f5',
-    gap:10,
-  },
-  input: {
-    // width:"100%",
-    height: 40,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 10,
-    backgroundColor: '#fff',
-    color: "black",
-  },
-  button: {
-    backgroundColor: '#007bff',
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginBottom: 10,
-  },
-  toggleButton: {
-    backgroundColor: '#eee',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    marginHorizontal: 5,
-  },
-  selectedButton: {
-    backgroundColor: '#007bff',
-  },
-  toggleButtonText: {
-    fontSize: 16,
-    color: '#333',
-  },
-  searchInput: {
-    height: 40,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 10,
-    backgroundColor: '#fff',
-  },
-  attendanceContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  studentText: {
-    marginBottom: 5,
-    fontSize: 16,
-  },
-});
 
 export default StudentAttendance;
