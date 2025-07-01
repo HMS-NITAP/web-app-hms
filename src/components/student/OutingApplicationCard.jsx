@@ -1,272 +1,151 @@
-import React, { useState } from 'react'
-import { Text, TouchableOpacity, View, Modal, StyleSheet, Image, ActivityIndicator } from 'react-native'
-import Icon from 'react-native-vector-icons/FontAwesome6';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { deletePendingOutingApplication, markReturnFromOuting } from '../../services/operations/StudentAPI';
 import MainButton from '../common/MainButton';
+import { FaTrash } from 'react-icons/fa6';
 
-const OutingApplicationCard = ({application,token,toast,fetchData}) => {
+const OutingApplicationCard = ({ application, token, toast, fetchData }) => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [markReturnModalOpen, setMarkReturnModalOpen] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
-    const [modalVisible, setModalVisible] = useState(false);
-    const [markReturnModalOpen, setMarkReturnModalOpen] = useState(false);
-    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const dispatch = useDispatch();
 
-    const dispatch = useDispatch();
+  const getDateFormat = (date) => new Date(date).toLocaleString();
 
-    const getDateFormat = (date) => {
-        const newDate = new Date(date);
-        return newDate.toLocaleString();
-    }
+  const handleConfirmDelete = async () => {
+    setIsButtonDisabled(true);
+    const response = await dispatch(deletePendingOutingApplication(application?.id, token, toast));
+    if (response) fetchData();
+    setIsButtonDisabled(false);
+    setModalVisible(false);
+  };
 
-    const handleConfirmDelete = async() => {
-      setIsButtonDisabled(true);
-        const response = await dispatch(deletePendingOutingApplication(application?.id,token,toast));
-        if(response){
-            fetchData();
-        }
-        setIsButtonDisabled(false);
-    }
+  const handleMarkReturn = async () => {
+    setIsButtonDisabled(true);
+    const response = await dispatch(markReturnFromOuting(application?.id, token, toast));
+    if (response) fetchData();
+    setIsButtonDisabled(false);
+    setMarkReturnModalOpen(false);
+  };
 
-    const handleMarkReturn = async() => {
-      setIsButtonDisabled(true);
-      const response = await dispatch(markReturnFromOuting(application?.id,token,toast));
-      if(response){
-        fetchData();
-      }
-      setIsButtonDisabled(false);
-    }
+  const statusColors = {
+    PENDING: 'text-orange-500',
+    INPROGRESS: 'text-green-600',
+    RETURNED: 'text-purple-700',
+    COMPLETED: 'text-green-600',
+    REJECTED: 'text-red-500',
+  };
 
   return (
-    <View style={{width:"100%",padding: 16,marginVertical: 8,backgroundColor: '#f9f9f9',borderRadius: 8,shadowColor: '#000',shadowOffset: { width: 0, height: 2 },shadowOpacity: 0.1, borderColor:"black", borderWidth:1,shadowRadius: 8,elevation: 10}}>
-        <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-            Created On: <Text style={{ fontWeight: 'normal', color: '#666' }}>{getDateFormat(application?.createdAt)}</Text>
-        </Text>
-        <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-            From: <Text style={{ fontWeight: 'normal', color: '#666' }}>{getDateFormat(application?.from)}</Text>
-        </Text>
-        <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-            To: <Text style={{ fontWeight: 'normal', color: '#666' }}>{getDateFormat(application?.to)}</Text>
-        </Text>
-        <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-            Purpose: <Text style={{ fontWeight: 'normal', color: '#666' }}>{application?.purpose}</Text>
-        </Text>
-        <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-            Place of Visit: <Text style={{ fontWeight: 'normal', color: '#666' }}>{application?.placeOfVisit}</Text>
-        </Text>
-        {
-          application?.status === "REJECTED" && (
-            <>
-              <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-                  Verified By: <Text style={{ fontWeight: 'normal', color: '#666' }}>{application?.verifiedBy?.name} ({application?.verifiedBy?.designation})</Text>
-              </Text>
-              <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-                  Verified At: <Text style={{ fontWeight: 'normal', color: '#666' }}>{getDateFormat(application?.verifiedOn)}</Text>
-              </Text>
-              <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-                  Remarks: <Text style={{ fontWeight: 'normal', color: '#666' }}>{application?.remarks}</Text>
-              </Text>
-            </>
-          )
-        }
-        {
-          application?.status === "INPROGRESS" && (
-            <>
-              <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-                  Verified By: <Text style={{ fontWeight: 'normal', color: '#666' }}>{application?.verifiedBy?.name} ({application?.verifiedBy?.designation})</Text>
-              </Text>
-              <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-                  Verified At: <Text style={{ fontWeight: 'normal', color: '#666' }}>{getDateFormat(application?.verifiedOn)}</Text>
-              </Text>
-            </>
-          )
-        }
-        {
-          application?.status === "RETURNED" && (
-            <>
-              <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-                  Verified By: <Text style={{ fontWeight: 'normal', color: '#666' }}>{application?.verifiedBy?.name} ({application?.verifiedBy?.designation})</Text>
-              </Text>
-              <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-                  Verified At: <Text style={{ fontWeight: 'normal', color: '#666' }}>{getDateFormat(application?.verifiedOn)}</Text>
-              </Text>
-              <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-                  Returned On: <Text style={{ fontWeight: 'normal', color: '#666' }}>{getDateFormat(application?.returnedOn)}</Text>
-              </Text>
-            </>
-          )
-        }
-        {
-          application?.status === "COMPLETED" && (
-            <>
-              <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-                  Verified By: <Text style={{ fontWeight: 'normal', color: '#666' }}>{application?.verifiedBy?.name} ({application?.verifiedBy?.designation})</Text>
-              </Text>
-              <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-                  Verified At: <Text style={{ fontWeight: 'normal', color: '#666' }}>{getDateFormat(application?.verifiedOn)}</Text>
-              </Text>
-              <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-                  Returned On: <Text style={{ fontWeight: 'normal', color: '#666' }}>{getDateFormat(application?.returnedOn)}</Text>
-              </Text>
-              {
-                application?.remarks!==null && <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>Remarks: <Text style={{ fontWeight: 'normal', color: 'black' }}>{application?.remarks} (MARKED DELAYED)</Text></Text>
-              }
-            </>
-          )
-        }
-        <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-            Status: <Text style={{ fontWeight: '800', color: application?.status==="PENDING" ? "orange"  : application?.status==="INPROGRESS" ? "green" : application?.status==="RETURNED" ? "#9d4edd" : application?.status==="COMPLETED" ? "green" : "red"}}>{application.status}</Text>
-        </Text>
+    <div className="w-full p-4 my-2 bg-gray-100 border border-black rounded shadow-md">
+      <p><strong>Created On:</strong> {getDateFormat(application?.createdAt)}</p>
+      <p><strong>From:</strong> {getDateFormat(application?.from)}</p>
+      <p><strong>To:</strong> {getDateFormat(application?.to)}</p>
+      <p><strong>Purpose:</strong> {application?.purpose}</p>
+      <p><strong>Place of Visit:</strong> {application?.placeOfVisit}</p>
 
-        {
-          application?.status === "INPROGRESS" && (
-            <View style={{marginTop:15, display:"flex", justifyContent:"center", alignItems:"center"}}><MainButton isButtonDisabled={isButtonDisabled} onPress={() => setMarkReturnModalOpen(true)} backgroundColor={"#95d5b2"} text={"Mark Return"}  /></View>
-          )
-        }
-
-        {
-            application?.status === "PENDING" && (
-                <View style={{marginTop:15}}>
-                    <TouchableOpacity 
-                        disabled={isButtonDisabled}
-                        style={[styles.trashButton,{opacity:isButtonDisabled?0.5:1}]} 
-                        onPress={() => setModalVisible(true)}
-                        >
-                        <Icon name='trash' size={25} style={styles.icon} color='#c1121f' />
-                    </TouchableOpacity>
-                </View>
-            )
-        }
-
+      {(application?.status === "REJECTED" || application?.status === "INPROGRESS" || application?.status === "RETURNED" || application?.status === "COMPLETED") && (
         <>
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => setModalVisible(false)}
-            >
-                <View style={styles.modalOverlay}>
-                <View style={styles.modalContainer}>
-                    <Text style={styles.modalText}>Are you sure you want to delete this Outing Application?</Text>
-                    <View style={styles.modalButtons}>
-                    <TouchableOpacity 
-                        disabled={isButtonDisabled}
-                        style={[styles.confirmButton,{opacity:isButtonDisabled?0.5:1}]} 
-                        onPress={handleConfirmDelete}
-                    >
-                        <Text style={styles.buttonText}>Yes</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity 
-                        disabled={isButtonDisabled}
-                        style={[styles.cancelButton,{opacity:isButtonDisabled?0.5:1}]} 
-                        onPress={() => setModalVisible(false)}
-                    >
-                        <Text style={styles.buttonText}>No</Text>
-                    </TouchableOpacity>
-                    </View>
-                </View>
-                </View>
-            </Modal>
-
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={markReturnModalOpen}
-                onRequestClose={() => setMarkReturnModalOpen(false)}
-            >
-                <View style={styles.modalOverlay}>
-                <View style={styles.modalContainer}>
-                    <Text style={styles.modalText}>Are you sure, you want to log return from vacation?</Text>
-                    <View style={styles.modalButtons}>
-                    <TouchableOpacity 
-                        disabled={isButtonDisabled}
-                        style={{flex: 1, backgroundColor: "#52b788", padding: 10, borderRadius: 5, alignItems: "center", marginRight: 10, opacity:isButtonDisabled?0.5:1}} 
-                        onPress={handleMarkReturn}
-                    >
-                        <Text style={styles.buttonText}>Yes</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity 
-                        disabled={isButtonDisabled}
-                        style={[styles.cancelButton,{opacity:isButtonDisabled?0.5:1}]} 
-                        onPress={() => setMarkReturnModalOpen(false)}
-                    >
-                        <Text style={styles.buttonText}>No</Text>
-                    </TouchableOpacity>
-                    </View>
-                </View>
-                </View>
-            </Modal>
+          <p><strong>Verified By:</strong> {application?.verifiedBy?.name} ({application?.verifiedBy?.designation})</p>
+          <p><strong>Verified At:</strong> {getDateFormat(application?.verifiedOn)}</p>
         </>
-    </View>
-  )
-}
+      )}
 
-export default OutingApplicationCard
+      {application?.status === "RETURNED" && (
+        <p><strong>Returned On:</strong> {getDateFormat(application?.returnedOn)}</p>
+      )}
 
-const styles = StyleSheet.create({
-    trashButton: {
-    borderColor: "#c1121f",
-    borderWidth: 0.5,
-    borderRadius: 1000,
-    paddingHorizontal: "auto",
-    justifyContent:"center",
-    alignItems:"center",
-    paddingVertical: 10,
-    backgroundColor: "#ffccd5"
-  },
-  editButton: {
-    borderColor: "#081c15",
-    borderWidth: 1,
-    borderRadius: 1000,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-    backgroundColor: "#d8f3dc"
-  },
-  icon: {
-    width: 30,
-    textAlign: 'center'
-  },
-  modalOverlay: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)"
-  },
-  modalContainer: {
-    width: 300,
-    backgroundColor: "white",
-    borderRadius: 10,
-    padding: 20,
-    alignItems: "center"
-  },
-  modalText: {
-    marginBottom: 20,
-    fontSize: 18,
-    textAlign: "center",
-    color:"black",
-  },
-  modalButtons: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%"
-  },
-  confirmButton: {
-    flex: 1,
-    backgroundColor: "#c1121f",
-    padding: 10,
-    borderRadius: 5,
-    alignItems: "center",
-    marginRight: 10
-  },
-  cancelButton: {
-    flex: 1,
-    backgroundColor: "#6c757d",
-    padding: 10,
-    borderRadius: 5,
-    alignItems: "center",
-    marginLeft: 10
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 16
-  },
-})
+      {application?.status === "COMPLETED" && (
+        <>
+          <p><strong>Returned On:</strong> {getDateFormat(application?.returnedOn)}</p>
+          {application?.remarks !== null && (
+            <p><strong>Remarks:</strong> <span className="text-black">{application?.remarks} (MARKED DELAYED)</span></p>
+          )}
+        </>
+      )}
+
+      {application?.status === "REJECTED" && (
+        <p><strong>Remarks:</strong> {application?.remarks}</p>
+      )}
+
+      <p><strong>Status:</strong> <span className={`font-bold ${statusColors[application?.status]}`}>{application.status}</span></p>
+
+      {application?.status === "INPROGRESS" && (
+        <div className="mt-4 flex justify-center">
+          <MainButton
+            isButtonDisabled={isButtonDisabled}
+            onPress={() => setMarkReturnModalOpen(true)}
+            backgroundColor="#95d5b2"
+            text="Mark Return"
+          />
+        </div>
+      )}
+
+      {application?.status === "PENDING" && (
+        <div className="mt-4">
+          <button
+            disabled={isButtonDisabled}
+            onClick={() => setModalVisible(true)}
+            className={`flex items-center gap-2 px-4 py-2 border border-red-700 bg-red-200 rounded-full ${isButtonDisabled ? 'opacity-50' : ''}`}
+          >
+            <FaTrash className="text-red-700" />
+            <span>Delete</span>
+          </button>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {modalVisible && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-md space-y-4 w-80">
+            <p className="text-center text-lg text-black">Are you sure you want to delete this Outing Application?</p>
+            <div className="flex justify-between">
+              <button
+                disabled={isButtonDisabled}
+                onClick={handleConfirmDelete}
+                className={`flex-1 bg-red-700 text-white py-2 rounded mr-2 ${isButtonDisabled ? 'opacity-50' : ''}`}
+              >
+                Yes
+              </button>
+              <button
+                disabled={isButtonDisabled}
+                onClick={() => setModalVisible(false)}
+                className={`flex-1 bg-gray-500 text-white py-2 rounded ml-2 ${isButtonDisabled ? 'opacity-50' : ''}`}
+              >
+                No
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Mark Return Modal */}
+      {markReturnModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-md space-y-4 w-80">
+            <p className="text-center text-lg text-black">Are you sure you want to log return from vacation?</p>
+            <div className="flex justify-between">
+              <button
+                disabled={isButtonDisabled}
+                onClick={handleMarkReturn}
+                className={`flex-1 bg-green-600 text-white py-2 rounded mr-2 ${isButtonDisabled ? 'opacity-50' : ''}`}
+              >
+                Yes
+              </button>
+              <button
+                disabled={isButtonDisabled}
+                onClick={() => setMarkReturnModalOpen(false)}
+                className={`flex-1 bg-gray-500 text-white py-2 rounded ml-2 ${isButtonDisabled ? 'opacity-50' : ''}`}
+              >
+                No
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default OutingApplicationCard;

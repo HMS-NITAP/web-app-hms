@@ -14,6 +14,7 @@ const OfficialDashboard = () => {
             const response = await dispatch(fetchDashboardData(token, toast));
             setDashboardData(response);
         } catch (error) {
+            console.log(error);
             toast.error('Failed to fetch dashboard data');
         }
     }, [token, dispatch]);
