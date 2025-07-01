@@ -34,11 +34,11 @@ import TakeAttendance from '../screens/official/TakeAttendance';
 import MessMenu from '../screens/common/MessMenu';
 import DetailedMessMenu from '../screens/common/DetailedMessMenu';
 import ViewMessFeedBack from '../screens/common/ViewMessFeedBack';
-// import ManageOfficialAccounts from '../screens/admin/ManageOfficialAccounts';
+import ManageOfficialAccounts from '../screens/admin/ManageOfficialAccounts';
 // import CreateHostelBlock from '../screens/admin/CreateHostelBlock';
-// import CreateOfficialAccount from '../screens/admin/CreateOfficialAccount';
+// import CreateOfficialAccount from '../screens/admin/CreateOfficialAccount'; //done it
 import StudentRegistration from '../screens/auth/StudentRegistration';
-// import StudentRegistrationApplications from '../screens/admin/StudentRegistrationApplications';
+import StudentRegistrationApplications from '../screens/admin/StudentRegistrationApplications';
 import OfficialDashboard from '../screens/official/OfficialDashboard';
 // import GiveMessFeedback from '../screens/student/GiveMessFeedback';
 // import GenerateMessReceipt from '../screens/student/GenerateMessReceipt';
@@ -47,9 +47,9 @@ import OfficialDashboard from '../screens/official/OfficialDashboard';
 import AdminDashboard from '../screens/admin/AdminDashboard';
 // import BlockRooms from '../screens/admin/BlockRooms';
 // import CotDetails from '../screens/admin/CotDetails';
-// import ManageStudentAccounts from '../screens/admin/ManageStudentAccounts';
+import ManageStudentAccounts from '../screens/admin/ManageStudentAccounts';
 // import ChangeStudentCot from '../screens/admin/ChangeStudentCot';
-// import EvenSemRegistrationApplications from '../screens/admin/EvenSemRegistrationApplications';
+import EvenSemRegistrationApplications from '../screens/admin/EvenSemRegistrationApplications';
 
 export const USER_ROLES = {
   ADMIN: 'ADMIN',
@@ -78,10 +78,10 @@ export const authRoutes = [
 
 export const adminRoutes = [
   { path: "/admin/dashboard", element: <AdminDashboard />, label: "Dashboard", icon: <FaIdBadge />, role: [USER_ROLES.ADMIN] },
-  // { path: "/admin/odd-sem-applications", element: <StudentRegistrationApplications />, label: "Odd Sem Registration Applications", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
-  // { path: "/admin/even-sem-applications", element: <EvenSemRegistrationApplications />, label: "Even Sem Registration Applications", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
-  // { path: "/admin/manage-students", element: <ManageStudentAccounts />, label: "Manage Student Accounts", icon: <FaChild />, role: [USER_ROLES.ADMIN] },
-  // { path: "/admin/manage-officials", element: <ManageOfficialAccounts />, label: "Manage Official Accounts", icon: <FaUserShield />, role: [USER_ROLES.ADMIN] },
+  { path: "/admin/odd-sem-applications", element: <StudentRegistrationApplications />, label: "Odd Sem Registration Applications", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
+  { path: "/admin/even-sem-applications", element: <EvenSemRegistrationApplications />, label: "Even Sem Registration Applications", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
+  { path: "/admin/manage-students", element: <ManageStudentAccounts />, label: "Manage Student Accounts", icon: <FaChild />, role: [USER_ROLES.ADMIN] },
+  { path: "/admin/manage-officials", element: <ManageOfficialAccounts />, label: "Manage Official Accounts", icon: <FaUserShield />, role: [USER_ROLES.ADMIN] },
   // { path: "/admin/create-official", element: <CreateOfficialAccount />, role: [USER_ROLES.ADMIN], hidden: true },
   // { path: "/admin/manage-hostels", element: <ManageHostels />, label: "Manage Hostel Blocks", icon: <FaUserGear />, role: [USER_ROLES.ADMIN] },
   // { path: "/admin/create-hostel", element: <CreateHostelBlock />, role: [USER_ROLES.ADMIN], hidden: true },

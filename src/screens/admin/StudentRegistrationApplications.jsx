@@ -1,58 +1,63 @@
-import { useFocusEffect } from '@react-navigation/native';
-import React, { useCallback, useState } from 'react'
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
-import { useToast } from 'react-native-toast-notifications';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchStudentRegistrationApplications } from '../../services/operations/AdminAPI';
-import Icon from 'react-native-vector-icons/FontAwesome6';
+import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import { FaLock } from 'react-icons/fa6'; // react-icons equivalent of FontAwesome6 lock icon
 import ApplicationCard from '../../components/Admin/ApplicationCard';
 
-const StudentRegistrationApplications = ({navigation}) => {
-    const [applications,setApplications] = useState([]);
-    const [loading,setLoading] = useState(false);
+const StudentRegistrationApplications = () => {
+  const [applications, setApplications] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-    const {token} = useSelector((state) => state.Auth);
-    const toast = useToast();
-    const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.Auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-    const fetchData = async() => {
-        const response = await dispatch(fetchStudentRegistrationApplications(token,toast));
-        setApplications(response);
-        setLoading(false);
-    }
+  const fetchData = async () => {
+    setLoading(true);
+    const response = await dispatch(fetchStudentRegistrationApplications(token, toast));
+    setApplications(response || []);
+    setLoading(false);
+  };
 
-    useFocusEffect(
-        useCallback(() => {
-          fetchData();
-        }, [token,toast])
-    );
+  useEffect(() => {
+    fetchData();
+  }, [token]);
 
-    return (
-        <>
-            {
-                loading ? "" : 
-                    <ScrollView contentContainerStyle={{width:"100%",display:"flex",justifyContent:"center", alignItems:"center", paddingHorizontal:15, paddingVertical:10}}>
-                        {
-                            applications && 
-                                <View style={{width:"100%", display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", paddingHorizontal:15, paddingVertical:15}}>
-                                    <View style={{display:"flex",flexDirection:"row",gap:15,justifyContent:"center",alignItems:"center"}}>
-                                        <Text style={{fontWeight:"600",color:"black",fontSize:16}}>Pending Applications</Text>
-                                        <Text style={{paddingVertical:5, paddingHorizontal:10, backgroundColor:"#9c89b8", color:"white", fontWeight:"800", borderRadius:100}}>{applications.length}</Text>
-                                    </View>
-                                    <TouchableOpacity onPress={() => navigation.navigate("Freezed Applications")}><Icon name="lock" color="grey" size={25} /></TouchableOpacity>
-                                </View>
-                        }
-                        <View style={{width:"100%",display:"flex",justifyContent:"center", alignItems:"center", gap:10}}>
-                            {
-                              applications && applications.map((application,index) => (
-                                <ApplicationCard key={index} application={application} toast={toast} token={token} fetchData={fetchData} />
-                              ))  
-                            }
-                        </View>
-                    </ScrollView>
-            }
-        </>
-      )
-}
+  return (
+    <>
+      {!loading && (
+        <div className="w-full flex flex-col items-center justify-start px-4 py-3">
+          {applications && (
+            <div className="w-full flex items-center justify-between px-4 py-3">
+              <div className="flex items-center gap-4">
+                <p className="font-semibold text-black text-base">Pending Applications</p>
+                <span className="py-1 px-3 bg-[#9c89b8] text-white font-extrabold rounded-full">
+                  {applications.length}
+                </span>
+              </div>
+              <button onClick={() => navigate('/freezed-applications')}>
+                <FaLock size={22} className="text-gray-600 hover:text-gray-800 transition" />
+              </button>
+            </div>
+          )}
 
-export default StudentRegistrationApplications
+          <div className="w-full flex flex-col items-center gap-4">
+            {applications.map((application, index) => (
+              <ApplicationCard
+                key={index}
+                application={application}
+                toast={toast}
+                token={token}
+                fetchData={fetchData}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
+export default StudentRegistrationApplications;
