@@ -1,64 +1,62 @@
-import { useFocusEffect } from '@react-navigation/native';
-import React, { useCallback, useState } from 'react'
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
-import { useToast } from 'react-native-toast-notifications';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { fetchOfficialAccounts } from '../../services/operations/AdminAPI';
 import OfficialCard from '../../components/Admin/OfficialCard';
-import Icon from 'react-native-vector-icons/FontAwesome6';
+import { FaUserPlus } from 'react-icons/fa6';
+import toast from 'react-hot-toast'; // ✅ Import toast
 
-const ManageOfficialAccounts = ({navigation}) => {
+const ManageOfficialAccounts = () => {
+  const [accounts, setAccounts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-    const [accounts,setAccounts] = useState([]);
-    const [loading,setLoading] = useState(false);
+  const { token } = useSelector((state) => state.Auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-    const {token} = useSelector((state) => state.Auth);
-    const toast = useToast();
-    const dispatch = useDispatch();
+  const fetchData = useCallback(async () => {
+    const response = await dispatch(fetchOfficialAccounts(token, toast)); // ✅ Pass toast
+    setAccounts(response || []); // Avoid setting undefined
+    setLoading(false);
+  }, [dispatch, token]);
 
-    const fetchData = async() => {
-        const response = await dispatch(fetchOfficialAccounts(token,toast));
-        setAccounts(response);
-        setLoading(false);
-    }
-
-    useFocusEffect(
-        useCallback(() => {
-          fetchData();
-        }, [token,toast,dispatch])
-    );
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   return (
-    <>
-        {
-            loading ? "" : 
-                <ScrollView contentContainerStyle={{width:"100%",display:"flex",justifyContent:"center", alignItems:"center", paddingHorizontal:15, paddingVertical:10}}>
-                    <View style={{width:"100%", display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", paddingHorizontal:15, paddingVertical:15}}>
-                        <View style={{display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center"}}>
-                            <Text style={{fontWeight:"600",color:"black",fontSize:15}}>Total Official Account</Text>
-                            {
-                                accounts && (
-                                    <View style={{height:25, width:25, borderRadius:100, display:"flex", justifyContent:"center", alignItems:"center",backgroundColor:"#9c89b8"}}>
-                                        <Text style={{color:"white", fontWeight:"800", fontSize:14}}>{accounts.length}</Text>
-                                    </View>
-                                )
-                            }
-                        </View>
-                        <TouchableOpacity onPress={() => navigation.navigate("Create Official Accounts")} style={{paddingHorizontal:10, paddingVertical:10, borderRadius:10, borderColor:"black", borderWidth:0.5, backgroundColor:"#023e8a"}}>
-                            <Icon name='user-plus' size={25} color='white' />
-                        </TouchableOpacity>
-                    </View>
-                    <View style={{width:"100%", display:"flex",justifyContent:"center", alignItems:"center", gap:10}}>
-                        {
-                            accounts && accounts.map((account,index) => (
-                                <OfficialCard key={index} data={account} token={token} toast={toast} fetchData={fetchData} />
-                            ))
-                        }
-                    </View>
-                </ScrollView>
-        }
-    </>
-  )
-}
+    <div className="w-full flex flex-col items-center px-4 py-3">
+      {!loading && (
+        <>
+          <div className="w-full flex flex-row justify-between items-center px-4 py-3">
+            <div className="flex flex-col items-center">
+              <span className="font-semibold text-black text-sm">Total Official Account</span>
+              <div className="h-6 w-6 rounded-full flex justify-center items-center bg-purple-400">
+                <span className="text-white font-bold text-sm">{accounts.length}</span>
+              </div>
+            </div>
+            <button
+              onClick={() => navigate('/create-official-account')}
+              className="px-3 py-2 rounded-md border border-black bg-blue-900"
+            >
+              <FaUserPlus size={20} color="white" />
+            </button>
+          </div>
 
-export default ManageOfficialAccounts
+          <div className="w-full flex flex-col items-center gap-3">
+            {accounts.map((account, index) => (
+              <OfficialCard
+                key={index}
+                data={account}
+                token={token}
+                fetchData={fetchData}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+export default ManageOfficialAccounts;
