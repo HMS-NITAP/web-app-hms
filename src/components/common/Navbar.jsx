@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Drawer from 'react-modern-drawer';
 import 'react-modern-drawer/dist/index.css';
 import { AiOutlineMenu } from 'react-icons/ai';
@@ -28,37 +28,6 @@ const Navbar = () => {
     navigate(route.path);
   }
 
-  const ResponsiveDrawer = ({ isOpen, onClose, children }) => {
-    const [drawerWidth, setDrawerWidth] = useState('70%');
-  
-    useEffect(() => {
-      const updateWidth = () => {
-        const screenWidth = window.innerWidth;
-        if (screenWidth >= 768) {
-          setDrawerWidth('400px'); // md and above
-        } else {
-          setDrawerWidth('70%');   // below md
-        }
-      };
-  
-      updateWidth(); // Set initially
-      window.addEventListener('resize', updateWidth);
-      return () => window.removeEventListener('resize', updateWidth);
-    }, []);
-  
-    return (
-      <Drawer
-        open={isOpen}
-        onClose={onClose}
-        direction="left"
-        style={{ width: drawerWidth }}
-        className="bg-zinc-900 text-white overflow-y-auto"
-      >
-        {children}
-      </Drawer>
-    );
-  };
-
   return (
     <>
       <div style={{ height: 'var(--header-height)' }} className="w-full px-4 flex justify-between items-center backdrop-blur-md bg-black/40 border-b border-white/10 text-white shadow-md">
@@ -78,8 +47,13 @@ const Navbar = () => {
         }
       </div>
 
-      <ResponsiveDrawer isOpen={isOpen} onClose={toggleDrawer}>
-      <div className="py-[0.5rem]">
+      <Drawer
+        open={isOpen}
+        onClose={toggleDrawer}
+        direction="left"
+        className="bg-zinc-900 text-white overflow-y-auto"
+      >
+        <div className="py-[0.5rem]">
           <h2 className="text-xl mb-4 text-blue-600 font-bold text-center">HMS NIT AP</h2>
           <div>
             {
@@ -159,7 +133,7 @@ const Navbar = () => {
             
           </div>
         </div>
-      </ResponsiveDrawer>
+      </Drawer>
 
       <LogoutModal logoutModalVisible={showLogoutModal} setLogoutModalVisible={setShowLogoutModal} />
     </>

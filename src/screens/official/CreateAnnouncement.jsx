@@ -1,118 +1,84 @@
 import React, { useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { createAnnouncement } from '../../services/operations/OfficialAPI';
-import MainButton from '../../components/common/MainButton';
-import { toast } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 const CreateAnnouncement = () => {
-  const { control, handleSubmit, setValue, formState: { errors } } = useForm();
-  const { token } = useSelector((state) => state.Auth);
+  const { register, handleSubmit, reset, formState: { errors } } = useForm();
   const dispatch = useDispatch();
-  const [fileResponse, setFileResponse] = useState(null);
+  const { token } = useSelector((state) => state.Auth);
+  const [file, setFile] = useState(null);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const onSubmit = async (data) => {
     setIsButtonDisabled(true);
-
     const formData = new FormData();
-    formData.append("title", data.title);
-    formData.append("textContent", data.textContent);
-
-    if (fileResponse) {
-      formData.append("file", fileResponse);
+    formData.append('title', data.title);
+    formData.append('textContent', data.textContent);
+    if (file) {
+      formData.append('file', file);
     }
 
-    const result = await dispatch(createAnnouncement(formData, token, toast));
-
-    if (result?.success) {
-      toast.success('Announcement Created Successfully');
-      setValue("title", "");
-      setValue("textContent", "");
-      setFileResponse(null);
-    } else {
-      toast.error('Failed to create announcement');
-    }
-
+    await dispatch(createAnnouncement(formData, token, toast));
+    reset();
+    setFile(null);
     setIsButtonDisabled(false);
   };
 
-  const handleFileChange = (e) => {
-    setFileResponse(e.target.files[0]);
-  };
-
   return (
-    <div className="flex flex-col items-center w-full h-full">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="pt-16 pb-8 w-[90%] flex flex-col gap-8"
-        encType="multipart/form-data"
-      >
-        {/* Title */}
-        <div className="flex flex-col gap-2 w-full">
-          <label className="text-base font-medium text-black">
-            Title<span className="text-red-500 text-xs">*</span>:
+    <div className="flex flex-col items-center w-full min-h-screen pt-10 pb-6 px-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-2xl flex flex-col gap-8">
+        
+        {/* Title Field */}
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-medium text-gray-800">
+            Title <span className="text-red-500 text-xs">*</span>
           </label>
-          <Controller
-            control={control}
-            name="title"
-            rules={{ required: true }}
-            render={({ field }) => (
-              <input
-                type="text"
-                placeholder="Enter Title"
-                {...field}
-                className="w-full p-2 border border-gray-400 rounded text-black"
-              />
-            )}
+          <input
+            type="text"
+            placeholder="Enter Title"
+            {...register('title', { required: true })}
+            className="border border-gray-300 rounded-md px-3 py-2 text-black"
           />
-          {errors.title && <span className="text-red-500 text-sm">Title is required.</span>}
+          {errors.title && <p className="text-xs text-red-500">Title is required.</p>}
         </div>
 
-        {/* Description */}
-        <div className="flex flex-col gap-2 w-full">
-          <label className="text-base font-medium text-black">
-            Description<span className="text-red-500 text-xs">*</span>:
+        {/* Description Field */}
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-medium text-gray-800">
+            Description <span className="text-red-500 text-xs">*</span>
           </label>
-          <Controller
-            control={control}
-            name="textContent"
-            rules={{ required: true }}
-            render={({ field }) => (
-              <textarea
-                placeholder="Enter Announcement Description"
-                {...field}
-                rows={5}
-                className="w-full p-2 border border-gray-400 rounded text-black"
-              />
-            )}
+          <textarea
+            rows={4}
+            placeholder="Enter Announcement Description"
+            {...register('textContent', { required: true })}
+            className="border border-gray-300 rounded-md px-3 py-2 text-black"
           />
-          {errors.textContent && <span className="text-red-500 text-sm">Description is required.</span>}
+          {errors.textContent && <p className="text-xs text-red-500">Description is required.</p>}
         </div>
 
-        {/* File Upload */}
-        <div className="flex flex-col gap-2 w-full">
-          <label className="text-base font-medium text-black">Select Document to Upload:</label>
+        {/* File Picker */}
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-medium text-gray-800">Select Document to Upload</label>
           <input
             type="file"
-            onChange={handleFileChange}
-            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-100 file:text-green-700 hover:file:bg-green-200"
+            accept="*"
+            onChange={(e) => setFile(e.target.files[0])}
+            className="text-sm text-gray-700"
           />
-          {fileResponse && (
-            <div className="mt-2 text-black font-semibold">
-              {fileResponse.name}
-            </div>
-          )}
+          {file && <p className="text-sm text-green-700 font-semibold">{file.name}</p>}
         </div>
 
-        {/* Submit */}
-        <div className="flex w-full">
-          <MainButton
-            isButtonDisabled={isButtonDisabled}
-            text="Create Announcement"
-            onPress={handleSubmit(onSubmit)}
+        {/* Submit Button */}
+        <div className="flex justify-start">
+          <button
             type="submit"
-          />
+            disabled={isButtonDisabled}
+            className="bg-blue-600 text-white px-6 py-2 rounded-md font-semibold hover:bg-blue-700 disabled:opacity-50"
+          >
+            Create Announcement
+          </button>
         </div>
       </form>
     </div>

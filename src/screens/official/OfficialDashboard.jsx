@@ -9,7 +9,7 @@ const OfficialDashboard = () => {
     const { token } = useSelector((state) => state.Auth);
     const dispatch = useDispatch();
 
-    const fetchData = useCallback(async () => {
+    const fetchData = async() => {
         try {
             const response = await dispatch(fetchDashboardData(token, toast));
             setDashboardData(response);
@@ -17,11 +17,11 @@ const OfficialDashboard = () => {
             console.log(error);
             toast.error('Failed to fetch dashboard data');
         }
-    }, [token, dispatch]);
+    }
 
     useEffect(() => {
         fetchData();
-    }, [fetchData]);
+    }, []);
 
     if (!dashboardData) {
         return (

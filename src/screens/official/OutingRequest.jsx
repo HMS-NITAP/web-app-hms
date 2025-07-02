@@ -1,83 +1,73 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   getAllPendingApplicationByHostelBlock,
   getAllInprogressApplicationByHostelBlock,
   getAllCompletedApplicationByHostelBlock,
-  getAllReturnedApplicationByHostelBlock,
+  getAllReturnedApplicationByHostelBlock
 } from '../../services/operations/OfficialAPI';
 import OutingRequestCard from '../../components/official/OutingRequestCard';
+import toast from 'react-hot-toast';
 
 const OutingRequest = () => {
   const [applicationType, setApplicationType] = useState('PENDING');
   const [outingApplication, setOutingApplication] = useState(null);
-
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.Auth);
 
-  const fetchOutingRequest = useCallback(async () => {
+  const fetchOutingRequest = async () => {
     setOutingApplication(null);
-    let data = [];
-
-    try {
-      if (applicationType === 'PENDING') {
-        data = await dispatch(getAllPendingApplicationByHostelBlock(token, toast));
-      } else if (applicationType === 'INPROGRESS') {
-        data = await dispatch(getAllInprogressApplicationByHostelBlock(token, toast));
-      } else if (applicationType === 'COMPLETED') {
-        data = await dispatch(getAllCompletedApplicationByHostelBlock(token, toast));
-      } else if (applicationType === 'RETURNED') {
-        data = await dispatch(getAllReturnedApplicationByHostelBlock(token, toast));
-      }
-      setOutingApplication(data);
-    } catch (error) {
-        console.log(error);
-      toast.error('Failed to fetch outing applications');
+    let data;
+    if (applicationType === 'PENDING') {
+      data = await dispatch(getAllPendingApplicationByHostelBlock(token, toast));
+    } else if (applicationType === 'INPROGRESS') {
+      data = await dispatch(getAllInprogressApplicationByHostelBlock(token, toast));
+    } else if (applicationType === 'COMPLETED') {
+      data = await dispatch(getAllCompletedApplicationByHostelBlock(token, toast));
+    } else if (applicationType === 'RETURNED') {
+      data = await dispatch(getAllReturnedApplicationByHostelBlock(token, toast));
     }
-  }, [token, dispatch, applicationType]);
+    setOutingApplication(data);
+  };
 
   useEffect(() => {
     fetchOutingRequest();
-  }, [fetchOutingRequest]);
-
-  const buttons = [
-    { type: 'PENDING', label: 'Pending' },
-    { type: 'INPROGRESS', label: 'In Progress' },
-    { type: 'RETURNED', label: 'Returned' },
-    { type: 'COMPLETED', label: 'Completed' },
-  ];
+  }, [token, applicationType]);
 
   return (
     <div className="w-full flex flex-col items-center px-4 py-6 gap-6">
       {/* Tabs */}
-      <div className="w-full max-w-3xl grid grid-cols-4 border border-black rounded-md overflow-hidden">
-        {buttons.map((btn) => (
+      <div className="w-full max-w-3xl flex border border-black rounded-lg overflow-hidden">
+        {['PENDING', 'INPROGRESS', 'RETURNED', 'COMPLETED'].map((type) => (
           <button
-            key={btn.type}
-            onClick={() => setApplicationType(btn.type)}
-            className={`py-2 text-center font-semibold ${
-              applicationType === btn.type ? 'bg-yellow-400' : 'bg-white'
+            key={type}
+            onClick={() => setApplicationType(type)}
+            className={`w-1/4 py-2 text-center font-medium ${
+              applicationType === type ? 'bg-yellow-400' : 'bg-white'
             } text-black border-r last:border-r-0`}
           >
-            {btn.label}
+            {type === 'PENDING'
+              ? 'Pending'
+              : type === 'INPROGRESS'
+              ? 'In Progress'
+              : type.charAt(0) + type.slice(1).toLowerCase()}
           </button>
         ))}
       </div>
 
       {/* Applications List */}
-      <div className="w-full max-w-3xl flex flex-col items-center gap-4">
+      <div className="w-full flex md:flex-row flex-col flex-wrap gap-[1.5rem] items-center">
         {!outingApplication ? (
-          <p className="font-bold text-black text-lg">Please Wait...</p>
+          <p className="text-lg font-semibold text-black">Please Wait...</p>
         ) : outingApplication.length === 0 ? (
-          <p className="font-semibold text-black text-base">No Applications Found</p>
+          <p className="text-lg font-semibold text-black">No Applications Found</p>
         ) : (
           outingApplication.map((application, index) => (
             <OutingRequestCard
               key={index}
               application={application}
-              token={token}
               toast={toast}
+              token={token}
               fetchOutingRequest={fetchOutingRequest}
             />
           ))
