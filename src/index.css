@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --header-height: 6rem;
+  --header-height: 4rem;
 }
 
 .full-minus-header {

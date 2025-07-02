@@ -87,7 +87,6 @@ export const deleteHostelBlock = (hostelBlockId,token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
         try{    
-            console.log("first");
             const response = await APIconnector("DELETE",DELETE_HOSTEL_BLOCK_API,{hostelBlockId},{Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -324,7 +323,6 @@ export const freezeRegistrationApplication = (formData,token,toast) => {
                 toast.success(response?.data?.message);
                 throw new Error(response?.data?.message);
             }
-            console.log("DSFD");
             toast.dismiss(id);
             toast.success(response?.data?.message);
             return true;

@@ -28,7 +28,6 @@ export const signUp = (data,otp,navigation,toast) => {
     return async() => {
         let id = toast("Creating your Account...");
         try{
-            let id = toast.show("Creating your Account...");
             const {email,password,confirmPassword,accountType} = data;
             const response = await APIconnector("POST",SIGNUP_API,{email,password,confirmPassword,accountType,otp});
             if(!response.data.success){
@@ -37,12 +36,12 @@ export const signUp = (data,otp,navigation,toast) => {
                 throw new Error(response.data.message);
             }
             toast.dismiss(id);
-            toast.show("Account created Successfully");
+            toast.success("Account created Successfully");
             navigation.navigate("Login");
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Signup Unsuccessful";
             toast.dismiss(id);
-            toast.show(errorMessage);
+            toast.error(errorMessage);
             console.log(e);
         }
     }
@@ -53,8 +52,6 @@ export const login = (email,password,toast,navigate) => {
         let id = toast("Please Wait...");
         try{
             const response = await APIconnector("POST",LOGIN_API,{email,password});
-
-            console.log("RESPONSE", response?.data);
             if(!response.data.success){
                 toast.dismiss(id);
                 toast.error(response.data.message);
@@ -65,8 +62,6 @@ export const login = (email,password,toast,navigate) => {
             localStorage.setItem("user",JSON.stringify(response?.data?.user));
             dispatch(setToken(response?.data?.token));
             dispatch(setUser(response?.data?.user));
-
-            console.log(response?.data?.user?.accountType, response?.data?.user?.accountType === USER_ROLES.OFFICIAL);
 
             if(response?.data?.user?.accountType === USER_ROLES.STUDENT){
                 navigate('/student/dashboard');
@@ -80,7 +75,6 @@ export const login = (email,password,toast,navigate) => {
             toast.dismiss(id);
             toast.success("Login Successful");
         }catch(e){
-            console.log("e", e);
             const errorMessage = e?.response?.data?.message || "Login Failed";
             toast.dismiss(id);
             toast.error(errorMessage);
@@ -90,7 +84,7 @@ export const login = (email,password,toast,navigate) => {
 
 export const sendResetPasswordEmail = (email,navigation,toast) => {
     return async() => {
-        let id = toast.show("Please Wait...", {type:"normal"});
+        let id = toast("Please Wait...");
         try{
             const response = await APIconnector("POST",RESET_PASSWORD_TOKEN,{email});
 
@@ -101,12 +95,12 @@ export const sendResetPasswordEmail = (email,navigation,toast) => {
             }
 
             toast.dismiss(id);
-            toast.show(response?.data?.message, { type: "success" });
+            toast.success(response?.data?.message);
             navigation.navigate("Reset Password Email Sent");
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to send mail";
             toast.dismiss(id);
-            toast.show(errorMessage);
+            toast.error(errorMessage);
             console.log(e);
         }
     }
@@ -114,7 +108,7 @@ export const sendResetPasswordEmail = (email,navigation,toast) => {
 
 export const resetPassword = (token,newPassword,confirmNewPassword,navigation,toast) => {
     return async() => {
-        let id = toast.show("Please Wait...", {type:"normal"});
+        let id = toast("Please Wait...");
         try{
             const response = await APIconnector("POST",RESET_PASSWORD,{token,newPassword,confirmNewPassword});
 
@@ -125,12 +119,12 @@ export const resetPassword = (token,newPassword,confirmNewPassword,navigation,to
             }
 
             toast.dismiss(id);
-            toast.show(response?.data?.message, { type: "success" });
+            toast.success(response?.data?.message);
             navigation.navigate("Reset Password Success");
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to reset password";
             toast.dismiss(id);
-            toast.show(errorMessage);
+            toast.error(errorMessage);
             console.log(e);
         }
     }
@@ -154,22 +148,22 @@ export const logout = (toast, navigate) => {
 
 export const sendOtpToStudent = (email,toast) => {
     return async() => {
-        let id = toast.show("Please Wait...", {type:'normal'});
+        let id = toast("Please Wait...");
         try{ 
             const response = await APIconnector("POST",SENDOTP_API,{email});
             if(!response.data.success){
                 toast.dismiss(id);
-                toast.show(response?.data?.message, { type: "danger" });
+                toast.error(response?.data?.message);
                 throw new Error(response.data.message);
             }
 
             toast.dismiss(id);
-            toast.show(response?.data?.message, { type: "success" });
+            toast.success(response?.data?.message);
             return true;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to Send OTP to Student";
             toast.dismiss(id);
-            toast.show(errorMessage);
+            toast.error(errorMessage);
             console.log(e);
             return false;
         }
@@ -178,22 +172,22 @@ export const sendOtpToStudent = (email,toast) => {
 
 export const verifyOtp = (formData,toast) => {
     return async() => {
-        let id = toast.show("Please Wait...", {type:'normal'});
+        let id = toast("Please Wait...");
         try{ 
             const response = await APIconnector("POST",VERIFY_OTP,formData,{"Content-Type": "multipart/form-data"});
             if(!response.data.success){
                 toast.dismiss(id);
-                toast.show(response?.data?.message, { type: "danger" });
+                toast.error(response?.data?.message);
                 throw new Error(response.data.message);
             }
 
             toast.dismiss(id);
-            toast.show(response?.data?.message, { type: "success" });
+            toast.success(response?.data?.message);
             return true;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Invalid OTP";
             toast.dismiss(id);
-            toast.show(errorMessage);
+            toast.error(errorMessage);
             console.log("Error",e);
             return false;
         }
@@ -202,22 +196,22 @@ export const verifyOtp = (formData,toast) => {
 
 export const createStudentAccount = (formData,toast) => {
     return async() => {
-        let id = toast.show("Please Wait...", {type:'normal'});
+        let id = toast("Please Wait...");
         try{ 
             const response = await APIconnector("POST",CREATE_STUDENT_ACCOUNT_API,formData,{"Content-Type": "multipart/form-data"});
             if(!response.data.success){
                 toast.dismiss(id);
-                toast.show(response?.data?.message, { type: "danger" });
+                toast.error(response?.data?.message);
                 throw new Error(response.data.message);
             }
 
             toast.dismiss(id);
-            toast.show(response?.data?.message, { type: "success" });
+            toast.success(response?.data?.message);
             return true;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to Complete Registration";
             toast.dismiss(id);
-            toast.show(errorMessage);
+            toast.error(errorMessage);
             console.log("Error",e);
             return false;
         }

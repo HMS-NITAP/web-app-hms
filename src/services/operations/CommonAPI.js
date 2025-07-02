@@ -13,21 +13,21 @@ const {
 
 export const getAllAnnouncements = (toast) => {
     return async() => {
-        let id = toast.show("Please Wait...", {type:'normal'});
+        let id = toast("Please Wait...");
         try{
             const response = await APIconnector("GET",GET_ALL_ANNOUNCEMENTS_API,null);
             if(!response.data.success){
-                toast.hide(id);
+                toast.dismiss(id);
+                toast.error(response?.data?.message);
                 throw new Error(response.data.message);
             }
-            toast.hide(id);
-            toast.show("Fetched all Announcements Successfully",{type:"success"});
-            console.log("fdsf",response?.data?.data);
+            toast.dismiss(id);
+            toast.success("Fetched all Announcements Successfully");
             return (response?.data?.data);            
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Fetched all Announcements Successfully";
-            toast.hide(id);
-            toast.show(errorMessage,{type:"danger"});
+            toast.dismiss(id);
+            toast.error(errorMessage);
             console.log(e);
             return [];
         }
@@ -36,23 +36,23 @@ export const getAllAnnouncements = (toast) => {
 
 export const fetchHostelData = (toast) => {
     return async () => {
-        let id = toast.show("Fetching Data...", {type:'normal'});
+        let id = toast("Please wait...");
         try {
             const response = await APIconnector("GET", FETCH_ALL_HOSTEL_DATA_API);
     
             if (!response.data.success) {
-            toast.hide(id);
-            toast.show(response?.data?.message, { type: "danger" });
-            throw new Error(response.data.message);
+                toast.dismiss(id);
+                toast.error(response?.data?.message);
+                throw new Error(response.data.message);
             }
     
-            toast.hide(id);
-            toast.show(response?.data?.message, { type: "success" });
+            toast.dismiss(id);
+            toast.success(response?.data?.message);
             return response?.data?.data;
         } catch (e) {
             const errorMessage = e?.response?.data?.message || "Failed to Fetch Hostel Data";
-            toast.hide(id);
-            toast.show(errorMessage, { type: "danger" });
+            toast.dismiss(id);
+            toast.error(errorMessage);
             console.log("Error", e);
             return null;
         }
@@ -61,22 +61,22 @@ export const fetchHostelData = (toast) => {
 
 export const fetchHostelBlockNames = (toast) => {
     return async() => {
-        let id = toast.show("Please Wait...", {type:'normal'});
+        let id = toast("Please Wait...");
         try{ 
             const response = await APIconnector("GET",FETCH_HOSTEL_BLOCKS_NAME);
             if(!response.data.success){
-                toast.hide(id);
-                toast.show(response?.data?.message, { type: "danger" });
+                toast.dismiss(id);
+                toast.error(response?.data?.message);
                 throw new Error(response.data.message);
             }
 
-            toast.hide(id);
-            toast.show(response?.data?.message, { type: "success" });
+            toast.dismiss(id);
+            toast.success(response?.data?.message);
             return response?.data?.data;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to fetch Hostel Blocks";
-            toast.hide(id);
-            toast.show(errorMessage, {type: "danger"});
+            toast.dismiss(id);
+            toast.error(errorMessage);
             console.log(e);
             return null;
         }
@@ -85,22 +85,22 @@ export const fetchHostelBlockNames = (toast) => {
 
 export const fetchHostelBlockRooms = (hostelBlockId,toast) => {
     return async() => {
-        let id = toast.show("Please Wait...", {type:'normal'});
+        let id = toast("Please Wait...");
         try{ 
             const response = await APIconnector("POST",FETCH_HOSTEL_BLOCKS_ROOMS,{hostelBlockId});
             if(!response.data.success){
-                toast.hide(id);
-                toast.show(response?.data?.message, { type: "danger" });
+                toast.dismiss(id);
+                toast.error(response?.data?.message);
                 throw new Error(response.data.message);
             }
 
-            toast.hide(id);
-            toast.show(response?.data?.message, { type: "success" });
+            toast.dismiss(id);
+            toast.success(response?.data?.message);
             return response?.data?.data;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to fetch Hostel Block Rooms";
-            toast.hide(id);
-            toast.show(errorMessage, {type: "danger"});
+            toast.dismiss(id);
+            toast.error(errorMessage);
             console.log("Erroiror",e);
             return null;
         }
@@ -109,22 +109,22 @@ export const fetchHostelBlockRooms = (hostelBlockId,toast) => {
 
 export const fetchCurrentDateRatingsAndReviews = (toast) => {
     return async() => {
-        let id = toast.show("Please Wait...", {type:'normal'});
+        let id = toast("Please Wait...");
         try{ 
             const response = await APIconnector("GET",FETCH_CURRENT_DATE_MESS_RATING_AND_REVIEW,);
             if(!response.data.success){
-                toast.hide(id);
-                toast.show(response?.data?.message, { type: "danger" });
+                toast.dismiss(id);
+                toast.error(response?.data?.message);
                 throw new Error(response.data.message);
             }
 
-            toast.hide(id);
-            toast.show(response?.data?.message, { type: "success" });
+            toast.dismiss(id);
+            toast.success(response?.data?.message);
             return response?.data?.data;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to fetch Hostel Block Rooms";
-            toast.hide(id);
-            toast.show(errorMessage, {type: "danger"});
+            toast.dismiss(id);
+            toast.error(errorMessage);
             console.log("Error",e);
             return null;
         }
@@ -133,22 +133,22 @@ export const fetchCurrentDateRatingsAndReviews = (toast) => {
 
 export const fetchCurrentSessionMessMenu = (currentDay, currentSession, toast) => {
     return async() => {
-        let id = toast.show("Please Wait...", {type:'normal'});
+        let id = toast("Please Wait...");
         try{ 
             const response = await APIconnector("POST",FETCH_CURRENT_SESSION_MESS_MENU_API,{currentDay, currentSession});
             if(!response.data.success){
-                toast.hide(id);
-                toast.show(response?.data?.message, { type: "danger" });
+                toast.dismiss(id);
+                toast.error(response?.data?.message);
                 throw new Error(response.data.message);
             }
 
-            toast.hide(id);
-            // toast.show(response?.data?.message, { type: "success" });
+            toast.dismiss(id);
+            // toast.success(response?.data?.message);
             return response?.data?.data;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to fetch Mess Menu For Current Session";
-            toast.hide(id);
-            toast.show(errorMessage, {type: "danger"});
+            toast.dismiss(id);
+            toast.error(errorMessage);
             console.log("Error",errorMessage);
             return null;
         }
@@ -157,23 +157,22 @@ export const fetchCurrentSessionMessMenu = (currentDay, currentSession, toast) =
 
 export const fetchDetailedMessMenu = (toast) => {
     return async() => {
-        let id = toast.show("Please Wait...", {type:'normal'});
+        let id = toast("Please Wait...");
         try{ 
             const response = await APIconnector("GET",FETCH_DETAILED_MESS_MENU_API);
-            console.log("Res", response.data.success);
             if(!response.data.success){
-                toast.hide(id);
-                toast.show(response?.data?.message, { type: "danger" });
+                toast.dismiss(id);
+                toast.error(response?.data?.message);
                 throw new Error(response.data.message);
             }
 
-            toast.hide(id);
-            // toast.show(response?.data?.message, { type: "success" });
+            toast.dismiss(id);
+            // toast.success(response?.data?.message);
             return response?.data?.data;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to fetch Mess Menu";
-            toast.hide(id);
-            toast.show(errorMessage, {type: "danger"});
+            toast.dismiss(id);
+            toast.error(errorMessage);
             console.log("Error",errorMessage);
             return null;
         }

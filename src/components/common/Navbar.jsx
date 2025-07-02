@@ -35,7 +35,7 @@ const Navbar = () => {
         </div>
 
         {
-          token && user && (user.accountType === USER_ROLES.STUDENT || user.accountType === USER_ROLES.OFFICIAL) && (
+          token && user && (
             <button
               className="cursor-pointer flex items-center gap-2 text-lg font-medium tracking-wide hover:text-red-400 transition focus:outline-none"
               onClick={() => setShowLogoutModal(true)}
