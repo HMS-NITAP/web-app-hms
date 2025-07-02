@@ -26,25 +26,25 @@ import ApplicationHistory from '../screens/student/ApplicationHistory';
 import RegisterComplaints from '../screens/student/RegisteredComplaints';
 import HostelComplaints from '../screens/official/HostelComplaints';
 import TakeAttendance from '../screens/official/TakeAttendance';
-// import ManageHostels from '../screens/admin/ManageHostels';
+import ManageHostels from '../screens/admin/ManageHostels';
 import MessMenu from '../screens/common/MessMenu';
 import DetailedMessMenu from '../screens/common/DetailedMessMenu';
 import ViewMessFeedBack from '../screens/common/ViewMessFeedBack';
 import ManageOfficialAccounts from '../screens/admin/ManageOfficialAccounts';
-// import CreateHostelBlock from '../screens/admin/CreateHostelBlock';
-// import CreateOfficialAccount from '../screens/admin/CreateOfficialAccount'; //done it
+import CreateHostelBlock from '../screens/admin/CreateHostelBlock';
+import CreateOfficialAccount from '../screens/admin/CreateOfficialAccount';
 import StudentRegistration from '../screens/auth/StudentRegistration';
 import StudentRegistrationApplications from '../screens/admin/StudentRegistrationApplications';
 import OfficialDashboard from '../screens/official/OfficialDashboard';
 import GiveMessFeedback from '../screens/student/GiveMessFeedback';
 import GenerateMessReceipt from '../screens/student/GenerateMessReceipt';
 import MessReceiptsHistory from '../screens/student/MessReceiptsHistory';
-// import FreezedApplications from '../screens/admin/FreezedApplications';
+import FreezedApplications from '../screens/admin/FreezedApplications';
 import AdminDashboard from '../screens/admin/AdminDashboard';
-// import BlockRooms from '../screens/admin/BlockRooms';
-// import CotDetails from '../screens/admin/CotDetails';
+import BlockRooms from '../screens/admin/BlockRooms';
+import CotDetails from '../screens/admin/CotDetails';
 import ManageStudentAccounts from '../screens/admin/ManageStudentAccounts';
-// import ChangeStudentCot from '../screens/admin/ChangeStudentCot';
+import ChangeStudentCot from '../screens/admin/ChangeStudentCot';
 import EvenSemRegistrationApplications from '../screens/admin/EvenSemRegistrationApplications';
 
 export const USER_ROLES = {
@@ -73,17 +73,17 @@ export const authRoutes = [
 
 export const adminRoutes = [
   { path: "/admin/dashboard", element: <AdminDashboard />, label: "Dashboard", icon: <FaIdBadge />, role: [USER_ROLES.ADMIN] },
-  // { path: "/admin/odd-sem-applications", element: <StudentRegistrationApplications />, label: "Odd Sem Registration Applications", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
-  // { path: "/admin/even-sem-applications", element: <EvenSemRegistrationApplications />, label: "Even Sem Registration Applications", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
-  // { path: "/admin/manage-students", element: <ManageStudentAccounts />, label: "Manage Student Accounts", icon: <FaChild />, role: [USER_ROLES.ADMIN] },
-  // { path: "/admin/manage-officials", element: <ManageOfficialAccounts />, label: "Manage Official Accounts", icon: <FaUserShield />, role: [USER_ROLES.ADMIN] },
-  // { path: "/admin/create-official", element: <CreateOfficialAccount />, role: [USER_ROLES.ADMIN], hidden: true },
-  // { path: "/admin/manage-hostels", element: <ManageHostels />, label: "Manage Hostel Blocks", icon: <FaUserGear />, role: [USER_ROLES.ADMIN] },
-  // { path: "/admin/create-hostel", element: <CreateHostelBlock />, role: [USER_ROLES.ADMIN], hidden: true },
-  // { path: "/admin/freezed-applications", element: <FreezedApplications />, role: [USER_ROLES.ADMIN], hidden: true },
-  // { path: "/admin/block-rooms", element: <BlockRooms />, role: [USER_ROLES.ADMIN], hidden: true },
-  // { path: "/admin/cot-details", element: <CotDetails />, role: [USER_ROLES.ADMIN], hidden: true },
-  // { path: "/admin/change-student-cot", element: <ChangeStudentCot />, role: [USER_ROLES.ADMIN], hidden: true },
+  { path: "/admin/odd-sem-applications", element: <StudentRegistrationApplications />, label: "Odd Sem Registration Applications", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
+  { path: "/admin/even-sem-applications", element: <EvenSemRegistrationApplications />, label: "Even Sem Registration Applications", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
+  { path: "/admin/manage-students", element: <ManageStudentAccounts />, label: "Manage Students", icon: <FaChild />, role: [USER_ROLES.ADMIN] },
+  { path: "/admin/manage-officials", element: <ManageOfficialAccounts />, label: "Manage Officials", icon: <FaUserShield />, role: [USER_ROLES.ADMIN] },
+  { path: "/admin/create-official-account", element: <CreateOfficialAccount />, role: [USER_ROLES.ADMIN], hidden: true },
+  { path: "/admin/manage-hostels", element: <ManageHostels />, label: "Manage Hostel Blocks", icon: <FaUserGear />, role: [USER_ROLES.ADMIN] },
+  { path: "/admin/create-hostel-block", element: <CreateHostelBlock />, role: [USER_ROLES.ADMIN], hidden: true },
+  { path: "/admin/freezed-applications", element: <FreezedApplications />, role: [USER_ROLES.ADMIN], hidden: true },
+  { path: "/admin/block-rooms", element: <BlockRooms />, role: [USER_ROLES.ADMIN], hidden: true },
+  { path: "/admin/cot-details", element: <CotDetails />, role: [USER_ROLES.ADMIN], hidden: true },
+  { path: "/admin/change-student-cot/:roomId/:cotId", element: <ChangeStudentCot />, role: [USER_ROLES.ADMIN], hidden: true },
   { path: "/announcements", element: <Announcements />, label: "Announcements", icon: <FaBullhorn />, role: null },
   { path: "/hostel-blocks", element: <HostelsBlocks />, label: "Hostel Blocks", icon: <FaBuilding />, role: null },
   { path: "/mess-menu", element: <MessMenu />, label: "Mess Menu", icon: <FaBowlFood />, role: null },

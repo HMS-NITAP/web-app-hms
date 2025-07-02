@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import toast from 'react-hot-toast';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchEvenSemStudentRegistrationApplications } from '../../services/operations/AdminAPI';
 import EvenSemApplicationCard from '../../components/Admin/EvenSemApplicationCard';
+import toast from 'react-hot-toast';
 
 const EvenSemRegistrationApplications = () => {
   const [applications, setApplications] = useState([]);
@@ -11,48 +11,46 @@ const EvenSemRegistrationApplications = () => {
   const { token } = useSelector((state) => state.Auth);
   const dispatch = useDispatch();
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
     const response = await dispatch(fetchEvenSemStudentRegistrationApplications(token, toast));
     setApplications(response || []);
     setLoading(false);
-  };
+  }, [token, dispatch, toast]);
 
   useEffect(() => {
     fetchData();
-  }, [token]);
+  }, [fetchData]);
+
+  if (loading) return null;
 
   return (
-    <div className="w-full flex flex-col items-center justify-center px-4 py-6">
-      {!loading && (
-        <>
-          <div className="w-full flex flex-row justify-between items-center bg-white p-4 rounded shadow mb-4">
-            <div className="flex items-center gap-4">
-              <p className="text-lg font-semibold text-black">Pending Applications</p>
-              <span className="bg-purple-400 text-white font-bold px-3 py-1 rounded-full">
-                {applications.length}
-              </span>
-            </div>
-            {/* Uncomment if needed
-            <button onClick={() => navigate("/freezed-applications")}>
-              <LockIcon className="text-gray-500 w-6 h-6" />
-            </button>
-            */}
+    <div className="w-full flex flex-col items-center px-4 py-2">
+      {applications && (
+        <div className="w-full flex justify-between items-center px-4 py-4">
+          <div className="flex items-center gap-4">
+            <p className="font-semibold text-black text-base">Pending Applications</p>
+            <span className="py-1 px-3 bg-purple-400 text-white font-bold rounded-full">
+              {applications.length}
+            </span>
           </div>
-
-          <div className="w-full flex flex-col items-center gap-4">
-            {applications.map((application, index) => (
-              <EvenSemApplicationCard
-                key={index}
-                application={application}
-                toast={toast}
-                token={token}
-                fetchData={fetchData}
-              />
-            ))}
-          </div>
-        </>
+          {/* <button onClick={() => navigate('/freezed-applications')}>
+            <FaLock size={20} className="text-gray-600" />
+          </button> */}
+        </div>
       )}
+
+      <div className="w-full flex flex-col items-center gap-4">
+        {applications.map((application, index) => (
+          <EvenSemApplicationCard
+            key={index}
+            application={application}
+            toast={toast}
+            token={token}
+            fetchData={fetchData}
+          />
+        ))}
+      </div>
     </div>
   );
 };

@@ -1,110 +1,90 @@
-import { useFocusEffect } from '@react-navigation/native';
-import React, { useCallback, useEffect, useState } from 'react'
-import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import { useToast } from 'react-native-toast-notifications';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchFreezedStudentRegistrationApplications } from '../../services/operations/AdminAPI';
-import ApplicationCard from '../../components/Admin/ApplicationCard';
-import Icon from 'react-native-vector-icons/FontAwesome6';
 import FreezeApplicationCard from '../../components/Admin/FreezeApplicationCard';
+import { FaMagnifyingGlass } from 'react-icons/fa6';
+import toast from 'react-hot-toast';
 
 const FreezedApplications = () => {
+  const [applications, setApplications] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
 
-    const [applications,setApplications] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [searchQuery, setSearchQuery] = useState("");
+  const { token } = useSelector((state) => state.Auth);
+  const dispatch = useDispatch();
 
-    const {token} = useSelector((state) => state.Auth);
-    const toast = useToast();
-    const dispatch = useDispatch();
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    const response = await dispatch(fetchFreezedStudentRegistrationApplications(token, toast));
+    setApplications(response || []);
+    setLoading(false);
+  }, [token, dispatch]);
 
-    const fetchData = async() => {
-        const response = await dispatch(fetchFreezedStudentRegistrationApplications(token,toast));
-        setApplications(response);
-        setLoading(false);
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  const searchRollNumber = () => {
+    if (!searchQuery) {
+      fetchData();
+      return;
     }
 
-    useFocusEffect(
-        useCallback(() => {
-          fetchData();
-        }, [token,toast])
+    const index = applications.findIndex(
+      (application) => application?.instituteStudent?.rollNo === searchQuery
     );
 
-    const searchRollNumber = () => {
-      if (applications) {
-        if (searchQuery === "") {
-          fetchData();
-          return;
-        }
-    
-        const index = applications.findIndex((application) => application?.instituteStudent?.rollNo === searchQuery);
-    
-        if(index !== -1){
-          const applicationToMove = applications[index];
-          const remainingApplications = applications.filter((_, i) => i !== index);
-    
-          const newApplications = [applicationToMove, ...remainingApplications];
-          setApplications(newApplications);
-        }
-      }
-    };
+    if (index !== -1) {
+      const appToMove = applications[index];
+      const rest = applications.filter((_, i) => i !== index);
+      setApplications([appToMove, ...rest]);
+    }
+  };
+
+  if (loading) return null;
 
   return (
-    <>
-            {
-                loading ? "" : 
-                    <ScrollView contentContainerStyle={{width:"100%",display:"flex",justifyContent:"center", alignItems:"center", paddingHorizontal:15, paddingVertical:10}}>
-                        {
-                            applications && 
-                                <View style={{width:"100%", display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", paddingHorizontal:15, paddingVertical:15, gap:15}}>
+    <div className="w-full flex flex-col items-center px-4 py-3">
+      {applications && (
+        <div className="w-full flex flex-col items-center gap-4 px-4 py-4">
+          <div className="flex items-center gap-4">
+            <p className="font-semibold text-black text-base">Freezed Applications</p>
+            <span className="py-1 px-3 bg-purple-400 text-white font-bold rounded-full">
+              {applications.length}
+            </span>
+          </div>
 
-                                    <View style={{display:"flex",flexDirection:"row",gap:15,justifyContent:"center",alignItems:"center"}}>
-                                        <Text style={{fontWeight:"600",color:"black",fontSize:16}}>Freezed Applications</Text>
-                                        <Text style={{paddingVertical:5, paddingHorizontal:10, backgroundColor:"#9c89b8", color:"white", fontWeight:"800", borderRadius:100}}>{applications.length}</Text>
-                                    </View>
+          <div className="w-full flex items-center justify-between gap-4">
+            <input
+              type="text"
+              placeholder="Search with Roll No"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full max-w-md border border-gray-400 rounded-lg p-2 text-black"
+            />
+            <button
+              onClick={searchRollNumber}
+              className="p-3 border border-black border-dotted rounded-full"
+            >
+              <FaMagnifyingGlass className="text-gray-500 text-lg" />
+            </button>
+          </div>
+        </div>
+      )}
 
-                                    <View style={styles.subFormView}>
-                                      <TextInput
-                                        style={styles.input}
-                                        placeholder="Search with Roll No"
-                                        placeholderTextColor={"#adb5bd"}
-                                        onChangeText={(e) => setSearchQuery(e)}   
-                                      />
-                                      <TouchableOpacity onPress={searchRollNumber} style={{padding:10, borderColor:"black", borderWidth:1, borderRadius:100, borderStyle:"dotted"}}><Icon name="magnifying-glass" color="grey" size={25} /></TouchableOpacity>
-                                    </View>
-                                </View>
-                        }
-                        <View style={{width:"100%",display:"flex",justifyContent:"center", alignItems:"center", gap:10}}>
-                            {
-                              applications && applications.map((application,index) => (
-                                <FreezeApplicationCard key={index} application={application} toast={toast} token={token} fetchData={fetchData} />
-                              ))  
-                            }
-                        </View>
-                    </ScrollView>
-            }
-        </>
-  )
-}
+      <div className="w-full flex flex-col items-center gap-4">
+        {applications.map((application, index) => (
+          <FreezeApplicationCard
+            key={index}
+            application={application}
+            toast={toast}
+            token={token}
+            fetchData={fetchData}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
 
-export default FreezedApplications
-
-const styles = StyleSheet.create({
-  subFormView: {
-    width:"100%",
-    display: 'flex',
-    flexDirection:"row",
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    gap: 10,
-  },
-  input: {
-    width:"80%",
-    padding: 10,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderRadius: 10,
-    borderColor: "#adb5bd",
-    color: "black",
-  },
-})
+export default FreezedApplications;

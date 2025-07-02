@@ -1,92 +1,91 @@
-import { useFocusEffect, useRoute } from '@react-navigation/native';
-import React, { useCallback, useState } from 'react'
-import { ActivityIndicator, Image, Linking, ScrollView, Text, TouchableOpacity, View } from 'react-native'
-import { fetchCotsInRooms } from '../../services/operations/AdminAPI';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useToast } from 'react-native-toast-notifications';
+import { fetchCotsInRooms } from '../../services/operations/AdminAPI';
+import { useLocation } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 
 const CotDetails = () => {
+  const [cotDetails, setCotDetails] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-    const [cotDetails, setCotDetails] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.Auth);
+  const location = useLocation();
+  const { roomId } = location.state;
 
-    const route = useRoute();
-    const {roomId} = route.params;
-
-    const dispatch = useDispatch();
-    const toast = useToast();
-    const {token} = useSelector((state) => state.Auth);
-
-
-    const fetchData = async() => {
-        if(roomId){
-            setCotDetails(null);
-            const response = await dispatch(fetchCotsInRooms(roomId,token,toast));
-            setCotDetails(response);
-        }
+  const fetchData = async () => {
+    if (roomId) {
+      setCotDetails(null);
+      const response = await dispatch(fetchCotsInRooms(roomId, token, toast));
+      setCotDetails(response);
     }
+  };
 
-    useFocusEffect(
-        useCallback(() => {
-          fetchData();
-        }, [roomId,token,toast])
-    );
+  useEffect(() => {
+    fetchData();
+  }, [roomId, token]);
 
   return (
-    <ScrollView contentContainerStyle={{width:"100%", display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", paddingVertical:20}}>
-        {
-            cotDetails && (
-                <View style={{width:"100%", display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", gap:5}}>
-                    <Text style={{color:"black", fontWeight:"700", fontSize:22, textAlign:"center"}}>Room - {cotDetails?.roomNumber}</Text>
-                    <Text style={{color:"black", fontWeight:"400", fontSize:18, textAlign:"center"}}>Floor - {cotDetails?.floorNumber}</Text>
-                    <View style={{width:"90%", marginHorizontal:"auto", display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", gap:15, marginVertical:15}}>
-                        {
-                            cotDetails!==null && cotDetails?.cots?.map((cot,index) => (
-                                <View key={index} style={{width:"100%"}}>
-                                    {
-                                        cot?.status==="AVAILABLE" ? (
-                                            <View style={{width:"100%", borderWidth:1, borderColor:"black", borderStyle:"dashed", borderRadius:10, padding:10}}>
-                                                <Text style={{width:"100%", color:"black", fontSize:18, fontWeight:"500", textAlign:"center"}}>Cot No : <Text style={{color:"#495057"}}>{cot?.cotNo} (<Text>{cot?.status}</Text>)</Text></Text>
-                                            </View>
-                                        ) 
-                                            : 
-                                        (
-                                            <View style={{width:"100%", borderWidth:1, borderColor:"black", borderStyle:"dashed", borderRadius:10, padding:10}}>
-                                                <Text style={{width:"100%", color:"black", fontSize:18, fontWeight:"500", textAlign:"center"}}>Cot No : <Text style={{color:"#495057"}}>{cot?.cotNo} (<Text>{cot?.status}</Text>)</Text></Text>
-                                                <View style={{alignItems: 'center',marginVertical: 20}}>
-                                                    {isLoading && (
-                                                        <ActivityIndicator size="large" color="#0000ff" />
-                                                    )}
-                                                    <Image 
-                                                        source={{ uri: cot?.student?.image }} 
-                                                        style={{width: 100,height: 100, borderRadius: 50, marginBottom: 10}} 
-                                                        onLoadStart={() => setIsLoading(true)}
-                                                        onLoad={() => setIsLoading(false)}
-                                                    />
-                                                    <Text style={{color:"black", fontSize:16, fontWeight:"500"}}>Name : <Text style={{color:"#495057"}}>{cot?.student?.name}</Text></Text>
-                                                </View>
-                                                <Text style={{color:"black", fontSize:15, fontWeight:"500"}}>Reg No : <Text style={{color:"#495057"}}>{cot?.student?.regNo}</Text></Text>
-                                                <Text style={{color:"black", fontSize:15, fontWeight:"500"}}>Roll No : <Text style={{color:"#495057"}}>{cot?.student?.rollNo}</Text></Text>
-                                                <Text style={{color:"black", fontSize:15, fontWeight:"500"}}>Gender : <Text style={{color:"#495057"}}>{cot?.student?.gender==="M" ? "Male" : "Female"}</Text></Text>
-                                                <Text style={{color:"black", fontSize:15, fontWeight:"500"}}>DOB : <Text style={{color:"#495057"}}>{cot?.student?.dob}</Text></Text>
-                                                <Text style={{color:"black", fontSize:15, fontWeight:"500"}}>Year : <Text style={{color:"#495057"}}>{cot?.student?.year}</Text></Text>
-                                                <Text style={{color:"black", fontSize:15, fontWeight:"500"}}>Branch : <Text style={{color:"#495057"}}>{cot?.student?.branch}</Text></Text>
-                                                <Text style={{color:"black", fontSize:15, fontWeight:"500"}}>Aadhaar Number : <Text style={{color:"#495057"}}>{cot?.student?.aadhaarNumber}</Text></Text>
-                                                <Text style={{color:"black", fontSize:15, fontWeight:"500"}}>Contact No : <Text style={{color:"#495057"}}>{cot?.student?.phone}</Text></Text>
-                                                <Text style={{color:"black", fontSize:15, fontWeight:"500"}}>Address : <Text style={{color:"#495057"}}>{cot?.student?.address}</Text></Text>
-                                                <Text style={{color:"black", fontSize:15, fontWeight:"500", marginTop:10, display:"flex", alignItems:"center"}}>Fee Receipt : <TouchableOpacity onPress={() => Linking.openURL(cot?.student?.hostelFeeReceipt)} style={{display:"flex", alignItems:"center"}}><Text style={{color:"blue", fontWeight:600}}>CLICK HERE</Text></TouchableOpacity></Text>
-                                            </View>
-                                        )
-                                    }
-                                </View>
-                            ))
-                        }
-                    </View>
-                </View>
-            )
-        }
-    </ScrollView>
-  )
-}
+    <div className="w-full flex flex-col items-center justify-center py-8 px-4">
+      {cotDetails && (
+        <div className="w-full max-w-4xl flex flex-col items-center justify-center gap-4">
+          <h2 className="text-center text-black font-bold text-2xl">Room - {cotDetails.roomNumber}</h2>
+          <p className="text-center text-black font-normal text-lg">Floor - {cotDetails.floorNumber}</p>
 
-export default CotDetails
+          <div className="w-full flex flex-col items-center justify-center gap-6 mt-6">
+            {cotDetails?.cots?.map((cot, index) => (
+              <div key={index} className="w-full border border-black border-dashed rounded-xl p-4">
+                <h3 className="text-center text-black font-medium text-lg">
+                  Cot No: <span className="text-gray-600">{cot.cotNo} ({cot.status})</span>
+                </h3>
+
+                {cot.status !== 'AVAILABLE' && (
+                  <div className="flex flex-col items-center gap-4 mt-5">
+                    {cot?.student?.image && (
+                      <>
+                        {isLoading && <p className="text-blue-600">Loading Image...</p>}
+                        <img
+                          src={cot.student.image}
+                          alt="Student"
+                          className="w-24 h-24 rounded-full object-cover"
+                          onLoadStart={() => setIsLoading(true)}
+                          onLoad={() => setIsLoading(false)}
+                        />
+                      </>
+                    )}
+
+                    <div className="w-full text-sm font-medium text-black flex flex-col gap-1">
+                      <p>Name: <span className="text-gray-700">{cot.student.name}</span></p>
+                      <p>Reg No: <span className="text-gray-700">{cot.student.regNo}</span></p>
+                      <p>Roll No: <span className="text-gray-700">{cot.student.rollNo}</span></p>
+                      <p>Gender: <span className="text-gray-700">{cot.student.gender === 'M' ? 'Male' : 'Female'}</span></p>
+                      <p>DOB: <span className="text-gray-700">{cot.student.dob}</span></p>
+                      <p>Year: <span className="text-gray-700">{cot.student.year}</span></p>
+                      <p>Branch: <span className="text-gray-700">{cot.student.branch}</span></p>
+                      <p>Aadhaar Number: <span className="text-gray-700">{cot.student.aadhaarNumber}</span></p>
+                      <p>Contact No: <span className="text-gray-700">{cot.student.phone}</span></p>
+                      <p>Address: <span className="text-gray-700">{cot.student.address}</span></p>
+                      <p className="mt-2">
+                        Fee Receipt:{' '}
+                        <a
+                          href={cot.student.hostelFeeReceipt}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 font-semibold underline"
+                        >
+                          CLICK HERE
+                        </a>
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default CotDetails;

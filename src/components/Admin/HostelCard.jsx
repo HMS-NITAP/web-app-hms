@@ -1,194 +1,122 @@
-import React, { useState } from 'react'
-import { Text, TouchableOpacity, View, Modal, StyleSheet, Image, ActivityIndicator } from 'react-native'
-import Icon from 'react-native-vector-icons/FontAwesome6';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { deleteHostelBlock } from '../../services/operations/AdminAPI';
+import { FaTrash } from 'react-icons/fa';
 
-const HostelCard = ({ data,token,toast,fetchData }) => {
+const HostelCard = ({ data, token, toast, fetchData }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
 
-  const handleConfirmDelete = async() => {
+  const handleConfirmDelete = async () => {
     setModalVisible(false);
-    await dispatch(deleteHostelBlock(data?.id,token,toast));
+    await dispatch(deleteHostelBlock(data?.id, token, toast));
     fetchData();
   };
 
-
   return (
-    <View style={styles.card}>
-        <View style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", paddingBottom:10}}>
-            <View style={styles.imageContainer}>
-                {isLoading && (
-                    <ActivityIndicator size="large" color="#0000ff" style={styles.loadingIndicator} />
-                )}
-                <Image 
-                    source={{ uri: data.image }} 
-                    style={styles.image} 
-                    onLoadStart={() => setIsLoading(true)}
-                    onLoad={() => setIsLoading(false)}
-                />
-            </View>
-            <View style={{display:"flex", justifyContent:"flex-start"}}>
-                <Text style={{color:"black", fontWeight:"600", fontSize:16}}>Name : <Text style={{color:"black", fontWeight:"500", fontSize:18}}>{data.name}</Text></Text>
-                <Text style={{color:"black", fontWeight:"600", fontSize:16}}>Capacity : <Text style={{color:"black", fontWeight:"500", fontSize:15}}>{data.capacity} students</Text></Text>
-                <Text style={{color:"black", fontWeight:"600", fontSize:16}}>Room Type : <Text style={{color:"black", fontWeight:"500", fontSize:15}}>{data.roomType}</Text></Text>
-                <Text style={{color:"black", fontWeight:"600", fontSize:16}}>Floor Count : <Text style={{color:"black", fontWeight:"500", fontSize:15}}>{data.floorCount === "2" ? "G+2" : "G+4"}</Text></Text>
-                <Text style={{color:"black", fontWeight:"600", fontSize:16}}>Gender : <Text style={{color:"black", fontWeight:"500", fontSize:15}}>{data.gender === 'M' ? "Male" : "Female"}</Text></Text>
-                <Text style={{color:"black", fontWeight:"600", fontSize:16}}>Year Assigned to : <Text style={{color:"black", fontWeight:"500", fontSize:15}}>{data.year}</Text></Text>
-            </View>
-        </View>
-        {
-          data?.wardens.length === 0 ? <View style={{width:"100%", justifyContent:"center"}}><Text style={{textAlign:"center", fontWeight:"700", fontSize:15, color:"#c1121f"}}>No Warden Assigned</Text></View>
-            :
-            <View>
-              <Text style={{fontSize:16, fontWeight:"800", color:"#14213d", marginBottom:5}}>Warden(s) :</Text>
-              {
-                data?.wardens.map((warden,index) => (
-                  <Text style={{fontSize:15, fontWeight:"700",color:"#003554"}} selectable={true}>{index+1}) {warden.name}    ( +91 {warden.phone} )</Text>
-                ))
-              }
-            </View>
-        }
+    <div className="w-full border border-black rounded-lg p-4 bg-white shadow-sm flex flex-col gap-4">
+      {/* Top Section */}
+      <div className="flex justify-between items-center gap-4">
+        <div className="relative w-[120px] h-[120px] rounded-full overflow-hidden flex justify-center items-center">
+          {isLoading && (
+            <div className="absolute z-10">
+              <div className="w-6 h-6 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          )}
+          <img
+            src={data.image}
+            alt="hostel"
+            className="w-full h-full object-cover"
+            onLoadStart={() => setIsLoading(true)}
+            onLoad={() => setIsLoading(false)}
+          />
+        </div>
 
-        {/* TO ADD DELETE FEATURE */}
-        {/* <View>
-            <TouchableOpacity 
-                style={styles.trashButton} 
-                onPress={() => setModalVisible(true)}
-                >
-                <Icon name='trash' size={25} style={styles.icon} color='#c1121f' />
-            </TouchableOpacity>
-        </View>
-        <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => setModalVisible(false)}
+        <div className="flex flex-col gap-1">
+          <p className="text-black font-semibold text-base">
+            Name:{' '}
+            <span className="font-medium text-lg">{data.name}</span>
+          </p>
+          <p className="text-black font-semibold text-base">
+            Capacity:{' '}
+            <span className="font-medium text-sm">{data.capacity} students</span>
+          </p>
+          <p className="text-black font-semibold text-base">
+            Room Type:{' '}
+            <span className="font-medium text-sm">{data.roomType}</span>
+          </p>
+          <p className="text-black font-semibold text-base">
+            Floor Count:{' '}
+            <span className="font-medium text-sm">
+              {data.floorCount === '2' ? 'G+2' : 'G+4'}
+            </span>
+          </p>
+          <p className="text-black font-semibold text-base">
+            Gender:{' '}
+            <span className="font-medium text-sm">
+              {data.gender === 'M' ? 'Male' : 'Female'}
+            </span>
+          </p>
+          <p className="text-black font-semibold text-base">
+            Year Assigned to:{' '}
+            <span className="font-medium text-sm">{data.year}</span>
+          </p>
+        </div>
+      </div>
+
+      {/* Warden Info */}
+      {data?.wardens.length === 0 ? (
+        <div className="w-full text-center text-red-700 font-bold text-sm">
+          No Warden Assigned
+        </div>
+      ) : (
+        <div>
+          <p className="text-[#14213d] font-extrabold mb-2">Warden(s):</p>
+          {data?.wardens.map((warden, index) => (
+            <p key={index} className="text-[#003554] font-bold text-sm">
+              {index + 1}) {warden.name} ( +91 {warden.phone} )
+            </p>
+          ))}
+        </div>
+      )}
+
+      {/* Uncomment below for delete functionality */}
+      {/* <div className="flex justify-end">
+        <button
+          className="bg-red-100 border border-red-700 rounded-full p-2"
+          onClick={() => setModalVisible(true)}
         >
-            <View style={styles.modalOverlay}>
-            <View style={styles.modalContainer}>
-                <Text style={styles.modalText}>Are you sure you want to delete this Hostel Block?</Text>
-                <View style={styles.modalButtons}>
-                <TouchableOpacity 
-                    style={styles.confirmButton} 
-                    onPress={handleConfirmDelete}
-                >
-                    <Text style={styles.buttonText}>Yes</Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                    style={styles.cancelButton} 
-                    onPress={() => setModalVisible(false)}
-                >
-                    <Text style={styles.buttonText}>No</Text>
-                </TouchableOpacity>
-                </View>
-            </View>
-            </View>
-        </Modal> */}
-    </View>
-  )
-}
+          <FaTrash className="text-red-700" />
+        </button>
+      </div>
 
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor:"white",
-    elevation:10,
-    width: '100%',
-    borderWidth: 1,
-    borderRadius: 10,
-    borderColor: "black",
-    paddingHorizontal: 10,
-    paddingVertical: 15,
-    display: "flex",
-    flexDirection: "colomn",
-    justifyContent: "center",
-    alignItems: "stretch",
-    gap: 10
-  },
-  trashButton: {
-    borderColor: "#c1121f",
-    borderWidth: 0.5,
-    borderRadius: 1000,
-    paddingHorizontal: "auto",
-    justifyContent:"center",
-    alignItems:"center",
-    paddingVertical: 10,
-    backgroundColor: "#ffccd5"
-  },
-  editButton: {
-    borderColor: "#081c15",
-    borderWidth: 1,
-    borderRadius: 1000,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-    backgroundColor: "#d8f3dc"
-  },
-  icon: {
-    width: 30,
-    textAlign: 'center'
-  },
-  modalOverlay: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)"
-  },
-  modalContainer: {
-    width: 300,
-    backgroundColor: "white",
-    borderRadius: 10,
-    padding: 20,
-    alignItems: "center"
-  },
-  modalText: {
-    marginBottom: 20,
-    fontSize: 18,
-    textAlign: "center"
-  },
-  modalButtons: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%"
-  },
-  confirmButton: {
-    flex: 1,
-    backgroundColor: "#c1121f",
-    padding: 10,
-    borderRadius: 5,
-    alignItems: "center",
-    marginRight: 10
-  },
-  cancelButton: {
-    flex: 1,
-    backgroundColor: "#6c757d",
-    padding: 10,
-    borderRadius: 5,
-    alignItems: "center",
-    marginLeft: 10
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 16
-  },
-  imageContainer: {
-        width: 120,
-        height: 120,
-        borderRadius: 60,
-        overflow: 'hidden',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    image: {
-        width: 120,
-        height: 120,
-    },
-    loadingIndicator: {
-        position: 'absolute',
-        zIndex: 1,
-    },
-});
+      {modalVisible && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-md shadow-md w-[300px]">
+            <p className="text-center text-lg mb-4">
+              Are you sure you want to delete this Hostel Block?
+            </p>
+            <div className="flex justify-between gap-4">
+              <button
+                onClick={handleConfirmDelete}
+                className="flex-1 bg-red-600 text-white py-2 rounded-md"
+              >
+                Yes
+              </button>
+              <button
+                onClick={() => setModalVisible(false)}
+                className="flex-1 bg-gray-600 text-white py-2 rounded-md"
+              >
+                No
+              </button>
+            </div>
+          </div>
+        </div>
+      )} */}
+    </div>
+  );
+};
 
 export default HostelCard;

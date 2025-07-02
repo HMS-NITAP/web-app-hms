@@ -1,133 +1,104 @@
-import { useFocusEffect, useRoute } from '@react-navigation/native';
-import React, { useCallback, useEffect, useState } from 'react'
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { useToast } from 'react-native-toast-notifications';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { downloadStudentDetailsInHostelBlockXlsxFile, fetchRoomsInHostelBlock } from '../../services/operations/AdminAPI';
-import Icon from 'react-native-vector-icons/FontAwesome6';
+import { toast } from 'react-hot-toast';
+import { FaFileArrowDown } from 'react-icons/fa6';
 
-const BlockRooms = ({navigation}) => {
+const BlockRooms = () => {
+  const [roomData, setRoomsData] = useState(null);
+  const [selectedFloor, setSelectedFloor] = useState(null);
+  const [floorRooms, setFloorRooms] = useState(null);
 
-    const [roomData, setRoomsData] = useState(null);
-    const [selectedFloor, setSelectedFloor] = useState(null);
-    const [floorRooms, setFloorRooms] = useState(null);
+  const { token } = useSelector((state) => state.Auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-    const route = useRoute();
-    const {hostelBlockId,hostelBlockName,floorCount} = route.params;
+  const location = useLocation();
+  const { hostelBlockId, hostelBlockName, floorCount } = location.state;
 
-    const floorsArray = Array.from({ length: floorCount + 1 }, (_, index) => ({
-        id : index,
-    }));
+  const floorsArray = Array.from({ length: floorCount + 1 }, (_, index) => ({
+    id: index,
+  }));
 
-    const dispatch = useDispatch();
-    const toast = useToast();
-    const {token} = useSelector((state) => state.Auth);
-
-    const fetchData = async() => {
-        if(hostelBlockId){
-            setRoomsData(null);
-            const response = await dispatch(fetchRoomsInHostelBlock(hostelBlockId,token,toast));
-            setRoomsData(response);
-        }
+  const fetchData = async () => {
+    if (hostelBlockId) {
+      setRoomsData(null);
+      const response = await dispatch(fetchRoomsInHostelBlock(hostelBlockId, token, toast));
+      setRoomsData(response);
     }
+  };
 
-    useEffect(() => {
-        const filterRoomsFloorWise = () => {
-          if(!roomData){
-            return;
-          }
-          const filterRooms = roomData.filter((room) => room?.floorNumber===selectedFloor);
-          setFloorRooms(filterRooms);
-        }
-        filterRoomsFloorWise();
-    },[selectedFloor,roomData]);
+  useEffect(() => {
+    fetchData();
+  }, [hostelBlockId, token]);
 
-    useFocusEffect(
-        useCallback(() => {
-          fetchData();
-        }, [hostelBlockId,token,toast])
-    );
+  useEffect(() => {
+    if (!roomData) return;
+    const filterRooms = roomData.filter((room) => room?.floorNumber === selectedFloor);
+    setFloorRooms(filterRooms);
+  }, [selectedFloor, roomData]);
 
-    const moveInsideRoom = (roomId) => {
-        navigation.navigate("Cot Details",{roomId});
-    }
+  const moveInsideRoom = (roomId) => {
+    navigate('/admin/cot-details', { state: { roomId } });
+  };
 
-    const downloadData = async() => {
-      dispatch(downloadStudentDetailsInHostelBlockXlsxFile(hostelBlockId,token,toast));
-    }
+  const downloadData = async () => {
+    dispatch(downloadStudentDetailsInHostelBlockXlsxFile(hostelBlockId, token, toast));
+  };
 
   return (
-    <ScrollView contentContainerStyle={{width:"100%", display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", paddingVertical:20}}>
-        <Text style={{color:"black", fontWeight:"700", fontSize:22, textAlign:"center"}}>{hostelBlockName}</Text>
-        <View style={{width:"90%", display:"flex", alignItems:"flex-end"}}><TouchableOpacity onPress={downloadData}><Icon name="file-arrow-down" color="grey" size={25} /></TouchableOpacity></View>
-        {
-              floorCount && (
-                <View style={styles.filterContainer}>
-                  <Text style={styles.filterLabel}>Select Floor :</Text>
-                  <View style={{display:"flex", maxWidth:"70%", gap:10, flexDirection:"row", flexWrap:"wrap", justifyContent:"center", alignItems:"center"}}>
-                    {
-                      floorsArray?.map((floor,index) => (
-                        <TouchableOpacity onPress={() => setSelectedFloor(floor?.id)} style={{paddingHorizontal:10, paddingVertical:5, borderRadius:1000, backgroundColor: selectedFloor === floor?.id ? '#b5e48c' : 'white', borderWidth:0.5, borderColor:selectedFloor === floor?.id ? 'transparent' : 'black'}} key={index}>
-                          <Text style={styles.filterButtonText}>{floor?.id}</Text>
-                        </TouchableOpacity>
-                      )) 
-                    }
-                  </View>
-                </View>
-              )
-        }
-        {
-              (!floorRooms || floorRooms.length==0) ? (<View><Text style={{color:"red", fontSize:16, fontWeight:"500"}}>No Rooms Are Present With This Requirements</Text></View>) : (
-                <View style={{width:"90%", display:"flex", flexDirection:"row", flexWrap:"wrap", gap:15, justifyContent:"center", alignItems:"center"}}>
-                  {
-                    floorRooms.map((room,index) => (
-                      <TouchableOpacity onPress={() => moveInsideRoom(room?.id)} key={index} style={{borderStyle:"dotted", width:"30%", marginHorizontal:"auto", gap:20, borderWidth:1.5, borderColor:"black", borderRadius:10, display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", paddingHorizontal:15, paddingVertical:15}}>
-                        <Text style={{textAlign:"center", fontWeight:"800", color:"red", fontSize:15, color:"#1b263b"}}>Room {room?.roomNumber}</Text>
-                      </TouchableOpacity>
-                    ))
-                  }
-                </View>
-              )
-        }
-    </ScrollView>
-  )
-}
+    <div className="w-full flex flex-col items-center justify-center py-8 gap-5">
+      <h1 className="text-black font-bold text-2xl text-center">{hostelBlockName}</h1>
 
-export default BlockRooms
+      <div className="w-11/12 flex justify-end">
+        <button onClick={downloadData}>
+          <FaFileArrowDown className="text-gray-500 text-xl" />
+        </button>
+      </div>
 
-const styles = StyleSheet.create({
-    filterContainer: {
-      display:"flex",
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap:20,
-      marginVertical:15,
-    },
-    filterLabel: {
-      fontSize: 16,
-      fontWeight: '600',
-      color: 'black',
-    },
-    filterButtonText: {
-      color: 'black',
-      fontWeight: '700',
-    },
-    roomContainer: {
-      backgroundColor: '#ffffffcc',
-      padding: 15, 
-      marginBottom: 20, 
-      borderRadius: 10,
-      alignItems: 'center',
-    },
-    roomText: {
-      fontSize: 18, 
-      fontWeight: 'bold',
-      marginBottom: 10, 
-    },
-    filterButton: {
-      paddingVertical: 8,
-      paddingHorizontal: 12,
-      borderRadius: 5,
-      marginHorizontal: 5,
-    },
-});
+      {/* Floor Filter */}
+      {floorCount && (
+        <div className="flex flex-col sm:flex-row items-center gap-5 my-4 w-full justify-center">
+          <p className="text-base font-semibold text-black">Select Floor:</p>
+          <div className="flex flex-wrap gap-3 max-w-[70%] justify-center">
+            {floorsArray.map((floor, index) => (
+              <button
+                key={index}
+                onClick={() => setSelectedFloor(floor.id)}
+                className={`px-4 py-1 rounded-full border text-sm font-bold ${
+                  selectedFloor === floor.id
+                    ? 'bg-lime-200 border-transparent'
+                    : 'bg-white border-black'
+                }`}
+              >
+                {floor.id}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Rooms Grid */}
+      {!floorRooms || floorRooms.length === 0 ? (
+        <p className="text-red-600 font-medium text-base">No Rooms Are Present With This Requirement</p>
+      ) : (
+        <div className="w-11/12 flex flex-wrap justify-center items-center gap-4">
+          {floorRooms.map((room, index) => (
+            <button
+              key={index}
+              onClick={() => moveInsideRoom(room.id)}
+              className="w-[30%] border border-black border-dotted rounded-lg p-4 flex flex-col items-center justify-center hover:bg-gray-100 transition"
+            >
+              <p className="text-center font-extrabold text-base text-[#1b263b]">
+                Room {room.roomNumber}
+              </p>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default BlockRooms;
