@@ -136,16 +136,17 @@ export const resetPassword = (token,newPassword,confirmNewPassword,navigation,to
     }
 }
 
-export const logout = (toast) => {
+export const logout = (toast, navigate) => {
     return async(dispatch) => {
         try{
             await dispatch(setToken(null));
             await dispatch(setUser(null));
-            await localStorage.removeItem("token");
-            await localStorage.removeItem("user");
-            toast.show("Successfully Logged Out from Account");
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            toast.success("Successfully Logged Out from Account");
+            navigate("/");
         }catch(e){
-            toast.show("Logout Unsuccessful");
+            toast.error("Logout Unsuccessful");
             console.log("Logout modal Error",e);
         }
     }

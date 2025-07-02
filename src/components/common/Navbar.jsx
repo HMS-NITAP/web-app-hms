@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import Drawer from 'react-modern-drawer';
 import 'react-modern-drawer/dist/index.css';
 import { AiOutlineMenu } from 'react-icons/ai';
+import { FaRightToBracket } from 'react-icons/fa6';
 import { adminRoutes, authRoutes, officialRoutes, studentRoutes, USER_ROLES } from '../../config/config';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
+import LogoutModal from './LogoutModal';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const {token} = useSelector((state) => state.Auth);
   const {user} = useSelector((state) => state.Profile);
@@ -26,12 +29,21 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="w-full h-14 px-4 flex justify-between items-center backdrop-blur-md bg-black/40 border-b border-white/10 text-white shadow-md">
+      <div style={{ height: 'var(--header-height)' }} className="w-full px-4 flex justify-between items-center backdrop-blur-md bg-black/40 border-b border-white/10 text-white shadow-md">
         <div className="cursor-pointer" onClick={toggleDrawer}>
           <AiOutlineMenu size={24} />
         </div>
 
-        <div className="text-lg font-medium tracking-wide">Profile</div>
+        {
+          token && user && (user.accountType === USER_ROLES.STUDENT || user.accountType === USER_ROLES.OFFICIAL) && (
+            <button
+              className="cursor-pointer flex items-center gap-2 text-lg font-medium tracking-wide hover:text-red-400 transition focus:outline-none"
+              onClick={() => setShowLogoutModal(true)}
+            >
+              <FaRightToBracket size={22} />
+            </button>
+          )
+        }
       </div>
 
       <Drawer
@@ -121,6 +133,8 @@ const Navbar = () => {
           </div>
         </div>
       </Drawer>
+
+      <LogoutModal logoutModalVisible={showLogoutModal} setLogoutModalVisible={setShowLogoutModal} />
     </>
   );
 };

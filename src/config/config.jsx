@@ -17,13 +17,12 @@ import ForgotPassword from '../screens/auth/ForgotPassword';
 import ResetPasswordMailSent from '../screens/auth/ResetPasswordMailSent';
 import ResetPassword from '../screens/auth/ResetPassword';
 import ResetPasswordSuccess from '../screens/auth/ResetPasswordSuccess';
-// import StudentDashboard from '../screens/student/StudentDashboard';
+import StudentDashboard from '../screens/student/StudentDashboard';
 // import AttendanceHistory from '../screens/student/AttendanceHistory';
 // import OutingApplication from '../screens/student/OutingApplication';
 // import RegisterComplaint from '../screens/student/RegisterComplaint';
 import OtpInput from '../screens/auth/OtpInput';
 import Gallery from '../screens/institute/Gallary';
-import LogoutModal from '../screens/common/LogoutModal';
 import Announcements from '../screens/common/Announcements';
 import OutingRequest from '../screens/official/OutingRequest';
 // import ApplicationHistory from '../screens/student/ApplicationHistory';
@@ -63,7 +62,6 @@ export const authRoutes = [
   { path: "/announcements", element: <Announcements />, label: "Announcements", icon: <FaBullhorn />, role: null },
   { path: "/hostel-blocks", element: <HostelsBlocks />, label: "Hostel Blocks", icon: <FaBuilding />, role: null },
   { path: "/mess-menu", element: <MessMenu />, label: "Mess Menu", icon: <FaBowlFood />, role: null },
-  { path: "/logout", element: <LogoutModal />, label: "Logout", icon: <FaUserGear />, role: null },
   { path: "/contact-us", element: <ContactUs />, label: "Contact Us", icon: <FaAddressBook />, role: null },
   { path: "/development-team", element: <DevelopmentTeam />, label: "Development Team", icon: <FaUsers />, role: null },
   { path: "/gallery", element: <Gallery />, label: "Gallery", icon: <FaImage />, role: null },
@@ -92,7 +90,7 @@ export const adminRoutes = [
 ]
 
 export const studentRoutes = [
-  // { path: "/student/dashboard", element: <StudentDashboard />, label: "Dashboard", icon: <FaIdBadge />, role: [USER_ROLES.STUDENT] },
+  { path: "/student/dashboard", element: <StudentDashboard />, label: "Dashboard", icon: <FaIdBadge />, role: [USER_ROLES.STUDENT] },
   // { path: "/student/attendance-history", element: <AttendanceHistory />, label: "Attendance History", icon: <FaTableList />, role: [USER_ROLES.STUDENT] },
   // { path: "/student/outing-application", element: <OutingApplication />, label: "Outing Application", icon: <FaWpforms />, role: [USER_ROLES.STUDENT] },
   // { path: "/student/application-history", element: <ApplicationHistory />, label: "Application History", icon: <FaClockRotateLeft />, role: [USER_ROLES.STUDENT] },

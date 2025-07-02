@@ -16,91 +16,93 @@ const App = () => {
     <div className='w-[100vw] h-[100vh] overflow-hidden flex flex-col items-center bg-gray-100'>
       <Navbar />
       
-      {
-        (!token || !user) && (
-          <Routes>
-            {
-              authRoutes.map((route) => {
-                if(!route.role) return <Route path={route.path} element={route.element} />
-                else return (
-                  <PrivateRoute allowedRoutes={route.role}>
-                    <Route path={route.path} element={route.element} />
-                  </PrivateRoute>
-                )
-              })
-            }
-          </Routes>
-        )
-      }
+      <div className="w-full full-minus-header">
+        {
+          (!token || !user) && (
+            <Routes>
+              {
+                authRoutes.map((route) => {
+                  if(!route.role) return <Route path={route.path} element={route.element} />
+                  else return (
+                    <PrivateRoute allowedRoutes={route.role}>
+                      <Route path={route.path} element={route.element} />
+                    </PrivateRoute>
+                  )
+                })
+              }
+            </Routes>
+          )
+        }
 
-      {/* ADMIN ROUTES */}
-      {
-        token && user && user.accountType == USER_ROLES.ADMIN && (
-          <Routes>
-            {
-              adminRoutes.map((route, index) => {
-                const element = !route.role
-                  ? route.element
-                  : <PrivateRoute allowedRoutes={route.role}>{route.element}</PrivateRoute>;
+        {/* ADMIN ROUTES */}
+        {
+          token && user && user.accountType == USER_ROLES.ADMIN && (
+            <Routes>
+              {
+                adminRoutes.map((route, index) => {
+                  const element = !route.role
+                    ? route.element
+                    : <PrivateRoute allowedRoutes={route.role}>{route.element}</PrivateRoute>;
 
-                return (
-                  <Route
-                    key={index}
-                    path={route.path}
-                    element={element}
-                  />
-                )
-              })
-            }
-          </Routes>
-        )
-      }
+                  return (
+                    <Route
+                      key={index}
+                      path={route.path}
+                      element={element}
+                    />
+                  )
+                })
+              }
+            </Routes>
+          )
+        }
 
-      {/* STUDENT ROUTES */}
-      {
-        token && user && user.accountType == USER_ROLES.STUDENT && (
-          <Routes>
-            {
-              studentRoutes.map((route, index) => {
-                const element = !route.role
-                  ? route.element
-                  : <PrivateRoute allowedRoutes={route.role}>{route.element}</PrivateRoute>;
+        {/* STUDENT ROUTES */}
+        {
+          token && user && user.accountType == USER_ROLES.STUDENT && (
+            <Routes>
+              {
+                studentRoutes.map((route, index) => {
+                  const element = !route.role
+                    ? route.element
+                    : <PrivateRoute allowedRoutes={route.role}>{route.element}</PrivateRoute>;
 
-                return (
-                  <Route
-                    key={index}
-                    path={route.path}
-                    element={element}
-                  />
-                )
-              })
-            }
-          </Routes>
-        )
-      }
+                  return (
+                    <Route
+                      key={index}
+                      path={route.path}
+                      element={element}
+                    />
+                  )
+                })
+              }
+            </Routes>
+          )
+        }
 
-      {/* OFFICIAL ROUTES */}
-      {
-        token && user && user.accountType == USER_ROLES.OFFICIAL && (
-          <Routes>
-            {
-              officialRoutes.map((route, index) => {
-                const element = !route.role
-                  ? route.element
-                  : <PrivateRoute allowedRoutes={route.role}>{route.element}</PrivateRoute>;
+        {/* OFFICIAL ROUTES */}
+        {
+          token && user && user.accountType == USER_ROLES.OFFICIAL && (
+            <Routes>
+              {
+                officialRoutes.map((route, index) => {
+                  const element = !route.role
+                    ? route.element
+                    : <PrivateRoute allowedRoutes={route.role}>{route.element}</PrivateRoute>;
 
-                return (
-                  <Route
-                    key={index}
-                    path={route.path}
-                    element={element}
-                  />
-                )
-              })
-            }
-          </Routes>
-        )
-      }
+                  return (
+                    <Route
+                      key={index}
+                      path={route.path}
+                      element={element}
+                    />
+                  )
+                })
+              }
+            </Routes>
+          )
+        }
+      </div>
       
     </div>
   );

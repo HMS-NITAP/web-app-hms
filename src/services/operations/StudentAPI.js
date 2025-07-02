@@ -171,23 +171,23 @@ export const getAllStudentHostelComplaint = (token,toast) => {
 
 export const getStudentDashboardData = (token,toast) => {
     return async() => {
-        let id = toast.show("Please Wait...",{type:"normal"});
+        let id = toast("Please Wait...");
         try{
             const response = await APIconnector("GET",GET_STUDENT_DASHBOARD_DATA_APT,null,{Authorization: `Bearer ${token}`});
             
             if(!response.data.success){
-                toast.hide(id);
-                toast.show(response.data.message, {type: "danger"});
+                toast.dismiss(id);
+                toast.error(response.data.message);
                 throw new Error(response.data.message);
             }
             
-            toast.hide(id);
-            toast.show(response?.data?.message,{type:"success"});
+            toast.dismiss(id);
+            toast.success(response?.data?.message);
             return response.data.data;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to fetch student dashboard data";
-            toast.hide(id);
-            toast.show(errorMessage,{type:"danger"});
+            toast.dismiss(id);
+            toast.error(errorMessage);
             console.log(e)
         }
     }
