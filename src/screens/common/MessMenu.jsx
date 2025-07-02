@@ -53,15 +53,15 @@ const MessMenu = () => {
   };
 
   return (
-    <div className="w-full flex flex-col items-center bg-gray-100 py-6 px-4 space-y-4">
+    <div className="w-full h-full flex flex-col items-center py-6 px-4 space-y-4">
       <h1 className="text-2xl font-bold text-black">Today's Menu</h1>
       <p className="text-lg font-semibold text-gray-700">{currentDay}</p>
       <p className="text-lg font-semibold text-gray-700">{currentSession}</p>
 
       {currentItems && (
-        <div className="mt-4 w-full max-w-md space-y-2">
+        <div className="mt-4 md:w-[70%] w-full flex md:flex-row flex-col gap-[2rem] justify-center items-center flex-wrap">
           {currentItems.map((item, index) => (
-            <div key={index} className="bg-green-100 rounded-lg p-3 text-gray-800 shadow-sm">
+            <div key={index} className="bg-green-100 md:w-[200px] w-[90%] text-center font-semibold rounded-lg p-3 text-gray-800 shadow-sm">
               {item}
             </div>
           ))}

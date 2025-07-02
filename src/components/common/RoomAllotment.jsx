@@ -1,146 +1,188 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchHostelBlockRooms, fetchHostelBlockNames } from '../../services/operations/CommonAPI';
-import { createStudentAccount } from '../../services/operations/AuthAPI';
-import { setRegistrationStep } from '../../reducers/slices/AuthSlice';
 import toast from 'react-hot-toast';
-import { FaArrowsRotate } from 'react-icons/fa6';
+import { fetchHostelBlockRooms, fetchHostelBlockNames } from '../../services/operations/CommonAPI';
+import { setRegistrationStep } from '../../reducers/slices/AuthSlice';
+import { createStudentAccount } from '../../services/operations/AuthAPI';
 
-const RoomAllotmentWeb = () => {
+const RoomAllotment = () => {
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-
-  const [hostelBlocks, setHostelBlocks] = useState([]);
-  const [hostelBlockRooms, setHostelBlockRooms] = useState([]);
+  const [hostelBlocks, setHostelBlocks] = useState(null);
+  const [hostelBlockRooms, setHostelBlockRooms] = useState(null);
   const [selectedBlock, setSelectedBlock] = useState(null);
   const [selectedFloor, setSelectedFloor] = useState(null);
-  const [floorRooms, setFloorRooms] = useState([]);
+  const [floorRooms, setFloorRooms] = useState(null);
   const [selectedCot, setSelectedCot] = useState(null);
-
   const [submitDetails, setSubmitDetails] = useState({ roomNo: null, floorNo: null, blockName: null, cotNo: null });
   const [floorCount, setFloorCount] = useState(null);
 
   const dispatch = useDispatch();
   const { registrationData } = useSelector((state) => state.Auth);
 
-  useEffect(() => {
-    const fetchBlocks = async () => {
-      const response = await dispatch(fetchHostelBlockNames(toast));
-      if (registrationData && response?.length > 0) {
-        const filtered = response.filter(
-          (block) => block.gender === registrationData.gender && block.year === registrationData.year
-        );
-        setHostelBlocks(filtered);
-      }
-      setLoading(false);
-    };
-    fetchBlocks();
-  }, []);
+  const floorsArray = floorCount !== null ? Array.from({ length: floorCount + 1 }, (_, index) => ({ id: index })) : [];
+
+  const fetchHostelBlocks = async () => {
+    const response = await dispatch(fetchHostelBlockNames(toast));
+    if (!registrationData) return;
+    if (response && response.length > 0) {
+      const filteredBlocks = response.filter(
+        (block) => block?.gender === registrationData?.gender && block?.year === registrationData?.year
+      );
+      setHostelBlocks(filteredBlocks);
+    }
+  };
+
+  const fetchRooms = async () => {
+    setIsButtonDisabled(true);
+    setSelectedCot(null);
+    const filterData = hostelBlocks.filter((block) => block.id === selectedBlock);
+    const floors = parseInt(filterData[0].floorCount);
+    setFloorCount(floors);
+    const response = await dispatch(fetchHostelBlockRooms(selectedBlock, toast));
+    setHostelBlockRooms(response);
+    setSubmitDetails({
+      blockName: filterData[0].name,
+      cotNo: null,
+      floorNo: null,
+      roomNo: null,
+    });
+    setIsButtonDisabled(false);
+  };
 
   useEffect(() => {
-    const fetchRooms = async () => {
-      if (!selectedBlock) return;
-      setIsButtonDisabled(true);
-      setSelectedCot(null);
-      const block = hostelBlocks.find((b) => b.id === selectedBlock);
-      setFloorCount(parseInt(block.floorCount));
-      const response = await dispatch(fetchHostelBlockRooms(selectedBlock, toast));
-      setHostelBlockRooms(response);
-      setSubmitDetails({ blockName: block.name, cotNo: null, floorNo: null, roomNo: null });
-      setIsButtonDisabled(false);
-    };
-    fetchRooms();
+    if (selectedBlock) {
+      fetchRooms();
+    }
+    // eslint-disable-next-line
   }, [selectedBlock]);
 
   useEffect(() => {
-    if (!selectedFloor || !hostelBlockRooms.length) return;
-    const filtered = hostelBlockRooms.filter((room) => room.floorNumber === selectedFloor);
-    setFloorRooms(filtered);
+    const filterRoomsFloorWise = () => {
+      if (!hostelBlockRooms) return;
+      const filterRooms = hostelBlockRooms.filter((room) => room?.floorNumber === selectedFloor);
+      setFloorRooms(filterRooms);
+    };
+    filterRoomsFloorWise();
   }, [selectedFloor, hostelBlockRooms]);
 
+  useEffect(() => {
+    fetchHostelBlocks();
+    setLoading(false);
+    // eslint-disable-next-line
+  }, []);
+
   const selectCot = (cot, room) => {
-    if (cot.status === 'BOOKED' || cot.status === 'BLOCKED') return;
-    setSelectedCot(cot.id);
-    setSubmitDetails((prev) => ({
-      ...prev,
-      cotNo: cot.cotNo,
-      roomNo: room.roomNumber,
-      floorNo: room.floorNumber,
+    if (cot?.status === 'BOOKED' || cot?.status === 'BLOCKED') return;
+    setSelectedCot(cot?.id);
+    setSubmitDetails((prevDetails) => ({
+      ...prevDetails,
+      cotNo: cot?.cotNo,
+      roomNo: room?.roomNumber,
+      floorNo: room?.floorNumber,
     }));
     setModalVisible(true);
+  };
+
+  const cancelHandler = () => {
+    setModalVisible(false);
+    setSelectedCot(null);
   };
 
   const handleSubmit = async () => {
     if (!registrationData) return;
     setIsButtonDisabled(true);
     const formdata = new FormData();
-    for (let key in registrationData) {
-      if (key === 'image' || key === 'instituteFeeReceipt' || key === 'hostelFeeReceipt') {
-        const file = registrationData[key]?.[0];
-        if (file) formdata.append(key, file);
-      } else {
-        formdata.append(key, registrationData[key]);
-      }
-    }
+    formdata.append('email', registrationData?.email);
+    formdata.append('password', registrationData?.password);
+    formdata.append('confirmPassword', registrationData?.confirmPassword);
+    formdata.append('name', registrationData?.name);
+    formdata.append('regNo', registrationData?.regNo);
+    formdata.append('rollNo', registrationData?.rollNo);
+    formdata.append('year', registrationData?.year);
+    formdata.append('branch', registrationData?.branch);
+    formdata.append('gender', registrationData?.gender);
+    formdata.append('pwd', registrationData?.pwd);
+    formdata.append('community', registrationData?.community);
+    formdata.append('aadhaarNumber', registrationData?.aadhaarNumber);
+    formdata.append('dob', registrationData?.dob);
+    formdata.append('bloodGroup', registrationData?.bloodGroup);
+    formdata.append('fatherName', registrationData?.fatherName);
+    formdata.append('motherName', registrationData?.motherName);
+    formdata.append('phone', registrationData?.phone);
+    formdata.append('parentsPhone', registrationData?.parentsPhone);
+    formdata.append('emergencyPhone', registrationData?.emergencyPhone);
+    formdata.append('address', registrationData?.address);
     formdata.append('hostelBlockId', selectedBlock);
     formdata.append('cotId', selectedCot);
-
+    formdata.append('image', registrationData?.image);
+    if (registrationData?.instituteFeeReceipt) {
+      formdata.append('instituteFeeReceipt', registrationData.instituteFeeReceipt);
+    }
+    formdata.append('hostelFeeReceipt', registrationData?.hostelFeeReceipt);
+    formdata.append('paymentMode', registrationData?.paymentMode);
+    formdata.append('paymentDate', registrationData?.paymentDate);
+    formdata.append('amountPaid', registrationData?.amountPaid);
     const response = await dispatch(createStudentAccount(formdata, toast));
     if (response) {
       setModalVisible(false);
       await dispatch(setRegistrationStep(4));
     } else {
-      toast.error('Refresh the page to check if the room is already booked.');
+      toast('Refresh the page from the above icon to check if the room is already booked by someone else.', { icon: '⚠️' });
       setModalVisible(false);
     }
     setIsButtonDisabled(false);
   };
 
   return (
-    <div className="w-full flex flex-col items-center gap-6">
+    <div className="w-full flex flex-col gap-6">
       {loading ? (
-        <p className="font-bold text-lg">Data Loading...</p>
+        <div>
+          <span className="font-extrabold text-lg">Data Loading...</span>
+        </div>
       ) : (
-        <>
-          {hostelBlocks.length === 0 ? (
-            <div className="bg-red-200 rounded-xl px-6 py-4">
-              <p className="text-center font-bold text-black">
-                No Hostel Blocks Allotted as per your Requirements.
-              </p>
+        <div className="flex flex-col gap-6 w-full px-2">
+          {(!hostelBlocks || hostelBlocks.length === 0) ? (
+            <div className="w-full bg-[#ff928b] rounded-2xl px-4 py-4">
+              <span className="text-center text-base text-black font-extrabold block">
+                No Hostel Blocks Alloted as per your Requirements.
+              </span>
             </div>
           ) : (
-            <div className="w-full max-w-4xl">
-              <p className="font-semibold text-black">Select Block :</p>
-              <div className="flex flex-wrap gap-3 mt-2">
-                {hostelBlocks.map((block, index) => (
+            <div className="flex flex-row items-center gap-5">
+              <span className="font-semibold text-black text-base">Select Block :</span>
+              <div className="flex flex-row flex-wrap gap-2 max-w-[70%]">
+                {hostelBlocks?.map((hostel, index) => (
                   <button
                     key={index}
-                    onClick={() => setSelectedBlock(block.id)}
+                    onClick={() => setSelectedBlock(hostel.id)}
                     className={`px-3 py-2 rounded-lg border ${
-                      selectedBlock === block.id ? 'bg-lime-300' : 'bg-white border-black'
-                    }`}
+                      selectedBlock === hostel?.id ? 'bg-[#b5e48c] border-transparent' : 'bg-white border-black'
+                    } font-bold`}
+                    disabled={isButtonDisabled}
                   >
-                    {block.name}
+                    {hostel?.name}
                   </button>
                 ))}
               </div>
             </div>
           )}
 
-          {floorCount !== null && (
-            <div className="w-full max-w-4xl">
-              <p className="font-semibold text-black">Select Floor :</p>
-              <div className="flex flex-wrap gap-3 mt-2">
-                {Array.from({ length: floorCount + 1 }, (_, i) => (
+          {floorCount && (
+            <div className="flex flex-row items-center gap-5">
+              <span className="font-semibold text-black text-base">Select Floor :</span>
+              <div className="flex flex-row flex-wrap gap-2 max-w-[70%]">
+                {floorsArray?.map((floor, index) => (
                   <button
-                    key={i}
-                    onClick={() => setSelectedFloor(i)}
+                    key={index}
+                    onClick={() => setSelectedFloor(floor?.id)}
                     className={`px-4 py-1 rounded-full border ${
-                      selectedFloor === i ? 'bg-lime-300' : 'bg-white border-black'
-                    }`}
+                      selectedFloor === floor?.id ? 'bg-[#b5e48c] border-transparent' : 'bg-white border-black'
+                    } font-bold`}
+                    disabled={isButtonDisabled}
                   >
-                    {i}
+                    {floor?.id}
                   </button>
                 ))}
               </div>
@@ -148,39 +190,40 @@ const RoomAllotmentWeb = () => {
           )}
 
           {selectedBlock && selectedFloor !== null && (
-            <div className="w-[90%] flex justify-end">
-              <button onClick={() => setSelectedBlock(selectedBlock)} disabled={isButtonDisabled}>
-                <FaArrowsRotate className="text-blue-900 text-xl" />
+            <div className="w-[90%] flex flex-row justify-end items-center mx-auto">
+              <button type="button" disabled={isButtonDisabled} onClick={fetchRooms} className="text-[#003049] text-xl">
+                &#x21bb;
               </button>
             </div>
           )}
 
-          {floorRooms.length === 0 ? (
-            <p className="text-red-500 font-semibold text-base">
-              No Rooms Are Present With This Requirements
-            </p>
+          {(!floorRooms || floorRooms.length === 0) ? (
+            <div>
+              <span className="text-red-600 text-base font-semibold">No Rooms Are Present With This Requirements</span>
+            </div>
           ) : (
-            <div className="w-full flex flex-col gap-6 items-center">
+            <div className="w-full flex flex-col gap-4 justify-center items-center">
               {floorRooms.map((room, index) => (
                 <div
                   key={index}
-                  className="w-[90%] border-dashed border-2 border-black rounded-xl px-6 py-4 flex flex-col items-center gap-4"
+                  className="w-[90%] border border-dashed border-black rounded-xl flex flex-col gap-4 justify-center items-center px-4 py-4"
                 >
-                  <p className="text-lg font-bold text-slate-900">Room {room.roomNumber}</p>
-                  <div className="flex flex-wrap gap-3 justify-center">
+                  <span className="text-center font-extrabold text-lg text-[#1b263b]">Room {room?.roomNumber}</span>
+                  <div className="flex flex-row flex-wrap gap-2 justify-center items-center">
                     {room.cots.map((cot, idx) => (
                       <button
                         key={idx}
                         onClick={() => selectCot(cot, room)}
-                        className={`px-3 py-2 rounded-lg border-dotted border ${
-                          selectedCot === cot.id
+                        className={`border border-dotted border-black rounded-lg px-3 py-2 font-semibold text-base ${
+                          selectedCot === cot?.id
                             ? 'bg-yellow-300'
-                            : cot.status === 'AVAILABLE'
-                            ? 'bg-white'
-                            : 'bg-gray-300'
+                            : cot?.status === 'AVAILABLE'
+                            ? 'bg-transparent'
+                            : 'bg-gray-400'
                         }`}
+                        disabled={cot?.status !== 'AVAILABLE' || isButtonDisabled}
                       >
-                        Cot {cot.cotNo}
+                        Cot {cot?.cotNo}
                       </button>
                     ))}
                   </div>
@@ -188,50 +231,50 @@ const RoomAllotmentWeb = () => {
               ))}
             </div>
           )}
-
-          {modalVisible && (
-            <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center">
-              <div className="bg-white p-6 rounded-xl shadow-xl w-full max-w-md">
-                <p className="text-center font-semibold text-lg mb-4">
-                  Verify Room Details and Submit
-                </p>
-                <div className="space-y-2 text-black">
-                  <p>
-                    <span className="font-bold">Block Name:</span> {submitDetails.blockName}
-                  </p>
-                  <p>
-                    <span className="font-bold">Floor No:</span> {submitDetails.floorNo}
-                  </p>
-                  <p>
-                    <span className="font-bold">Room No:</span> {submitDetails.roomNo}
-                  </p>
-                  <p>
-                    <span className="font-bold">Cot No:</span> {submitDetails.cotNo}
-                  </p>
-                </div>
-                <div className="flex justify-end mt-4 gap-4">
-                  <button
-                    disabled={isButtonDisabled}
-                    onClick={handleSubmit}
-                    className="bg-green-400 px-4 py-2 rounded-xl text-black font-bold disabled:opacity-50"
-                  >
-                    Submit
-                  </button>
-                  <button
-                    disabled={isButtonDisabled}
-                    onClick={() => setModalVisible(false)}
-                    className="bg-red-300 px-4 py-2 rounded-xl text-black font-bold disabled:opacity-50"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </div>
+        </div>
+      )}
+      {/* Modal */}
+      {modalVisible && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white rounded-lg p-6 flex flex-col items-center gap-4 w-[90vw] max-w-md">
+            <span className="text-lg text-gray-600 text-center">
+              Verify your selected Room Details and submit your Application
+            </span>
+            <div className="flex flex-col items-center gap-1">
+              <span className="font-semibold text-black">
+                Block Name : <span className="font-normal">{submitDetails?.blockName}</span>
+              </span>
+              <span className="font-semibold text-black">
+                Floor No : <span className="font-normal">{submitDetails?.floorNo}</span>
+              </span>
+              <span className="font-semibold text-black">
+                Room No : <span className="font-normal">{submitDetails?.roomNo}</span>
+              </span>
+              <span className="font-semibold text-black">
+                Cot No : <span className="font-normal">{submitDetails?.cotNo}</span>
+              </span>
             </div>
-          )}
-        </>
+            <div className="flex flex-row gap-4 w-full">
+              <button
+                disabled={isButtonDisabled}
+                className={`flex-1 bg-[#76c893] py-2 rounded text-white font-bold ${isButtonDisabled ? 'opacity-50' : ''}`}
+                onClick={handleSubmit}
+              >
+                Submit
+              </button>
+              <button
+                disabled={isButtonDisabled}
+                className={`flex-1 bg-gray-500 py-2 rounded text-white font-bold ${isButtonDisabled ? 'opacity-50' : ''}`}
+                onClick={cancelHandler}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
 };
 
-export default RoomAllotmentWeb;
+export default RoomAllotment;

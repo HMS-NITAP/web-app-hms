@@ -46,7 +46,7 @@ const HostelBlocks = () => {
       {/* Girls Hostel Blocks */}
       <div className="w-full flex flex-col items-center">
         <h2 className="text-xl font-bold text-black text-center mb-4">Girls Hostel Blocks</h2>
-        <div className="w-[90%] flex flex-col gap-6">
+        <div className="w-[95%] flex md:flex-row flex-col justify-center items-start flex-wrap md:gap-[2rem] gap-[1rem]">
           {girlsHostelData.map((data, index) => (
             <AnimatedCardHostelBlock key={index} data={data} />
           ))}
@@ -59,7 +59,7 @@ const HostelBlocks = () => {
       {/* Boys Hostel Blocks */}
       <div className="w-full flex flex-col items-center">
         <h2 className="text-xl font-bold text-black text-center mb-4">Boys Hostel Blocks</h2>
-        <div className="w-[90%] flex flex-col gap-6">
+        <div className="w-[95%] flex md:flex-row flex-col justify-center items-start flex-wrap gap-6">
           {boysHostelData.map((data, index) => (
             <AnimatedCardHostelBlock key={index} data={data} />
           ))}

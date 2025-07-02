@@ -1,73 +1,71 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import OtpInput from 'react-otp-input';
 import { verifyOtp } from '../../services/operations/AuthAPI';
 import { setRegistrationStep } from '../../reducers/slices/AuthSlice';
-import toast from 'react-hot-toast';
 import MainButton from './MainButton';
+import toast from 'react-hot-toast';
 
 const OtpVerification = () => {
   const dispatch = useDispatch();
+  const { registrationData } = useSelector((state) => state.Auth);
+
   const [otp, setOtp] = useState('');
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
-  const { registrationData } = useSelector((state) => state.Auth);
-
   const submitHandler = async () => {
     if (!otp || otp.length !== 6) {
-      toast.error('Enter a valid 6-digit OTP.');
+      toast.error('Enter Correct OTP');
       return;
     }
 
     const formData = new FormData();
-    formData.append('email', registrationData?.email);
-    formData.append('password', registrationData?.password);
-    formData.append('confirmPassword', registrationData?.confirmPassword);
+    if (!registrationData) return;
+
+    formData.append('email', registrationData.email);
+    formData.append('password', registrationData.password);
+    formData.append('confirmPassword', registrationData.confirmPassword);
     formData.append('otp', otp);
 
     setIsButtonDisabled(true);
     const response = await dispatch(verifyOtp(formData, toast));
     if (response) {
-      dispatch(setRegistrationStep(3));
+      await dispatch(setRegistrationStep(3));
     }
     setIsButtonDisabled(false);
   };
 
-  const handleInputChange = (e, index) => {
-    const val = e.target.value.replace(/[^0-9]/g, '');
-    const newOtp = otp.split('');
-    newOtp[index] = val;
-    setOtp(newOtp.join('').slice(0, 6));
-  };
-
   return (
-    <div className="w-full flex flex-col items-center gap-8">
-      <div className="w-full bg-yellow-100 rounded-xl px-6 py-4 text-center text-black">
-        <p className="text-base">
+    <div className="w-full flex flex-col items-center gap-6">
+      <div className="w-full bg-[#e9edc9] rounded-2xl px-4 py-4">
+        <p className="text-center text-[15px] text-black">
           Please enter the OTP sent to your institute email ID,{' '}
-          <span className="font-semibold">{registrationData?.email}</span>, to complete verification.
+          <span className="font-extrabold">{registrationData?.email}</span>, to complete the verification of your account.
         </p>
       </div>
 
       <div className="w-full flex flex-col items-center gap-10">
-        <div className="flex justify-center gap-2">
-          {[...Array(6)].map((_, index) => (
+        <OtpInput
+          value={otp}
+          onChange={setOtp}
+          numInputs={6}
+          renderInput={(props) => (
             <input
-              key={index}
-              type="text"
-              maxLength={1}
-              value={otp[index] || ''}
-              onChange={(e) => handleInputChange(e, index)}
-              className="w-10 h-12 text-center text-black border border-gray-400 rounded-lg text-lg"
+              {...props}
+              className="w-12 h-12 text-black text-xl text-center border border-gray-400 rounded-md outline-none focus:border-gray-700"
             />
-          ))}
-        </div>
-
-        <MainButton
-          isButtonDisabled={isButtonDisabled}
-          text="Submit"
-          onPress={submitHandler}
-          backgroundColor="#eddea4"
+          )}
+          containerStyle="flex justify-center gap-3"
         />
+
+        <div className="flex justify-center items-center">
+          <MainButton
+            isButtonDisabled={isButtonDisabled}
+            text="Submit"
+            onClick={submitHandler}
+            backgroundColor="#eddea4"
+          />
+        </div>
       </div>
     </div>
   );

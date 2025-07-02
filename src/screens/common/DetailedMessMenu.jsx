@@ -51,7 +51,7 @@ const DetailedMessMenu = () => {
             <button
               key={index}
               onClick={() => setSelectedDay(day)}
-              className={`px-3 py-2 rounded-lg text-sm font-semibold ${
+              className={`cursor-pointer Cpx-3 py-2 rounded-lg text-sm font-semibold ${
                 selectedDay === day ? 'bg-blue-900 text-white' : 'bg-lime-300 text-black'
               }`}
             >
@@ -69,7 +69,7 @@ const DetailedMessMenu = () => {
             <button
               key={index}
               onClick={() => setMealPeriod(meal)}
-              className={`px-3 py-2 rounded-lg text-sm font-semibold ${
+              className={`cursor-pointer px-3 py-2 rounded-lg text-sm font-semibold ${
                 mealPeriod === meal ? 'bg-blue-900 text-white' : 'bg-lime-300 text-black'
               }`}
             >
@@ -82,13 +82,10 @@ const DetailedMessMenu = () => {
       {/* Menu Items */}
       <div className="w-full">
         <p className="text-lg font-semibold text-black mb-2">Menu Items :</p>
-        <div className="space-y-3">
+        <div className="mt-4 mx-auto md:w-[70%] w-full flex md:flex-row flex-col gap-[2rem] justify-center items-center flex-wrap">
           {menu && menu.length > 0 ? (
             menu.map((menuItem, index) => (
-              <div
-                key={index}
-                className="w-full bg-green-100 border border-black rounded-xl px-4 py-3 text-center text-base text-black font-medium shadow"
-              >
+              <div key={index} className="bg-green-100 md:w-[200px] w-[90%] text-center font-semibold rounded-lg p-3 text-gray-800 shadow-sm">
                 {menuItem}
               </div>
             ))

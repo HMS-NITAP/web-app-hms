@@ -1,62 +1,49 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { FaCheck } from 'react-icons/fa';
-
-const StepCircle = ({ stepNumber, label, currentStep }) => {
-  const isCompleted = currentStep > stepNumber;
-  const isActive = currentStep === stepNumber;
-  return (
-    <div className="flex flex-col items-center gap-1 w-1/4">
-      <div
-        className={`flex justify-center items-center w-10 h-10 rounded-full border-2 
-          ${isCompleted ? 'bg-yellow-500 border-yellow-500' : isActive ? 'border-yellow-500' : 'border-black'}`
-        }
-      >
-        {isCompleted ? (
-          <FaCheck className="text-white" size={18} />
-        ) : (
-          <span
-            className={`font-bold text-[16px] ${
-              isActive ? 'text-yellow-500' : 'text-black'
-            }`}
-          >
-            {stepNumber}
-          </span>
-        )}
-      </div>
-      <span
-        className={`text-center text-sm font-semibold w-4/5 ${
-          isCompleted || isActive ? 'text-yellow-500' : 'text-black'
-        }`}
-      >
-        {label}
-      </span>
-    </div>
-  );
-};
+import { FaCheck } from 'react-icons/fa6';
 
 const ProgressIndicator = () => {
   const { registrationStep } = useSelector((state) => state.Auth);
 
+  const stepStyle = (stepNumber) => {
+    const isCompleted = registrationStep > stepNumber;
+    const isActive = registrationStep === stepNumber;
+
+    return {
+      circle: `w-10 h-10 rounded-full border-2 flex items-center justify-center 
+               ${isCompleted ? 'bg-[#ee9b00] border-[#ee9b00]' : isActive ? 'border-[#ee9b00]' : 'border-black'}`,
+      text: `text-sm font-semibold text-center 
+             ${isCompleted || isActive ? 'text-[#ee9b00]' : 'text-black'}`,
+      iconColor: isCompleted ? 'text-white' : isActive ? 'text-[#ee9b00]' : 'text-black'
+    };
+  };
+
   return (
-    <div className="w-full my-5 flex flex-row justify-evenly items-start px-2">
-      <StepCircle stepNumber={1} label="Fill Details" currentStep={registrationStep} />
-
-      <div
-        className={`border-t-2 w-[20%] mt-5 border-dotted ${
-          registrationStep > 1 ? 'border-yellow-500' : 'border-black'
-        }`}
-      />
-
-      <StepCircle stepNumber={2} label="Verify Email" currentStep={registrationStep} />
-
-      <div
-        className={`border-t-2 w-[20%] mt-5 border-dotted ${
-          registrationStep > 2 ? 'border-yellow-500' : 'border-black'
-        }`}
-      />
-
-      <StepCircle stepNumber={3} label="Select Room" currentStep={registrationStep} />
+    <div className="w-full my-5 flex justify-evenly items-start px-2">
+      {[1, 2, 3].map((step, index) => (
+        <React.Fragment key={step}>
+          <div className="flex flex-col items-center gap-[0.5rem]">
+            <div className={stepStyle(step).circle}>
+              {registrationStep > step ? (
+                <FaCheck className="text-white" size={20} />
+              ) : (
+                <span className={`${stepStyle(step).iconColor} font-bold text-base`}>{step}</span>
+              )}
+            </div>
+            <p className={stepStyle(step).text}>
+              {step === 1 && 'Fill Details'}
+              {step === 2 && 'Verify Email'}
+              {step === 3 && 'Select Room'}
+            </p>
+          </div>
+          {step < 3 && (
+            <div
+              className={`border-t-2 w-[25%] mt-5 border-dotted 
+                          ${registrationStep > step ? 'border-[#ee9b00]' : 'border-black'}`}
+            />
+          )}
+        </React.Fragment>
+      ))}
     </div>
   );
 };

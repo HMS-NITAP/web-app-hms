@@ -9,60 +9,73 @@ const AnimatedCardHostelBlock = ({ data }) => {
   };
 
   return (
-    <div className={`w-full max-w-xl border border-black rounded-xl bg-white overflow-hidden shadow-lg transition-all duration-300 ${isExpanded ? 'h-auto' : 'h-40'} relative`}>
+    <div className="w-full md:w-[350px] border border-black rounded-xl bg-white my-4 shadow-lg overflow-hidden transition-all duration-300">
       {/* Header */}
-      <div className="flex items-center gap-4 p-3">
-        {/* Image */}
-        <div className="w-20 h-20 rounded-full overflow-hidden flex justify-center items-center relative">
+      <div className="flex items-center gap-4 p-4">
+        <div className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center relative">
           {isLoading && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+            <div className="absolute inset-0 flex items-center justify-center bg-white z-10">
+              <div className="w-5 h-5 border-4 border-blue-500 border-t-transparent animate-spin rounded-full" />
             </div>
           )}
           <img
             src={data.image}
-            alt={data.name}
-            className="w-full h-full object-cover"
+            alt="hostel"
             onLoadStart={() => setIsLoading(true)}
             onLoad={() => setIsLoading(false)}
+            className="w-full h-full object-cover"
           />
         </div>
-
-        {/* Header Text */}
         <div className="flex flex-col">
-          <h2 className="text-lg font-bold text-gray-700">Name: <span className="text-black">{data.name}</span></h2>
-          <p className="text-gray-600 font-semibold">Room Type: <span className="text-black">{data.roomType}</span></p>
+          <p className="text-gray-600 font-bold text-lg">
+            Name : <span className="text-black font-semibold">{data.name}</span>
+          </p>
+          <p className="text-gray-600 font-semibold text-sm">
+            Room Type : <span className="text-black">{data.roomType}</span>
+          </p>
         </div>
       </div>
 
-      {/* Expanded Details */}
-      {isExpanded && (
-        <div className="px-3 py-4">
-          <p className="text-base font-bold text-[#051923]">Capacity: <span className="font-bold">{data.capacity} students</span></p>
-          <p className="text-base font-bold text-[#051923]">Floor Count: <span className="font-bold">{data.floorCount === "2" ? "G+2" : "G+4"}</span></p>
-          <p className="text-base font-semibold text-black">Year Assigned to: <span className="font-medium">{data.year}</span></p>
+      {/* Details Section */}
+      <div
+        className={`transition-all duration-500 ease-in-out overflow-hidden ${
+          isExpanded ? 'max-h-[500px]' : 'max-h-0'
+        }`}
+      >
+        <div className="px-4 pb-6 flex flex-col gap-3">
+          <p className="font-bold text-[#051923] text-base">
+            Capacity : <span className="text-[#051923] font-bold">{data.capacity} students</span>
+          </p>
+          <p className="font-bold text-[#051923] text-base">
+            Floor Count :{' '}
+            <span className="text-[#051923] font-bold">{data.floorCount === '2' ? 'G+2' : 'G+4'}</span>
+          </p>
+          <p className="text-black font-semibold text-base">
+            Year Assigned to :{' '}
+            <span className="text-black font-medium text-sm">{data.year}</span>
+          </p>
+          
 
-          {/* Wardens */}
-          {data?.wardens?.length === 0 ? (
-            <p className="text-center font-bold text-[#c1121f] mt-2">No Warden Assigned</p>
+          {data?.wardens.length === 0 ? (
+            <p className="text-center font-bold text-red-700 text-sm">No Warden Assigned</p>
           ) : (
-            <div className="mt-3">
-              <p className="text-lg font-extrabold text-[#14213d] mb-2">Warden(s):</p>
-              {data.wardens.map((warden, index) => (
-                <p key={index} className="text-base font-bold text-[#003554]">
-                  {index + 1}) {warden.name} (+91 {warden.phone})
+            <div className="mt-2">
+              <p className="text-[#14213d] text-base font-extrabold mb-2">Warden(s):</p>
+              {data?.wardens.map((warden, index) => (
+                <p key={index} className="text-[#003554] text-sm font-bold">
+                  {index + 1}) {warden.name} ( +91 {warden.phone} )
                 </p>
               ))}
             </div>
           )}
         </div>
-      )}
+      </div>
 
       {/* Toggle Button */}
-      <div className="absolute bottom-0 left-0 w-full">
+      <div className="w-full">
         <button
           onClick={toggleCard}
-          className="w-full bg-[#415a77] text-white font-bold py-2 rounded-b-xl hover:bg-[#324c6e] transition"
+          className="cursor-pointer w-full py-2 bg-[#415a77] text-white font-bold text-center rounded-b-xl hover:bg-[#33475b] transition"
         >
           {isExpanded ? 'Hide Info' : 'More Info'}
         </button>

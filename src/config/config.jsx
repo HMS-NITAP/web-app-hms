@@ -7,8 +7,6 @@ import {
 } from "react-icons/fa6";
 
 import Login from '../screens/auth/Login';
-import Signup from '../screens/auth/Signup';
-// import LogoutModal from '../components/common/LogoutModal';
 import CreateAnnouncement from '../screens/official/CreateAnnouncement';
 import HostelsBlocks from '../screens/institute/HostelsBlocks';
 import ContactUs from '../screens/institute/ContactUs';
@@ -18,10 +16,9 @@ import ResetPasswordMailSent from '../screens/auth/ResetPasswordMailSent';
 import ResetPassword from '../screens/auth/ResetPassword';
 import ResetPasswordSuccess from '../screens/auth/ResetPasswordSuccess';
 import StudentDashboard from '../screens/student/StudentDashboard';
-import AttendanceHistory from '../screens/student/AttendanceHistory';
+// import AttendanceHistory from '../screens/student/AttendanceHistory';
 // import OutingApplication from '../screens/student/OutingApplication';
 // import RegisterComplaint from '../screens/student/RegisterComplaint';
-import OtpInput from '../screens/auth/OtpInput';
 import Gallery from '../screens/institute/Gallary';
 import Announcements from '../screens/common/Announcements';
 import OutingRequest from '../screens/official/OutingRequest';
@@ -91,7 +88,7 @@ export const adminRoutes = [
 
 export const studentRoutes = [
   { path: "/student/dashboard", element: <StudentDashboard />, label: "Dashboard", icon: <FaIdBadge />, role: [USER_ROLES.STUDENT] },
-  { path: "/student/attendance-history", element: <AttendanceHistory />, label: "Attendance History", icon: <FaTableList />, role: [USER_ROLES.STUDENT] },
+  // { path: "/student/attendance-history", element: <AttendanceHistory />, label: "Attendance History", icon: <FaTableList />, role: [USER_ROLES.STUDENT] },
   // { path: "/student/outing-application", element: <OutingApplication />, label: "Outing Application", icon: <FaWpforms />, role: [USER_ROLES.STUDENT] },
   // { path: "/student/application-history", element: <ApplicationHistory />, label: "Application History", icon: <FaClockRotateLeft />, role: [USER_ROLES.STUDENT] },
   // { path: "/student/register-complaint", element: <RegisterComplaint />, label: "Register Complaint", icon: <FaBookBookmark />, role: [USER_ROLES.STUDENT] },

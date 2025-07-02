@@ -22,7 +22,7 @@ const Login = () => {
   };
 
   return (
-    <div className="w-full min-h-screen flex items-center justify-center bg-gray-100 p-4">
+    <div className="w-full h-full flex items-center justify-center bg-gray-100 p-4">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-full max-w-md bg-white p-8 rounded-lg shadow-md space-y-6"
@@ -94,7 +94,7 @@ const Login = () => {
         </div>
 
         {/* Submit Button */}
-        <div>
+        <div className='w-full flex justify-center'>
           <MainButton
             text="Log In"
             type="submit"
