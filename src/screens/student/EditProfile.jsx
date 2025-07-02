@@ -1,568 +1,375 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView } from 'react-native';
-import MainButton from '../../components/common/MainButton';
-import ModalDropdown from 'react-native-modal-dropdown';
 import { useForm, Controller } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { editStudentProfile } from '../../services/operations/StudentAPI';
-import { useToast } from 'react-native-toast-notifications';
+import toast from 'react-hot-toast';
 
-const EditProfile = ({ navigation }) => {
-    const dropdownOptions1 = ['1st Year', '2nd Year', '3rd Year', '4th Year'];
-    const dropdownOptions2 = [
-        'CSE', 
-        'ECE', 
-        'EEE', 
-        'MECH', 
-        'BIOTECH', 
-        'CIVIL', 
-        'METALLURGY'
-    ];
-    const dropdownOptions3 = ['M', 'F'];
-    const dropdownOptions4 = [
-        { label: "True", value: true },
-        { label: "False", value: false },
-    ];
+const EditProfile = () => {
+  const yearOptions = ['1st Year', '2nd Year', '3rd Year', '4th Year'];
+  const branchOptions = ['CSE', 'ECE', 'EEE', 'MECH', 'BIOTECH', 'CIVIL', 'METALLURGY'];
+  const genderOptions = ['M', 'F'];
+  const hostellerOptions = [
+    { label: "True", value: true },
+    { label: "False", value: false },
+  ];
 
-    const { control, handleSubmit, formState: { errors } } = useForm();
-    const dispatch = useDispatch();
-    const {token} = useSelector((state) => state.Auth);
-    const toast = useToast();
+  const { control, handleSubmit, formState: { errors } } = useForm();
+  const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.Auth);
 
-    const submitHandler = async (data) => {
-        await dispatch(editStudentProfile(data,token,toast));
-    };
+  const submitHandler = async (data) => {
+    await dispatch(editStudentProfile(data, token, toast));
+  };
 
   return (
-    <ScrollView >
-        <View style={styles.container}>
-            <View style={styles.form}>
+    <div className="w-full flex flex-col items-center py-8">
+      <form className="w-full max-w-xl flex flex-col gap-5" onSubmit={handleSubmit(submitHandler)}>
+        {/* Name */}
+        <div className="flex flex-col gap-1">
+          <label className="font-medium text-black">
+            Name <span className="text-xs text-red-600">*</span> :
+          </label>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <input {...field} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter your name" />
+            )}
+            name="name"
+            defaultValue=""
+          />
+          {errors.name && <span className="text-red-600 text-sm">Name is required.</span>}
+        </div>
+        {/* Registration No */}
+        <div className="flex flex-col gap-1">
+          <label className="font-medium text-black">
+            Registration No <span className="text-xs text-red-600">*</span> :
+          </label>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <input {...field} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter your Registration Number" />
+            )}
+            name="regNo"
+            defaultValue=""
+          />
+          {errors.regNo && <span className="text-red-600 text-sm">Registration Number is required.</span>}
+        </div>
+        {/* Roll No */}
+        <div className="flex flex-col gap-1">
+          <label className="font-medium text-black">
+            Roll No <span className="text-xs text-red-600">*</span> :
+          </label>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <input {...field} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter your Roll Number" />
+            )}
+            name="rollNo"
+            defaultValue=""
+          />
+          {errors.rollNo && <span className="text-red-600 text-sm">Roll Number is required.</span>}
+        </div>
+        {/* Year */}
+        <div className="flex flex-col gap-1">
+          <label className="font-medium text-black">
+            Year <span className="text-xs text-red-600">*</span> :
+          </label>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <select {...field} className="w-full p-2 border border-gray-400 rounded-lg text-black">
+                <option value="">Select Year</option>
+                {yearOptions.map((year, idx) => (
+                  <option key={idx} value={year}>{year}</option>
+                ))}
+              </select>
+            )}
+            name="year"
+            defaultValue=""
+          />
+          {errors.year && <span className="text-red-600 text-sm">Year is required.</span>}
+        </div>
+        {/* Branch */}
+        <div className="flex flex-col gap-1">
+          <label className="font-medium text-black">
+            Branch <span className="text-xs text-red-600">*</span> :
+          </label>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <select {...field} className="w-full p-2 border border-gray-400 rounded-lg text-black">
+                <option value="">Select Branch</option>
+                {branchOptions.map((branch, idx) => (
+                  <option key={idx} value={branch}>{branch}</option>
+                ))}
+              </select>
+            )}
+            name="branch"
+            defaultValue=""
+          />
+          {errors.branch && <span className="text-red-600 text-sm">Branch is required.</span>}
+        </div>
+        {/* Gender */}
+        <div className="flex flex-col gap-1">
+          <label className="font-medium text-black">
+            Gender <span className="text-xs text-red-600">*</span> :
+          </label>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <select {...field} className="w-full p-2 border border-gray-400 rounded-lg text-black">
+                <option value="">Select Gender</option>
+                {genderOptions.map((gender, idx) => (
+                  <option key={idx} value={gender}>{gender === 'M' ? 'Male' : 'Female'}</option>
+                ))}
+              </select>
+            )}
+            name="gender"
+            defaultValue=""
+          />
+          {errors.gender && <span className="text-red-600 text-sm">Gender is required.</span>}
+        </div>
+        {/* Community */}
+        <div className="flex flex-col gap-1">
+          <label className="font-medium text-black">
+            Community <span className="text-xs text-red-600">*</span> :
+          </label>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <input {...field} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter your Community" />
+            )}
+            name="community"
+            defaultValue=""
+          />
+          {errors.community && <span className="text-red-600 text-sm">Community is required.</span>}
+        </div>
+        {/* Aadhar Number */}
+        <div className="flex flex-col gap-1">
+          <label className="font-medium text-black">
+            Aadhar Number <span className="text-xs text-red-600">*</span> :
+          </label>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <input {...field} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter your Aadhaar Number" />
+            )}
+            name="aadharNumber"
+            defaultValue=""
+          />
+          {errors.aadharNumber && <span className="text-red-600 text-sm">Aadhar Number is required.</span>}
+        </div>
+        {/* DOB */}
+        <div className="flex flex-col gap-1">
+          <label className="font-medium text-black">
+            DOB <span className="text-xs text-red-600">*</span> :
+          </label>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <input {...field} type="date" className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="YYYY-MM-DD" />
+            )}
+            name="dob"
+            defaultValue=""
+          />
+          {errors.dob && <span className="text-red-600 text-sm">DOB is required.</span>}
+        </div>
+        {/* Blood Group */}
+        <div className="flex flex-col gap-1">
+          <label className="font-medium text-black">
+            Blood Group <span className="text-xs text-red-600">*</span> :
+          </label>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <input {...field} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter your Blood Group" />
+            )}
+            name="bloodGroup"
+            defaultValue=""
+          />
+          {errors.bloodGroup && <span className="text-red-600 text-sm">Blood Group is required.</span>}
+        </div>
+        {/* Father Name */}
+        <div className="flex flex-col gap-1">
+          <label className="font-medium text-black">
+            Father Name <span className="text-xs text-red-600">*</span> :
+          </label>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <input {...field} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter your Father Name" />
+            )}
+            name="fatherName"
+            defaultValue=""
+          />
+          {errors.fatherName && <span className="text-red-600 text-sm">Father Name is required.</span>}
+        </div>
+        {/* Mother Name */}
+        <div className="flex flex-col gap-1">
+          <label className="font-medium text-black">
+            Mother Name <span className="text-xs text-red-600">*</span> :
+          </label>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <input {...field} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter your Mother Name" />
+            )}
+            name="motherName"
+            defaultValue=""
+          />
+          {errors.motherName && <span className="text-red-600 text-sm">Mother Name is required.</span>}
+        </div>
+        {/* Contact Number */}
+        <div className="flex flex-col gap-1">
+          <label className="font-medium text-black">
+            Contact Number <span className="text-xs text-red-600">*</span> :
+          </label>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <input {...field} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter your Contact number" />
+            )}
+            name="phone"
+            defaultValue=""
+          />
+          {errors.phone && <span className="text-red-600 text-sm">Contact Number is required.</span>}
+        </div>
+        {/* Parent Contact Number */}
+        <div className="flex flex-col gap-1">
+          <label className="font-medium text-black">
+            Parent Contact Number <span className="text-xs text-red-600">*</span> :
+          </label>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <input {...field} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter your Parent Contact Number" />
+            )}
+            name="parentsPhone"
+            defaultValue=""
+          />
+          {errors.parentsPhone && <span className="text-red-600 text-sm">Parent Contact Number is required.</span>}
+        </div>
+        {/* Emergency Phone */}
+        <div className="flex flex-col gap-1">
+          <label className="font-medium text-black">
+            Emergency Phone <span className="text-xs text-red-600">*</span> :
+          </label>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <input {...field} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter your Emergency Contact" />
+            )}
+            name="emergencyPhone"
+            defaultValue=""
+          />
+          {errors.emergencyPhone && <span className="text-red-600 text-sm">Emergency Contact is required.</span>}
+        </div>
+        {/* Address */}
+        <div className="flex flex-col gap-1">
+          <label className="font-medium text-black">
+            Address <span className="text-xs text-red-600">*</span> :
+          </label>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <input {...field} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter your Address" />
+            )}
+            name="address"
+            defaultValue=""
+          />
+          {errors.address && <span className="text-red-600 text-sm">Address is required.</span>}
+        </div>
+        {/* Is Hosteller */}
+        <div className="flex flex-col gap-1">
+          <label className="font-medium text-black">
+            Is Hosteller? <span className="text-xs text-red-600">*</span> :
+          </label>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <select {...field} className="w-full p-2 border border-gray-400 rounded-lg text-black">
+                <option value="">Select</option>
+                {hostellerOptions.map((option, idx) => (
+                  <option key={idx} value={option.value}>{option.label}</option>
+                ))}
+              </select>
+            )}
+            name="isHosteller"
+            defaultValue={false}
+          />
+          {errors.isHosteller && <span className="text-red-600 text-sm">This is required.</span>}
+        </div>
+        {/* Cot Number */}
+        <div className="flex flex-col gap-1">
+          <label className="font-medium text-black">
+            Cot Number <span className="text-xs text-red-600">*</span> :
+          </label>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <input {...field} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter Cot Number" />
+            )}
+            name="cotNo"
+            defaultValue=""
+          />
+          {errors.cotNo && <span className="text-red-600 text-sm">Cot Number is required.</span>}
+        </div>
+        {/* Floor No */}
+        <div className="flex flex-col gap-1">
+          <label className="font-medium text-black">
+            Floor No <span className="text-xs text-red-600">*</span> :
+          </label>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <input {...field} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter your Floor Number" />
+            )}
+            name="floorNo"
+            defaultValue=""
+          />
+          {errors.floorNo && <span className="text-red-600 text-sm">Floor Number is required.</span>}
+        </div>
+        {/* Room No */}
+        <div className="flex flex-col gap-1">
+          <label className="font-medium text-black">
+            Room No <span className="text-xs text-red-600">*</span> :
+          </label>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <input {...field} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter your Room Number" />
+            )}
+            name="roomNo"
+            defaultValue=""
+          />
+          {errors.roomNo && <span className="text-red-600 text-sm">Room Number is required.</span>}
+        </div>
+        <button type="submit" className="w-full py-3 rounded-xl font-bold text-lg text-black bg-[#b5e48c] mt-2">
+          Update
+        </button>
+      </form>
+    </div>
+  );
+};
 
-                <View style={styles.subFormView}>
-                    <Text style={styles.label} >Name<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-                    <Controller
-                        control={control}
-                        rules={{ required: true }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Enter your name"
-                            placeholderTextColor={"#adb5bd"}
-                            onBlur={onBlur}
-                            onChangeText={onChange}
-                            value={value}
-                        />
-                        )}
-                        name="name"
-                        defaultValue=""
-                    />
-                    {errors.name && <Text style={styles.errorText}>Name is required.</Text>}
-                </View>
-
-                <View style={styles.subFormView}>
-                    <Text style={styles.label} >Registration No<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-                    <Controller
-                        control={control}
-                        rules={{ required: true }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Enter your Registration Number"
-                            placeholderTextColor={"#adb5bd"}
-                            onBlur={onBlur}
-                            onChangeText={onChange}
-                            value={value}
-                        />
-                        )}
-                        name="regNo"
-                        defaultValue=""
-                    />
-                    {errors.regNo && <Text style={styles.errorText}>Registration Number is required.</Text>}
-                </View>
-
-                <View style={styles.subFormView}>
-                    <Text style={styles.label} >Roll No<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-                    <Controller
-                        control={control}
-                        rules={{ required: true }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Enter your Roll Number"
-                            placeholderTextColor={"#adb5bd"}
-                            onBlur={onBlur}
-                            onChangeText={onChange}
-                            value={value}
-                        />
-                        )}
-                        name="rollNo"
-                        defaultValue=""
-                    />
-                    {errors.rollNo && <Text style={styles.errorText}>Roll Number is required.</Text>}
-                </View>
-
-                <View style={styles.subFormView}>
-                    <Text style={styles.label} >Year<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-                    <Controller
-                            control={control}
-                            rules={{ required: true }}
-                            render={({ field: { onChange, onBlur, value } }) => (
-                        <ModalDropdown
-                            options={dropdownOptions1}
-                            style={styles.input}
-                            dropdownStyle={styles.dropdownOptions}
-                            defaultValue="none"
-                            onBlur={onBlur}
-                            onSelect={(index) => onChange(dropdownOptions1[index])}
-                            value={value}
-                        />    
-                        )}
-                        name="year"
-                        defaultValue=""
-                    />
-                    {errors.year && <Text style={styles.errorText}>Year is required.</Text>}
-                </View>
-
-                <View style={styles.subFormView}>
-                    <Text style={styles.label} >Branch<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-                    <Controller
-                            control={control}
-                            rules={{ required: true }}
-                            render={({ field: { onChange, onBlur, value } }) => (
-                        <ModalDropdown
-                            options={dropdownOptions2}
-                            style={styles.input}
-                            dropdownStyle={styles.dropdownOptions}
-                            defaultValue="none"
-                            onBlur={onBlur}
-                            onSelect={(index) => onChange(dropdownOptions2[index])}
-                            value={value}
-                        />    
-                        )}
-                        name="branch"
-                        defaultValue=""
-                    />
-                    {errors.branch && <Text style={styles.errorText}>Branch is required.</Text>}
-                </View>
-
-                <View style={styles.subFormView}>
-                    <Text style={styles.label} >Gender<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-                    <Controller
-                            control={control}
-                            rules={{ required: true }}
-                            render={({ field: { onChange, onBlur, value } }) => (
-                        <ModalDropdown
-                            options={dropdownOptions3}
-                            style={styles.input}
-                            dropdownStyle={styles.dropdownOptions}
-                            defaultValue="none"
-                            onBlur={onBlur}
-                            onSelect={(index) => onChange(dropdownOptions3[index])}
-                            value={value}
-                        />    
-                        )}
-                        name="gender"
-                        defaultValue=""
-                    />
-                    {errors.gender && <Text style={styles.errorText}>Gender is required.</Text>}
-                </View>
-
-                {/* <View style={styles.subFormView}>
-                    <Text style={styles.label}>PWD?<Text style={{ fontSize: 10, color: 'red' }}>*</Text> :</Text>
-                    <Controller
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                        <ModalDropdown
-                        options={dropdownOptions4.map(option => option.label)}
-                        style={styles.input}
-                        dropdownStyle={styles.dropdownOptions}
-                        defaultValue="Select"
-                        onBlur={onBlur}
-                        onSelect={(index) => {
-                            const selectedOption = dropdownOptions4[index];
-                            onChange(selectedOption.value);
-                        }}
-                        value={value !== undefined ? dropdownOptions4.find(option => option.value === value)?.label : "Select"}
-                        />
-                    )}
-                    name="pwd"
-                    defaultValue={false}
-                    />
-                    {errors.PWD && <Text style={styles.errorText}>This is required.</Text>}
-                </View> */}
-
-                <View style={styles.subFormView}>
-                    <Text style={styles.label} >Community<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-                    <Controller
-                        control={control}
-                        rules={{ required: true }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Enter your Community"
-                            placeholderTextColor={"#adb5bd"}
-                            onBlur={onBlur}
-                            onChangeText={onChange}
-                            value={value}
-                        />
-                        )}
-                        name="community"
-                        defaultValue=""
-                    />
-                    {errors.community && <Text style={styles.errorText}>Community is required.</Text>}
-                </View>
-
-                <View style={styles.subFormView}>
-                    <Text style={styles.label} >Aadhar Number<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-                    <Controller
-                        control={control}
-                        rules={{ required: true }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Enter your Aadhaar Number"
-                            placeholderTextColor={"#adb5bd"}
-                            onBlur={onBlur}
-                            onChangeText={onChange}
-                            value={value}
-                        />
-                        )}
-                        name="aadharNumber"
-                        defaultValue=""
-                    />
-                    {errors.aadharNumber && <Text style={styles.errorText}>Aadhar Number is required.</Text>}
-                </View>
-
-                <View style={styles.subFormView}>
-                    <Text style={styles.label} >DOB<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-                    <Controller
-                        control={control}
-                        rules={{ required: true }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                        <TextInput
-                            style={styles.input}
-                            placeholder="YYYY-MM-DD"
-                            placeholderTextColor={"#adb5bd"}
-                            onBlur={onBlur}
-                            onChangeText={onChange}
-                            value={value}
-                        />
-                        )}
-                        name="dob"
-                        defaultValue=""
-                    />
-                    {errors.dob && <Text style={styles.errorText}>DOB is required.</Text>}
-                </View>
-
-                <View style={styles.subFormView}>
-                    <Text style={styles.label} >Blood Group<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-                    <Controller
-                        control={control}
-                        rules={{ required: true }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Enter your Blood Group"
-                            placeholderTextColor={"#adb5bd"}
-                            onBlur={onBlur}
-                            onChangeText={onChange}
-                            value={value}
-                        />
-                        )}
-                        name="bloodGroup"
-                        defaultValue=""
-                    />
-                    {errors.bloodGroup && <Text style={styles.errorText}>Blood Group is required.</Text>}
-                </View>
-
-                <View style={styles.subFormView}>
-                    <Text style={styles.label} >Father Name<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-                    <Controller
-                        control={control}
-                        rules={{ required: true }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Enter your Father Name"
-                            placeholderTextColor={"#adb5bd"}
-                            onBlur={onBlur}
-                            onChangeText={onChange}
-                            value={value}
-                        />
-                        )}
-                        name="fatherName"
-                        defaultValue=""
-                    />
-                    {errors.fatherName && <Text style={styles.errorText}>Father Name is required.</Text>}
-                </View>
-
-                <View style={styles.subFormView}>
-                    <Text style={styles.label} >Mother Name<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-                    <Controller
-                        control={control}
-                        rules={{ required: true }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Enter your Mother Name"
-                            placeholderTextColor={"#adb5bd"}
-                            onBlur={onBlur}
-                            onChangeText={onChange}
-                            value={value}
-                        />
-                        )}
-                        name="motherName"
-                        defaultValue=""
-                    />
-                    {errors.motherName && <Text style={styles.errorText}>Mother Name is required.</Text>}
-                </View>
-
-                <View style={styles.subFormView}>
-                    <Text style={styles.label} >Contact Number<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-                    <Controller
-                        control={control}
-                        rules={{ required: true }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Enter your Contact number"
-                            placeholderTextColor={"#adb5bd"}
-                            onBlur={onBlur}
-                            onChangeText={onChange}
-                            value={value}
-                        />
-                        )}
-                        name="phone"
-                        defaultValue=""
-                    />
-                    {errors.phone && <Text style={styles.errorText}>Contact Number is required.</Text>}
-                </View>
-
-                <View style={styles.subFormView}>
-                    <Text style={styles.label} >Parent Contact Number<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-                    <Controller
-                        control={control}
-                        rules={{ required: true }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Enter your Parent Contact Number"
-                            placeholderTextColor={"#adb5bd"}
-                            onBlur={onBlur}
-                            onChangeText={onChange}
-                            value={value}
-                        />
-                        )}
-                        name="parentsPhone"
-                        defaultValue=""
-                    />
-                    {errors.parentsPhone && <Text style={styles.errorText}>Parent Contact Number is required.</Text>}
-                </View>
-
-                <View style={styles.subFormView}>
-                    <Text style={styles.label} >Emergency Phone<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-                    <Controller
-                        control={control}
-                        rules={{ required: true }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Enter your Emergency Contact"
-                            placeholderTextColor={"#adb5bd"}
-                            onBlur={onBlur}
-                            onChangeText={onChange}
-                            value={value}
-                        />
-                        )}
-                        name="emergencyPhone"
-                        defaultValue=""
-                    />
-                    {errors.emergencyPhone && <Text style={styles.errorText}>Emergency Contact is required.</Text>}
-                </View>
-
-                <View style={styles.subFormView}>
-                    <Text style={styles.label} >Address<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-                    <Controller
-                        control={control}
-                        rules={{ required: true }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Enter your Address"
-                            placeholderTextColor={"#adb5bd"}
-                            onBlur={onBlur}
-                            onChangeText={onChange}
-                            value={value}
-                        />
-                        )}
-                        name="address"
-                        defaultValue=""
-                    />
-                    {errors.address && <Text style={styles.errorText}>Address is required.</Text>}
-                </View>
-                
-                <View style={styles.subFormView}>
-                    <Text style={styles.label}>Is Hosteller?<Text style={{ fontSize: 10, color: 'red' }}>*</Text> :</Text>
-                    <Controller
-                        control={control}
-                        rules={{ required: true }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                            <ModalDropdown
-                            options={dropdownOptions4.map(option => option.label)}
-                            style={styles.input}
-                            dropdownStyle={styles.dropdownOptions}
-                            defaultValue="Select"
-                            onBlur={onBlur}
-                            onSelect={(index) => {
-                                const selectedOption = dropdownOptions4[index];
-                                onChange(selectedOption.value);
-                            }}
-                            value={value !== undefined ? dropdownOptions4.find(option => option.value === value)?.label : "Select"}
-                            />
-                        )}
-                        name="isHosteller"
-                        defaultValue={false}
-                    />
-                    {errors.isHosteller && <Text style={styles.errorText}>This is required.</Text>}
-                </View>
-
-                <View style={styles.subFormView}>
-                    <Text style={styles.label} >Cot Number<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-                    <Controller
-                        control={control}
-                        rules={{ required: true }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Enter Cot Number"
-                            placeholderTextColor={"#adb5bd"}
-                            onBlur={onBlur}
-                            onChangeText={onChange}
-                            value={value}
-                        />
-                        )}
-                        name="cotNo"
-                        defaultValue=""
-                    />
-                    {errors.cotNo && <Text style={styles.errorText}>Cot Number is required.</Text>}
-                </View>
-
-                <View style={styles.subFormView}>
-                    <Text style={styles.label} >Floor No<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-                    <Controller
-                        control={control}
-                        rules={{ required: true }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Enter your Floor Number"
-                            placeholderTextColor={"#adb5bd"}
-                            onBlur={onBlur}
-                            onChangeText={onChange}
-                            value={value}
-                        />
-                        )}
-                        name="floorNo"
-                        defaultValue=""
-                    />
-                    {errors.floorNo && <Text style={styles.errorText}>Floor Number is required.</Text>}
-                </View>
-
-                <View style={styles.subFormView}>
-                    <Text style={styles.label} >Room No<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-                    <Controller
-                        control={control}
-                        rules={{ required: true }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Enter your Room Number"
-                            placeholderTextColor={"#adb5bd"}
-                            onBlur={onBlur}
-                            onChangeText={onChange}
-                            value={value}
-                        />
-                        )}
-                        name="roomNo"
-                        defaultValue=""
-                    />
-                    {errors.roomNo && <Text style={styles.errorText}>Room Number is required.</Text>}
-                </View>
-
-                <MainButton text={"Update"} onPress={handleSubmit(submitHandler)} />
-            </View>
-        </View>
-        </ScrollView>
-  )
-}
-
-const styles = StyleSheet.create({
-  container:{
-      display:'flex',
-      flexDirection:'column',
-      justifyContent:'center',
-      alignItems:'center',
-      width:'100%',
-      height:'100%',
-  },
-  heading:{
-      width:'100%',
-      backgroundColor:'#ffb703',
-      paddingVertical:15,
-      textAlign:'center',
-      display:'flex',
-      justifyContent:'center',
-      alignItems:'center',
-      fontSize:100,
-  },
-  subFormView:{
-      width:"100%",
-      display:'flex',
-      justifyContent:'center',
-      flexDirection:'column',
-      alignItems:'start',
-      gap:2,
-  },
-  form:{
-      paddingTop:60,
-      paddingBottom:30,
-      width:"80%",
-      display:'flex',
-      justifyContent:'center',
-      alignItems:'start',
-      flexDirection:'column',
-      gap:20,
-  },
-  label:{
-      fontSize:15,
-      fontWeight:'500',
-      color:'#000000',
-  },
-  input:{
-      width:"100%",
-      padding:10,
-      paddingHorizontal:10,
-      borderWidth:1,
-      borderRadius:10,
-      borderColor:"#adb5bd",
-  },
-  button:{
-      textAlign:'center',
-      borderRadius:30,
-      fontSize:15,
-      fontWeight:'800',
-      color:"black"
-  },
-  dropdownOptions: {
-    width: 250, // Set the same width as the dropdown
-    padding:10,
-    paddingHorizontal:10,
-    borderWidth:1,
-    borderRadius:10,
-    borderColor:"#adb5bd",
-  },
-})
-
-
-export default EditProfile
+export default EditProfile;

@@ -48,7 +48,7 @@ export const studentEndPoints = {
     ADD_EVEN_SEM_FEE_RECEIPT_API : SERVER_BASE_URL + '/student/addEvenSemFeeReceipt',
 
     // PROFILE APIs
-    EDIT_STUDENT_PROFILE_API : SERVER_BASE_URL + '/student//editProfile',
+    EDIT_STUDENT_PROFILE_API : SERVER_BASE_URL + '/student/editProfile',
 }
 
 export const officialEndPoints = {

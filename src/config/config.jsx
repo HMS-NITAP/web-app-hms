@@ -2,8 +2,7 @@ import {
   FaRightToBracket, FaAddressCard, FaBullhorn, FaBuilding, FaBowlFood, FaAddressBook,
   FaUsers, FaImage, FaStar, FaIdBadge, FaUserShield, FaChild, FaUserGear, FaTableList,
   FaWpforms, FaClockRotateLeft, FaBookBookmark, FaPersonCircleExclamation,
-  FaCashRegister, FaReceipt, FaCommentDots, FaCircleExclamation, FaScroll,
-  FaUsersLine, FaPeopleRoof
+  FaCashRegister, FaReceipt, FaCommentDots, FaCircleExclamation, FaPeopleRoof
 } from "react-icons/fa6";
 
 import Login from '../screens/auth/Login';
