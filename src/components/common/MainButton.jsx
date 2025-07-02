@@ -11,7 +11,7 @@ const MainButton = ({
     <button
       onClick={onPress}
       disabled={isButtonDisabled}
-      className={`
+      className={`cursor-pointer
         px-5 py-3 rounded-xl font-bold 
         flex justify-center items-center 
         transition-opacity duration-200

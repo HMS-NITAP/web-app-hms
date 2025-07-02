@@ -1,168 +1,125 @@
-import React, { useCallback, useState } from 'react'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
-import { useToast } from 'react-native-toast-notifications';
-import { useFocusEffect } from '@react-navigation/native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
 import { fetchMessHallsAndStudentGender, generateMessSessionReceipt } from '../../services/operations/StudentAPI';
-import ModalDropdown from 'react-native-modal-dropdown';
 import MainButton from '../../components/common/MainButton';
+import { useNavigate } from 'react-router-dom';
 
-const GenerateMessReceipt = ({navigation}) => {
+const GenerateMessReceipt = ({ }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { token } = useSelector((state) => state.Auth);
 
   const [messHalls, setMessHalls] = useState(null);
-  const [selectedMessHallName, setSelectedMessHallName] = useState(false);
+  const [selectedMessHallName, setSelectedMessHallName] = useState('');
   const [loading, setLoading] = useState(true);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-
-  const dispatch = useDispatch();
-  const toast = useToast();
-  const {token} = useSelector((state) => state.Auth);
-
-  const [currentDate, setCurrentDate] = useState(null);
-  const [sessionDate, setSessionDate] = useState(null);
+  const [currentDate, setCurrentDate] = useState('');
+  const [sessionDate, setSessionDate] = useState('');
   const [displaySession, setDisplaySession] = useState('');
 
   const findSession = () => {
     const now = new Date();
     const options = { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'Asia/Kolkata' };
     const localDate = now.toLocaleDateString('en-CA', options).split('/').reverse().join('-');
-    
-    setCurrentDate(localDate); 
-    setSessionDate(localDate); 
 
-    const currentHour = now.getHours();
+    setCurrentDate(localDate);
+    setSessionDate(localDate);
 
-    if(currentHour >= 0 && currentHour < 10){
-      setDisplaySession("Breakfast");
-    }else if(currentHour >= 10 && currentHour < 15){
-      setDisplaySession("Lunch");
-    }else if(currentHour >= 15 && currentHour < 18){
-      setDisplaySession("Snacks");
-    }else{
-      setDisplaySession("Dinner");
-    }
-  }
+    const hour = now.getHours();
+    if (hour < 10) setDisplaySession('Breakfast');
+    else if (hour < 15) setDisplaySession('Lunch');
+    else if (hour < 18) setDisplaySession('Snacks');
+    else setDisplaySession('Dinner');
+  };
 
-  const fetchData = async() => {
-    const response = await dispatch(fetchMessHallsAndStudentGender(token,toast));
-    if(response){
-      const filteredMessHalls = response?.messHalls.filter((messHall) => messHall?.gender===response?.studentDetails?.gender);
-      setMessHalls(filteredMessHalls);
+  const fetchData = async () => {
+    const response = await dispatch(fetchMessHallsAndStudentGender(token, toast));
+    if (response) {
+      const filtered = response.messHalls.filter(
+        (mess) => mess.gender === response.studentDetails.gender
+      );
+      setMessHalls(filtered);
       setLoading(false);
     }
-  }
+  };
 
-  useFocusEffect(
-    useCallback(() => {
-      findSession();
-      fetchData();
-    }, [toast])
-);
+  useEffect(() => {
+    findSession();
+    fetchData();
+  }, []);
 
-  const handleGenerate = async() => {
-    if(!selectedMessHallName){
-      toast.show("Select A Mess Hall", {type : "warning"});
+  const handleGenerate = async () => {
+    if (!selectedMessHallName) {
+      toast.error('Select a Mess Hall');
       return;
     }
-    if(!sessionDate || !displaySession){
-      toast.show("Something Went Wrong", {type : "warning"});
+    if (!sessionDate || !displaySession) {
+      toast.error('Something went wrong with date/session');
       return;
     }
 
     setIsButtonDisabled(true);
 
-    let formData = new FormData();
-    formData.append("session",displaySession);
-    formData.append("date",sessionDate);
-    formData.append("messHallName",selectedMessHallName);
+    const formData = new FormData();
+    formData.append('session', displaySession);
+    formData.append('date', sessionDate);
+    formData.append('messHallName', selectedMessHallName);
 
-    const response = await dispatch(generateMessSessionReceipt(formData,token,toast));
-    if(response){
-      navigation.navigate("Mess Receipts History");
+    const response = await dispatch(generateMessSessionReceipt(formData, token, toast));
+    if (response) {
+      navigate('/student/mess-receipt-history');
     }
 
     setIsButtonDisabled(false);
-  }
+  };
 
   return (
-    <ScrollView contentContainerStyle={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", padding:15}}>
-        {
-          loading ? (<Text style={{color:"black", fontSize:15, fontWeight:"700", textAlign:"center"}}>Please Wait...</Text>) : (
-            <View style={styles.form}>
-              <View style={{width:"100%", backgroundColor:"#d8f3dc", borderRadius:20, paddingHorizontal:15, paddingVertical:15}}>
-                  <Text style={{textAlign:"center", fontSize:15, color:"black"}}>Please select the Mess Hall where you would like to have your meals for this session. Once the receipt is generated, you will be able to avail meals for this session only at your selected Mess Hall, and only once. Kindly note that this receipt can only be generated once per session.</Text>
-              </View>
-              <View style={styles.subFormView}>
-                  <Text style={styles.label}>Mess Hall <Text style={{ fontSize: 10, color: 'red' }}>*</Text> :</Text>
-                  <ModalDropdown
-                      options={messHalls.map((mess) => mess?.hallName)}
-                      style={styles.dropDownStyle}
-                      dropdownStyle={styles.dropdownOptions}
-                      dropdownTextStyle={{ color: "black", fontSize: 14, fontWeight: "600" }}
-                      dropdownTextHighlightStyle={{ backgroundColor: "#caf0f8" }}
-                      textStyle={{ color: "black", fontSize: 14, paddingHorizontal: 10 }}
-                      saveScrollPosition={false}
-                      // defaultIndex={0}
-                      isFullWidth={true}
-                      onSelect={(index) => {
-                          setSelectedMessHallName(messHalls[index]?.hallName) 
-                      }}
-                      defaultValue="Select Mess Hall"
-                  />
-              </View>
-              <View>
-                <Text style={styles.label}>Date: <Text style={{fontWeight:"600", color:"#6c757d"}}> {currentDate}</Text></Text>
-                <Text style={styles.label}>Session:<Text style={{fontWeight:"600", color:"#6c757d"}}> {displaySession}</Text></Text>
-              </View>
-              <MainButton isButtonDisabled={isButtonDisabled} text={"Generate"} onPress={handleGenerate} />
-            </View>
-          )
-        }
-    </ScrollView>
-  )
-}
+    <div className="w-full px-4 py-6 flex flex-col items-center">
+      {loading ? (
+        <p className="text-black font-bold text-center text-lg">Please Wait...</p>
+      ) : (
+        <div className="w-full max-w-xl flex flex-col gap-6">
+          <div className="bg-green-100 p-4 rounded-lg text-center text-black text-sm">
+            Please select the Mess Hall where you would like to have your meals for this session. Once the receipt is generated, you will be able to avail meals for this session only at your selected Mess Hall, and only once.
+          </div>
 
-export default GenerateMessReceipt
+          <div className="flex flex-col gap-2">
+            <label className="text-black font-medium">
+              Mess Hall <span className="text-red-500 text-sm">*</span>
+            </label>
+            <select
+              value={selectedMessHallName}
+              onChange={(e) => setSelectedMessHallName(e.target.value)}
+              className="border border-gray-400 rounded px-4 py-2 text-black"
+            >
+              <option value="">Select Mess Hall</option>
+              {messHalls?.map((hall, index) => (
+                <option key={index} value={hall.hallName}>
+                  {hall.hallName}
+                </option>
+              ))}
+            </select>
+          </div>
 
-const styles = StyleSheet.create({
-  subFormView:{
-        display:'flex',
-        justifyContent:'center',
-        flexDirection:'column',
-        alignItems:'start',
-        gap:2,
-    },
-    form:{
-        width:"90%",
-        display:'flex',
-        justifyContent:'center',
-        alignItems:'start',
-        flexDirection:'column',
-        gap:20,
-    },
-    label:{
-        fontSize:16,
-        fontWeight:'500',
-        color:'#000000',
-    },
-    dropDownStyle : {
-        paddingVertical:10,
-        borderWidth:1,
-        borderRadius:10,
-        borderColor:"#adb5bd",
-    },
-    dropdownOptions: {
-        paddingHorizontal:10,
-        paddingVertical:10,
-        marginTop: 10,
-        borderWidth: 1,
-        borderRadius: 10,
-        borderColor: '#adb5bd',
-        backgroundColor: '#ffffff',
-        elevation: 3,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-    },
-})
+          <div className="text-black text-sm space-y-1">
+            <p>
+              <strong>Date:</strong> <span className="text-gray-600">{currentDate}</span>
+            </p>
+            <p>
+              <strong>Session:</strong> <span className="text-gray-600">{displaySession}</span>
+            </p>
+          </div>
+
+          <MainButton
+            text="Generate"
+            isButtonDisabled={isButtonDisabled}
+            onPress={handleGenerate}
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default GenerateMessReceipt;

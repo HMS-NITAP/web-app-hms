@@ -1,176 +1,121 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import { useToast } from 'react-native-toast-notifications';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getStudentAttendance } from '../../services/operations/StudentAPI';
-import { useFocusEffect } from '@react-navigation/native';
+import toast from 'react-hot-toast';
 
-const AttendanceHistory = ({ navigation }) => {
+const AttendanceHistory = () => {
   const [selectedMonth, setSelectedMonth] = useState(new Date());
+  const [attendanceData, setAttendanceData] = useState([]);
+
+  const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.Auth);
+
+  const fetchAttendanceData = async () => {
+    const response = await dispatch(getStudentAttendance(token, toast));
+    if (response) {
+      setAttendanceData(response);
+    }
+  };
+
+  useEffect(() => {
+    fetchAttendanceData();
+  }, []);
 
   const getMonthYearString = (date) => {
     return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
   };
 
   const handlePrevMonth = () => {
-    const prevMonth = new Date(selectedMonth);
-    prevMonth.setMonth(prevMonth.getMonth() - 1);
-    setSelectedMonth(prevMonth);
+    const prev = new Date(selectedMonth);
+    prev.setMonth(prev.getMonth() - 1);
+    setSelectedMonth(prev);
   };
 
   const handleNextMonth = () => {
-    const nextMonth = new Date(selectedMonth);
-    nextMonth.setMonth(nextMonth.getMonth() + 1);
-    setSelectedMonth(nextMonth);
+    const next = new Date(selectedMonth);
+    next.setMonth(next.getMonth() + 1);
+    setSelectedMonth(next);
   };
 
   const getAttendanceStatus = (date) => {
-    const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-    const attendance = attendanceData.find((item) => item.date === formattedDate);
-    return attendance ? attendance.status : 'N/A';
+    const formatted = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(
+      date.getDate()
+    ).padStart(2, '0')}`;
+    const match = attendanceData.find((a) => a.date === formatted);
+    return match ? match.status : 'N/A';
   };
-
-  const dispatch = useDispatch();
-  const { token } = useSelector((state) => state.Auth);
-  const toast = useToast();
-  const [attendanceData, setAttendanceData] = useState([]);
-
-  const fetchAttendanceData = async () => {
-    const response = await dispatch(getStudentAttendance(token, toast));
-    setAttendanceData(response);
-  };
-
-  useFocusEffect(
-    useCallback(() => {
-      fetchAttendanceData();
-    }, [token, toast])
-  );
 
   const getBackgroundColor = (status) => {
     switch (status) {
       case 'present':
-        return 'lightgreen';
+        return 'bg-green-300';
       case 'absent':
-        return 'salmon';
+        return 'bg-red-300';
       default:
-        return '#f0f0f0';
+        return 'bg-gray-200';
     }
   };
 
   const renderCalendar = () => {
-    const daysInMonth = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 0).getDate();
-    const calendar = [];
-    for (let i = 1; i <= daysInMonth; i++) {
-      const currentDate = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), i);
-      const attendanceStatus = getAttendanceStatus(currentDate);
-      const backgroundColor = getBackgroundColor(attendanceStatus);
-      calendar.push(
-        <View key={i} style={[styles.calendarCell, { backgroundColor }]}>
-          <Text style={styles.dayText}>{currentDate.getDate()}</Text>
-        </View>
+    const days = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 0).getDate();
+    const grid = [];
+    for (let i = 1; i <= days; i++) {
+      const date = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), i);
+      const status = getAttendanceStatus(date);
+      const bgColor = getBackgroundColor(status);
+      grid.push(
+        <div
+          key={i}
+          className={`md:w-[60px] md:h-[60px] w-[45px] h-[45px] border border-gray-300 flex items-center justify-center ${bgColor} rounded-md text-black font-semibold`}
+        >
+          {i}
+        </div>
       );
     }
-    return calendar;
+    return grid;
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={{display:"flex", flexWrap:"wrap",marginVertical:30,flexDirection:"row", justifyContent:"space-evenly", alignItems:"center", gap:15}}>
-        <View style={styles.legendContainer}>
-          <View style={[styles.legendDot, { backgroundColor: 'lightgreen' }]} />
-          <Text style={styles.legendText}>Present Days</Text>
-        </View>
-        <View style={styles.legendContainer}>
-          <View style={[styles.legendDot, { backgroundColor: 'salmon' }]} />
-          <Text style={styles.legendText}>Absent Days</Text>
-        </View>
-        <View style={styles.legendContainer}>
-          <View style={[styles.legendDot, { backgroundColor: '#f0f0f0' }]} />
-          <Text style={styles.legendText}>Not Marked</Text>
-        </View>
-      </View>
-      
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handlePrevMonth} style={styles.navButton}>
-          <Text style={styles.arrowText}>&lt;</Text>
-        </TouchableOpacity>
-        <Text style={styles.monthYearText}>{getMonthYearString(selectedMonth)}</Text>
-        <TouchableOpacity onPress={handleNextMonth} style={styles.navButton}>
-          <Text style={styles.arrowText}>&gt;</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.calendar}>{renderCalendar()}</View>
-    </ScrollView>
+    <div className="w-full px-4 py-8 flex flex-col items-center gap-6 bg-white min-h-screen">
+      {/* Legend */}
+      <div className="flex flex-wrap justify-center gap-6">
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-6 bg-green-300 rounded" />
+          <span className="text-gray-600 font-medium">Present Days</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-6 bg-red-300 rounded" />
+          <span className="text-gray-600 font-medium">Absent Days</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-6 bg-gray-200 rounded" />
+          <span className="text-gray-600 font-medium">Not Marked</span>
+        </div>
+      </div>
+
+      {/* Month Header */}
+      <div className="flex items-center justify-between w-full max-w-md">
+        <button
+          onClick={handlePrevMonth}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          &lt;
+        </button>
+        <h2 className="text-xl font-bold text-black">{getMonthYearString(selectedMonth)}</h2>
+        <button
+          onClick={handleNextMonth}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          &gt;
+        </button>
+      </div>
+
+      {/* Calendar Grid */}
+      <div className="w-auto grid grid-cols-7 gap-[4px]">
+        {renderCalendar()}
+      </div>
+    </div>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#fff',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  navButton: {
-    padding: 10,
-    borderRadius: 5,
-    backgroundColor: '#007bff',
-  },
-  arrowText: {
-    fontSize: 20,
-    color: '#fff',
-  },
-  monthYearText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color:"black"
-  },
-  calendar: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  calendarCell: {
-    width: '14%',
-    paddingVertical: 10,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#ccc',
-  },
-  dayText: {
-    fontSize: 16,
-    color:"black"
-  },
-  goBackButton: {
-    marginTop: 20,
-    padding: 10,
-    backgroundColor: '#007bff',
-    borderRadius: 5,
-    alignSelf: 'center',
-  },
-  goBackText: {
-    color: '#fff',
-    fontSize: 16,
-  },
-  legendContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  legendDot: {
-    width: 30,
-    height: 30,
-    borderRadius: 10,
-    marginRight: 5,
-  },
-  legendText: {
-    fontSize: 16,
-    color: "#6c757d"
-  },
-});
 
 export default AttendanceHistory;

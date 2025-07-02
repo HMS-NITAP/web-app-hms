@@ -1,117 +1,117 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { deletePendingOutingApplication, markReturnFromOuting } from '../../services/operations/StudentAPI';
+import toast from 'react-hot-toast';
 import MainButton from '../common/MainButton';
-import { FaTrash } from 'react-icons/fa6';
 
-const OutingApplicationCard = ({ application, token, toast, fetchData }) => {
+const OutingApplicationCard = ({ application, token, fetchData }) => {
+  const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const [markReturnModalOpen, setMarkReturnModalOpen] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-
-  const dispatch = useDispatch();
 
   const getDateFormat = (date) => new Date(date).toLocaleString();
 
   const handleConfirmDelete = async () => {
     setIsButtonDisabled(true);
-    const response = await dispatch(deletePendingOutingApplication(application?.id, token, toast));
-    if (response) fetchData();
+    const res = await dispatch(deletePendingOutingApplication(application?.id, token, toast));
+    if (res) fetchData();
     setIsButtonDisabled(false);
     setModalVisible(false);
   };
 
   const handleMarkReturn = async () => {
     setIsButtonDisabled(true);
-    const response = await dispatch(markReturnFromOuting(application?.id, token, toast));
-    if (response) fetchData();
+    const res = await dispatch(markReturnFromOuting(application?.id, token, toast));
+    if (res) fetchData();
     setIsButtonDisabled(false);
     setMarkReturnModalOpen(false);
   };
 
-  const statusColors = {
-    PENDING: 'text-orange-500',
-    INPROGRESS: 'text-green-600',
-    RETURNED: 'text-purple-700',
-    COMPLETED: 'text-green-600',
-    REJECTED: 'text-red-500',
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "PENDING":
+        return "text-orange-500";
+      case "INPROGRESS":
+        return "text-green-600";
+      case "RETURNED":
+        return "text-purple-700";
+      case "COMPLETED":
+        return "text-green-700";
+      default:
+        return "text-red-600";
+    }
   };
 
   return (
-    <div className="w-full p-4 my-2 bg-gray-100 border border-black rounded shadow-md">
-      <p><strong>Created On:</strong> {getDateFormat(application?.createdAt)}</p>
-      <p><strong>From:</strong> {getDateFormat(application?.from)}</p>
-      <p><strong>To:</strong> {getDateFormat(application?.to)}</p>
-      <p><strong>Purpose:</strong> {application?.purpose}</p>
-      <p><strong>Place of Visit:</strong> {application?.placeOfVisit}</p>
+    <div className="w-full border border-black bg-gray-100 rounded-lg p-4 shadow-md">
+      <p><strong>Created On:</strong> <span className="text-gray-600">{getDateFormat(application.createdAt)}</span></p>
+      <p><strong>From:</strong> <span className="text-gray-600">{getDateFormat(application.from)}</span></p>
+      <p><strong>To:</strong> <span className="text-gray-600">{getDateFormat(application.to)}</span></p>
+      <p><strong>Purpose:</strong> <span className="text-gray-600">{application.purpose}</span></p>
+      <p><strong>Place of Visit:</strong> <span className="text-gray-600">{application.placeOfVisit}</span></p>
 
-      {(application?.status === "REJECTED" || application?.status === "INPROGRESS" || application?.status === "RETURNED" || application?.status === "COMPLETED") && (
+      {["REJECTED", "INPROGRESS", "RETURNED", "COMPLETED"].includes(application.status) && (
         <>
-          <p><strong>Verified By:</strong> {application?.verifiedBy?.name} ({application?.verifiedBy?.designation})</p>
-          <p><strong>Verified At:</strong> {getDateFormat(application?.verifiedOn)}</p>
+          <p><strong>Verified By:</strong> <span className="text-gray-600">{application.verifiedBy?.name} ({application.verifiedBy?.designation})</span></p>
+          <p><strong>Verified At:</strong> <span className="text-gray-600">{getDateFormat(application.verifiedOn)}</span></p>
         </>
       )}
 
-      {application?.status === "RETURNED" && (
-        <p><strong>Returned On:</strong> {getDateFormat(application?.returnedOn)}</p>
+      {["RETURNED", "COMPLETED"].includes(application.status) && (
+        <p><strong>Returned On:</strong> <span className="text-gray-600">{getDateFormat(application.returnedOn)}</span></p>
       )}
 
-      {application?.status === "COMPLETED" && (
-        <>
-          <p><strong>Returned On:</strong> {getDateFormat(application?.returnedOn)}</p>
-          {application?.remarks !== null && (
-            <p><strong>Remarks:</strong> <span className="text-black">{application?.remarks} (MARKED DELAYED)</span></p>
-          )}
-        </>
+      {application.status === "REJECTED" && (
+        <p><strong>Remarks:</strong> <span className="text-gray-600">{application.remarks}</span></p>
       )}
 
-      {application?.status === "REJECTED" && (
-        <p><strong>Remarks:</strong> {application?.remarks}</p>
+      {application.status === "COMPLETED" && application.remarks !== null && (
+        <p><strong>Remarks:</strong> <span className="text-black">{application.remarks} (MARKED DELAYED)</span></p>
       )}
 
-      <p><strong>Status:</strong> <span className={`font-bold ${statusColors[application?.status]}`}>{application.status}</span></p>
+      <p className="mt-2"><strong>Status:</strong> <span className={`font-bold ${getStatusColor(application.status)}`}>{application.status}</span></p>
 
-      {application?.status === "INPROGRESS" && (
+      {/* Action Buttons */}
+      {application.status === "INPROGRESS" && (
         <div className="mt-4 flex justify-center">
           <MainButton
             isButtonDisabled={isButtonDisabled}
             onPress={() => setMarkReturnModalOpen(true)}
-            backgroundColor="#95d5b2"
-            text="Mark Return"
+            backgroundColor={"#95d5b2"}
+            text={"Mark Return"}
           />
         </div>
       )}
 
-      {application?.status === "PENDING" && (
-        <div className="mt-4">
+      {application.status === "PENDING" && (
+        <div className="mt-4 flex justify-center">
           <button
             disabled={isButtonDisabled}
             onClick={() => setModalVisible(true)}
-            className={`flex items-center gap-2 px-4 py-2 border border-red-700 bg-red-200 rounded-full ${isButtonDisabled ? 'opacity-50' : ''}`}
+            className={`cursor-pointer bg-red-100 text-red-600 border border-red-500 rounded-full px-4 py-2 font-semibold transition ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-200'}`}
           >
-            <FaTrash className="text-red-700" />
-            <span>Delete</span>
+            🗑 Delete
           </button>
         </div>
       )}
 
-      {/* Delete Confirmation Modal */}
+      {/* Delete Modal */}
       {modalVisible && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-md space-y-4 w-80">
-            <p className="text-center text-lg text-black">Are you sure you want to delete this Outing Application?</p>
-            <div className="flex justify-between">
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded shadow-md w-[300px] text-center space-y-4">
+            <p className="text-lg text-black">Are you sure you want to delete this Outing Application?</p>
+            <div className="flex justify-between gap-4">
               <button
                 disabled={isButtonDisabled}
                 onClick={handleConfirmDelete}
-                className={`flex-1 bg-red-700 text-white py-2 rounded mr-2 ${isButtonDisabled ? 'opacity-50' : ''}`}
+                className="cursor-pointer bg-red-600 text-white px-4 py-2 rounded w-full disabled:opacity-50"
               >
                 Yes
               </button>
               <button
-                disabled={isButtonDisabled}
                 onClick={() => setModalVisible(false)}
-                className={`flex-1 bg-gray-500 text-white py-2 rounded ml-2 ${isButtonDisabled ? 'opacity-50' : ''}`}
+                className="cursor-pointer bg-gray-500 text-white px-4 py-2 rounded w-full"
               >
                 No
               </button>
@@ -122,21 +122,20 @@ const OutingApplicationCard = ({ application, token, toast, fetchData }) => {
 
       {/* Mark Return Modal */}
       {markReturnModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-md space-y-4 w-80">
-            <p className="text-center text-lg text-black">Are you sure you want to log return from vacation?</p>
-            <div className="flex justify-between">
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded shadow-md w-[300px] text-center space-y-4">
+            <p className="text-lg text-black">Are you sure you want to log return from vacation?</p>
+            <div className="flex justify-between gap-4">
               <button
                 disabled={isButtonDisabled}
                 onClick={handleMarkReturn}
-                className={`flex-1 bg-green-600 text-white py-2 rounded mr-2 ${isButtonDisabled ? 'opacity-50' : ''}`}
+                className="cursor-pointer bg-green-600 text-white px-4 py-2 rounded w-full disabled:opacity-50"
               >
                 Yes
               </button>
               <button
-                disabled={isButtonDisabled}
                 onClick={() => setMarkReturnModalOpen(false)}
-                className={`flex-1 bg-gray-500 text-white py-2 rounded ml-2 ${isButtonDisabled ? 'opacity-50' : ''}`}
+                className="cursor-pointer bg-gray-500 text-white px-4 py-2 rounded w-full"
               >
                 No
               </button>

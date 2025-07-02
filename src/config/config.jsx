@@ -16,14 +16,14 @@ import ResetPasswordMailSent from '../screens/auth/ResetPasswordMailSent';
 import ResetPassword from '../screens/auth/ResetPassword';
 import ResetPasswordSuccess from '../screens/auth/ResetPasswordSuccess';
 import StudentDashboard from '../screens/student/StudentDashboard';
-// import AttendanceHistory from '../screens/student/AttendanceHistory';
-// import OutingApplication from '../screens/student/OutingApplication';
-// import RegisterComplaint from '../screens/student/RegisterComplaint';
+import AttendanceHistory from '../screens/student/AttendanceHistory';
+import OutingApplication from '../screens/student/OutingApplication';
+import RegisterComplaint from '../screens/student/RegisterComplaint';
 import Gallery from '../screens/institute/Gallary';
 import Announcements from '../screens/common/Announcements';
 import OutingRequest from '../screens/official/OutingRequest';
-// import ApplicationHistory from '../screens/student/ApplicationHistory';
-// import RegisterComplaints from '../screens/student/RegisteredComplaints';
+import ApplicationHistory from '../screens/student/ApplicationHistory';
+import RegisterComplaints from '../screens/student/RegisteredComplaints';
 import HostelComplaints from '../screens/official/HostelComplaints';
 import TakeAttendance from '../screens/official/TakeAttendance';
 // import ManageHostels from '../screens/admin/ManageHostels';
@@ -36,9 +36,9 @@ import ManageOfficialAccounts from '../screens/admin/ManageOfficialAccounts';
 import StudentRegistration from '../screens/auth/StudentRegistration';
 import StudentRegistrationApplications from '../screens/admin/StudentRegistrationApplications';
 import OfficialDashboard from '../screens/official/OfficialDashboard';
-// import GiveMessFeedback from '../screens/student/GiveMessFeedback';
-// import GenerateMessReceipt from '../screens/student/GenerateMessReceipt';
-// import MessReceiptsHistory from '../screens/student/MessReceiptsHistory';
+import GiveMessFeedback from '../screens/student/GiveMessFeedback';
+import GenerateMessReceipt from '../screens/student/GenerateMessReceipt';
+import MessReceiptsHistory from '../screens/student/MessReceiptsHistory';
 // import FreezedApplications from '../screens/admin/FreezedApplications';
 import AdminDashboard from '../screens/admin/AdminDashboard';
 // import BlockRooms from '../screens/admin/BlockRooms';
@@ -73,10 +73,10 @@ export const authRoutes = [
 
 export const adminRoutes = [
   { path: "/admin/dashboard", element: <AdminDashboard />, label: "Dashboard", icon: <FaIdBadge />, role: [USER_ROLES.ADMIN] },
-  { path: "/admin/odd-sem-applications", element: <StudentRegistrationApplications />, label: "Odd Sem Registration Applications", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
-  { path: "/admin/even-sem-applications", element: <EvenSemRegistrationApplications />, label: "Even Sem Registration Applications", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
-  { path: "/admin/manage-students", element: <ManageStudentAccounts />, label: "Manage Student Accounts", icon: <FaChild />, role: [USER_ROLES.ADMIN] },
-  { path: "/admin/manage-officials", element: <ManageOfficialAccounts />, label: "Manage Official Accounts", icon: <FaUserShield />, role: [USER_ROLES.ADMIN] },
+  // { path: "/admin/odd-sem-applications", element: <StudentRegistrationApplications />, label: "Odd Sem Registration Applications", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
+  // { path: "/admin/even-sem-applications", element: <EvenSemRegistrationApplications />, label: "Even Sem Registration Applications", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
+  // { path: "/admin/manage-students", element: <ManageStudentAccounts />, label: "Manage Student Accounts", icon: <FaChild />, role: [USER_ROLES.ADMIN] },
+  // { path: "/admin/manage-officials", element: <ManageOfficialAccounts />, label: "Manage Official Accounts", icon: <FaUserShield />, role: [USER_ROLES.ADMIN] },
   // { path: "/admin/create-official", element: <CreateOfficialAccount />, role: [USER_ROLES.ADMIN], hidden: true },
   // { path: "/admin/manage-hostels", element: <ManageHostels />, label: "Manage Hostel Blocks", icon: <FaUserGear />, role: [USER_ROLES.ADMIN] },
   // { path: "/admin/create-hostel", element: <CreateHostelBlock />, role: [USER_ROLES.ADMIN], hidden: true },
@@ -84,24 +84,45 @@ export const adminRoutes = [
   // { path: "/admin/block-rooms", element: <BlockRooms />, role: [USER_ROLES.ADMIN], hidden: true },
   // { path: "/admin/cot-details", element: <CotDetails />, role: [USER_ROLES.ADMIN], hidden: true },
   // { path: "/admin/change-student-cot", element: <ChangeStudentCot />, role: [USER_ROLES.ADMIN], hidden: true },
+  { path: "/announcements", element: <Announcements />, label: "Announcements", icon: <FaBullhorn />, role: null },
+  { path: "/hostel-blocks", element: <HostelsBlocks />, label: "Hostel Blocks", icon: <FaBuilding />, role: null },
+  { path: "/mess-menu", element: <MessMenu />, label: "Mess Menu", icon: <FaBowlFood />, role: null },
+  { path: "/contact-us", element: <ContactUs />, label: "Contact Us", icon: <FaAddressBook />, role: null },
+  { path: "/development-team", element: <DevelopmentTeam />, label: "Development Team", icon: <FaUsers />, role: null },
+  { path: "/gallery", element: <Gallery />, label: "Gallery", icon: <FaImage />, role: null },
+  { path: "/view-feedback", element: <ViewMessFeedBack />, label: "View Mess Feedback", icon: <FaStar />, role: null },
 ]
 
 export const studentRoutes = [
   { path: "/student/dashboard", element: <StudentDashboard />, label: "Dashboard", icon: <FaIdBadge />, role: [USER_ROLES.STUDENT] },
-  // { path: "/student/attendance-history", element: <AttendanceHistory />, label: "Attendance History", icon: <FaTableList />, role: [USER_ROLES.STUDENT] },
-  // { path: "/student/outing-application", element: <OutingApplication />, label: "Outing Application", icon: <FaWpforms />, role: [USER_ROLES.STUDENT] },
-  // { path: "/student/application-history", element: <ApplicationHistory />, label: "Application History", icon: <FaClockRotateLeft />, role: [USER_ROLES.STUDENT] },
-  // { path: "/student/register-complaint", element: <RegisterComplaint />, label: "Register Complaint", icon: <FaBookBookmark />, role: [USER_ROLES.STUDENT] },
-  // { path: "/student/complaints", element: <RegisterComplaints />, label: "Complaints Registered", icon: <FaPersonCircleExclamation />, role: [USER_ROLES.STUDENT] },
-  // { path: "/student/mess-receipt", element: <GenerateMessReceipt />, label: "Generate Mess Receipt", icon: <FaCashRegister />, role: [USER_ROLES.STUDENT] },
-  // { path: "/student/mess-receipt-history", element: <MessReceiptsHistory />, label: "Mess Receipts History", icon: <FaReceipt />, role: [USER_ROLES.STUDENT] },
-  // { path: "/student/give-feedback", element: <GiveMessFeedback />, role: [USER_ROLES.STUDENT], hidden: true },
+  { path: "/announcements", element: <Announcements />, label: "Announcements", icon: <FaBullhorn />, role: null },
+  { path: "/student/attendance-history", element: <AttendanceHistory />, label: "Attendance History", icon: <FaTableList />, role: [USER_ROLES.STUDENT] },
+  { path: "/student/outing-application", element: <OutingApplication />, label: "Outing Application", icon: <FaWpforms />, role: [USER_ROLES.STUDENT] },
+  { path: "/student/application-history", element: <ApplicationHistory />, label: "Application History", icon: <FaClockRotateLeft />, role: [USER_ROLES.STUDENT] },
+  { path: "/student/register-complaint", element: <RegisterComplaint />, label: "Register Complaint", icon: <FaBookBookmark />, role: [USER_ROLES.STUDENT] },
+  { path: "/student/complaints", element: <RegisterComplaints />, label: "Complaints Registered", icon: <FaPersonCircleExclamation />, role: [USER_ROLES.STUDENT] },
+  { path: "/student/mess-receipt", element: <GenerateMessReceipt />, label: "Generate Mess Receipt", icon: <FaCashRegister />, role: [USER_ROLES.STUDENT] },
+  { path: "/student/mess-receipt-history", element: <MessReceiptsHistory />, label: "Mess Receipts History", icon: <FaReceipt />, role: [USER_ROLES.STUDENT] },
+  { path: "/view-feedback", element: <ViewMessFeedBack />, label: "View Mess Feedback", icon: <FaStar />, role: null },
+  { path: "/student/give-feedback", element: <GiveMessFeedback />, role: [USER_ROLES.STUDENT], hidden: true },
+  { path: "/hostel-blocks", element: <HostelsBlocks />, label: "Hostel Blocks", icon: <FaBuilding />, role: null },
+  { path: "/mess-menu", element: <MessMenu />, label: "Mess Menu", icon: <FaBowlFood />, role: null },
+  { path: "/contact-us", element: <ContactUs />, label: "Contact Us", icon: <FaAddressBook />, role: null },
+  { path: "/development-team", element: <DevelopmentTeam />, label: "Development Team", icon: <FaUsers />, role: null },
+  { path: "/gallery", element: <Gallery />, label: "Gallery", icon: <FaImage />, role: null },
 ]
 
 export const officialRoutes = [
-  { path: "/official/dashboard", element: <OfficialDashboard />, label: "Dashboard", icon: <FaIdBadge />, role: [USER_ROLES.OFFICIAL] },
-  { path: "/official/create-announcement", element: <CreateAnnouncement />, label: "Create Announcement", icon: <FaBullhorn />, role: [USER_ROLES.OFFICIAL] },
-  { path: "/official/outing-request", element: <OutingRequest />, label: "Outing Request", icon: <FaWpforms />, role: [USER_ROLES.OFFICIAL] },
-  { path: "/official/take-attendance", element: <TakeAttendance />, label: "Take Attendance", icon: <FaPeopleRoof />, role: [USER_ROLES.OFFICIAL] },
-  { path: "/official/hostel-complaints", element: <HostelComplaints />, label: "Hostel Complaints", icon: <FaCircleExclamation />, role: [USER_ROLES.OFFICIAL] },
+  // { path: "/official/dashboard", element: <OfficialDashboard />, label: "Dashboard", icon: <FaIdBadge />, role: [USER_ROLES.OFFICIAL] },
+  // { path: "/official/create-announcement", element: <CreateAnnouncement />, label: "Create Announcement", icon: <FaBullhorn />, role: [USER_ROLES.OFFICIAL] },
+  // { path: "/official/outing-request", element: <OutingRequest />, label: "Outing Request", icon: <FaWpforms />, role: [USER_ROLES.OFFICIAL] },
+  // { path: "/official/take-attendance", element: <TakeAttendance />, label: "Take Attendance", icon: <FaPeopleRoof />, role: [USER_ROLES.OFFICIAL] },
+  // { path: "/official/hostel-complaints", element: <HostelComplaints />, label: "Hostel Complaints", icon: <FaCircleExclamation />, role: [USER_ROLES.OFFICIAL] },
+  { path: "/announcements", element: <Announcements />, label: "Announcements", icon: <FaBullhorn />, role: null },
+  { path: "/hostel-blocks", element: <HostelsBlocks />, label: "Hostel Blocks", icon: <FaBuilding />, role: null },
+  { path: "/mess-menu", element: <MessMenu />, label: "Mess Menu", icon: <FaBowlFood />, role: null },
+  { path: "/contact-us", element: <ContactUs />, label: "Contact Us", icon: <FaAddressBook />, role: null },
+  { path: "/development-team", element: <DevelopmentTeam />, label: "Development Team", icon: <FaUsers />, role: null },
+  { path: "/gallery", element: <Gallery />, label: "Gallery", icon: <FaImage />, role: null },
+  { path: "/view-feedback", element: <ViewMessFeedBack />, label: "View Mess Feedback", icon: <FaStar />, role: null },
 ];

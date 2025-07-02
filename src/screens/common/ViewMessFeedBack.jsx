@@ -48,7 +48,7 @@ const ViewMessFeedback = () => {
       {user && user?.accountType === 'STUDENT' && (
         <div className="w-full flex justify-end">
           <button
-            onClick={() => navigate('/give-mess-feedback')}
+            onClick={() => navigate('/student/give-feedback')}
             className="flex items-center gap-2 bg-[#ccd5ae] text-black px-4 py-2 rounded-lg hover:opacity-90 transition"
           >
             <FaCirclePlus size={20} className="text-gray-600" />

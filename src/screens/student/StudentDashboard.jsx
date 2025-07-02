@@ -318,7 +318,7 @@ const StudentDashboardScreen = () => {
             </div>
 
             {/* Section: Hostel, Room, Mess, Payment */}
-            <div className="flex flex-col md:flex-row gap-4 overflow-x-auto w-full">
+            <div className="flex flex-col md:flex-row gap-4 overflow-x-auto w-full p-[1rem]">
               {/* Hostel Details */}
               <div className="flex-1 min-w-[220px] bg-white rounded-xl shadow-md p-4 flex flex-col gap-2">
                 <span className="text-lg font-bold text-green-700 text-center">Hostel Details</span>

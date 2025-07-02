@@ -1,78 +1,102 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { ScrollView,Text, View, TouchableOpacity, Linking } from 'react-native'
-import { useDispatch,useSelector } from 'react-redux'
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { getAllStudentHostelComplaint } from '../../services/operations/StudentAPI';
-import { useToast } from 'react-native-toast-notifications';
-import { useFocusEffect } from '@react-navigation/native';
+import toast from 'react-hot-toast';
 
 const RegisterComplaints = () => {
+  const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.Auth);
+  const [complaintsRegistered, setComplaintsRegistered] = useState([]);
 
-    const dispatch = useDispatch();
-    
-    const {token} = useSelector((state) => state.Auth);
-    const toast = useToast();
-    const [complaintsRegistered,setComplaintsRegistered] = useState([]);
+  const fetchData = async () => {
+    setComplaintsRegistered(null);
+    const data = await dispatch(getAllStudentHostelComplaint(token, toast));
+    setComplaintsRegistered(data);
+  };
 
-    const fetchData = async () => {
-        setComplaintsRegistered(null);
-        const data = await dispatch(getAllStudentHostelComplaint(token,toast));
-        setComplaintsRegistered(data);
-    }
+  useEffect(() => {
+    fetchData();
+  }, [token]);
 
-    useFocusEffect(
-        useCallback(() => {
-          fetchData();
-        }, [token, toast])
-      );
+  const getDateFormat = (date) => {
+    const newDate = new Date(date);
+    return newDate.toLocaleString();
+  };
 
-    const getDateFormat = (date) => {
-        const newDate = new Date(date);
-        return newDate.toLocaleString();
-    }
+  return (
+    <div className="w-full px-4 py-6 flex flex-col items-center">
+      {complaintsRegistered && (
+        <div className="w-full flex justify-center items-center py-4">
+          <div className="flex gap-4 items-center">
+            <span className="font-semibold text-black text-base">Total Complaints Registered</span>
+            <span className="px-3 py-1 bg-purple-400 text-white font-bold rounded-full">{complaintsRegistered.length}</span>
+          </div>
+        </div>
+      )}
 
-    return (
-        <ScrollView contentContainerStyle={{width:"100%", paddingHorizontal:10,paddingVertical:10,justifyContent:'start',alignItems:"center"}}>
-            {
-                complaintsRegistered && 
-                    <View style={{width:"100%", display:"flex", flexDirection:"row", justifyContent:"center", alignItems:"center", paddingHorizontal:15, paddingVertical:15}}>
-                        <View style={{display:"flex",flexDirection:"row",gap:15,justifyContent:"center",alignItems:"center"}}>
-                            <Text style={{fontWeight:"600",color:"black",fontSize:16}}>Total Complaints Registered</Text>
-                            <Text style={{paddingVertical:5, paddingHorizontal:10, backgroundColor:"#9c89b8", color:"white", fontWeight:"800", borderRadius:100}}>{complaintsRegistered.length}</Text>
-                        </View>
-                    </View>
-            }
-            {
-                complaintsRegistered && complaintsRegistered.map((complaint) => {
-                    return (
-                        <View key={complaint?.id} style={{width:"100%",padding: 15,marginVertical: 8,backgroundColor: '#f9f9f9',borderRadius: 8,shadowColor: '#000',shadowOffset: { width: 0, height: 2 },shadowOpacity: 0.1,shadowRadius: 8,elevation: 2,width: '95%'}}>
-                            <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-                                Registered On : <Text style={{ fontWeight: 'normal', color: '#666' }}>{getDateFormat(complaint.createdAt)}</Text>
-                            </Text>
-                            <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-                                Category : <Text style={{ fontWeight: 'normal', color: '#666' }}>{complaint.category}</Text>
-                            </Text>
-                            <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-                                About : <Text style={{ fontWeight: 'normal', color: '#666' }}>{complaint.about}</Text>
-                            </Text>
-                            <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-                                Status: <Text style={{ fontWeight: '800', color: complaint?.status==="RESOLVED" ? "green" : "red"}}>{complaint.status==="RESOLVED" ? "RESOLVED" : "IN REVIEW"}</Text>
-                            </Text>
-                            {
-                                complaint?.fileUrl[0] && 
-                                    <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>Attachments : <Text style={{ fontWeight: 'normal', color: 'blue' }} onPress={() => Linking.openURL(complaint?.fileUrl[0])}>Click Here to See</Text></Text>
-                            }
-                            {
-                                complaint?.resolvedOn && <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>Resolved On : <Text style={{ fontWeight: 'normal', color: '#666' }}>{getDateFormat(complaint?.resolvedOn)}</Text></Text>
-                            }
-                            {
-                                complaint?.resolvedById && <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>Resolved By : <Text style={{ fontWeight: 'normal', color: '#666' }}>{complaint?.resolvedBy?.name} ({complaint?.resolvedBy?.designation})</Text></Text>
-                            }
-                        </View>
-                    )
-                })
-            }
-    </ScrollView>
-    )
-}
+      {complaintsRegistered &&
+        complaintsRegistered.map((complaint) => (
+          <div
+            key={complaint?.id}
+            className="w-[90%] md:w-[30%] flex flex-col bg-gray-100 rounded-lg shadow-md p-4 mb-4 "
+          >
+            <p className="text-base font-bold text-gray-800 mb-1">
+              Registered On:{' '}
+              <span className="font-normal text-gray-600">
+                {getDateFormat(complaint.createdAt)}
+              </span>
+            </p>
+            <p className="text-base font-bold text-gray-800 mb-1">
+              Category:{' '}
+              <span className="font-normal text-gray-600">{complaint.category}</span>
+            </p>
+            <p className="text-base font-bold text-gray-800 mb-1">
+              About:{' '}
+              <span className="font-normal text-gray-600">{complaint.about}</span>
+            </p>
+            <p className="text-base font-bold text-gray-800 mb-1">
+              Status:{' '}
+              <span
+                className={`font-extrabold ${
+                  complaint?.status === 'RESOLVED' ? 'text-green-600' : 'text-red-600'
+                }`}
+              >
+                {complaint.status === 'RESOLVED' ? 'RESOLVED' : 'IN REVIEW'}
+              </span>
+            </p>
+            {complaint?.fileUrl[0] && (
+              <p className="text-base font-bold text-gray-800 mb-1">
+                Attachments:{' '}
+                <a
+                  href={complaint?.fileUrl[0]}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-normal text-blue-600 underline"
+                >
+                  Click Here to See
+                </a>
+              </p>
+            )}
+            {complaint?.resolvedOn && (
+              <p className="text-base font-bold text-gray-800 mb-1">
+                Resolved On:{' '}
+                <span className="font-normal text-gray-600">
+                  {getDateFormat(complaint?.resolvedOn)}
+                </span>
+              </p>
+            )}
+            {complaint?.resolvedById && (
+              <p className="text-base font-bold text-gray-800 mb-1">
+                Resolved By:{' '}
+                <span className="font-normal text-gray-600">
+                  {complaint?.resolvedBy?.name} ({complaint?.resolvedBy?.designation})
+                </span>
+              </p>
+            )}
+          </div>
+        ))}
+    </div>
+  );
+};
 
-export default RegisterComplaints
+export default RegisterComplaints;
