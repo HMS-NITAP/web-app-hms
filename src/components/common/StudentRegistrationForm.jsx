@@ -355,9 +355,9 @@ const StudentRegistrationForm = () => {
                 {/* Date of Birth */}
                 <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
                     <label className="font-medium text-black">Date of Birth <span className="text-xs text-red-600">*</span> :</label>
-                    <div className="flex flex-row justify-start items-center gap-[2rem] ml-[3rem]">
+                    <div className="flex flex-row justify-start items-center gap-[2rem] ml-[6rem]">
                         <input type="date" className="p-2 border border-gray-400 rounded-lg text-black" value={dob || ''} onChange={e => setDob(e.target.value)} max={new Date().toISOString().split('T')[0]} />
-                        <span className="font-bold text-center text-black">{formatDate(dob)}</span>
+                        {/* <span className="font-bold text-center text-black">{formatDate(dob)}</span> */}
                     </div>
                 </div>
                 {/* Aadhaar Number */}
@@ -533,9 +533,9 @@ const StudentRegistrationForm = () => {
                 {/* Hostel Fee Payment Date */}
                 <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
                     <label className="font-medium text-black">Hostel Fee Payment Date <span className="text-xs text-red-600">*</span> :</label>
-                    <div className="flex flex-row justify-start items-center gap-[2rem] ml-[3rem]">
+                    <div className="flex flex-row justify-start items-center gap-[2rem] ml-[6rem]">
                         <input type="date" className="p-2 border border-gray-400 rounded-lg text-black" value={paymentDate || ''} onChange={e => setPaymentDate(e.target.value)} />
-                        <span className="font-bold text-center text-black">{formatDate(paymentDate)}</span>
+                        {/* <span className="font-bold text-center text-black">{formatDate(paymentDate)}</span> */}
                     </div>
                 </div>
                 {/* Hostel Fee Payment Amount */}

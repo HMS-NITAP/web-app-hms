@@ -13,7 +13,7 @@ const MainButton = ({
       onClick={onPress}
       disabled={isButtonDisabled}
       className={`cursor-pointer
-        px-5 py-3 rounded-xl font-bold 
+        px-4 py-2 rounded font-bold 
         flex justify-center items-center 
         hover:scale-105 transition-all duration-200
         ${backgroundColor} ${textColor} ${width}

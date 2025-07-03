@@ -122,15 +122,15 @@ const TakeAttendance = () => {
           {floorCount !== null && (
             <div className="flex flex-row items-center gap-4">
               <span className="text-black font-semibold text-base">Select Floor:</span>
-              <div className="flex flex-row flex-wrap gap-2 max-w-[70%]">
+              <div className="flex flex-row flex-wrap gap-2 max-w-[90%]">
                 {floorsArray?.map((floor, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedFloor(floor?.id)}
-                    className={`px-4 py-1 rounded-full border font-bold ${
+                    className={`px-4 py-2 cursor-pointer rounded-full border font-bold transition-all duration-200 ${
                       selectedFloor === floor?.id
-                        ? 'bg-[#b5e48c] border-transparent'
-                        : 'bg-white border-black'
+                        ? 'bg-yellow-400 border-transparent hover:bg-yellow-500'
+                        : 'bg-white border-black hover:bg-[#caf0f8]'
                     }`}
                     disabled={isButtonDisabled}
                   >
@@ -149,103 +149,106 @@ const TakeAttendance = () => {
               onChange={(e) => setSelectedDate(e.target.value)}
               max={new Date().toISOString().split('T')[0]}
             />
-            <span className="font-bold text-black">
+            {/* <span className="font-bold text-black">
               {selectedDate ? `Selected: ${new Date(selectedDate).toLocaleDateString()}` : 'No date selected'}
-            </span>
+            </span> */}
           </div>
-          {selectedFloor !== null &&
+          <div className='w-full flex md:flex-row flex-col flex-wrap gap-[1rem] justify-start items-stretch'>
+            {selectedFloor !== null &&
             selectedDate &&
-            floorRooms?.map((room, index) => (
-              <div
-                key={index}
-                className="w-full border-2 border-dashed border-black rounded-xl flex flex-col gap-4 justify-center items-center px-4 py-4"
-              >
-                <span className="text-center font-extrabold text-lg text-[#1b263b]">
-                  Room {room?.roomNumber}
-                </span>
-                <div className="w-full flex flex-col gap-3">
-                  {room.cots.map(
-                    (cot, cotIndex) =>
-                      cot?.status === 'BOOKED' &&
-                      cot?.student !== null &&
-                      cot?.student?.attendence !== null && (
-                        <div
-                          key={cotIndex}
-                          className={`flex flex-row justify-between items-center w-full mx-auto border border-dotted border-black rounded-xl p-3 ${
-                            findStatus(
-                              cot?.student?.attendence?.presentDays,
-                              cot?.student?.attendence?.absentDays
-                            ) === 'NM'
-                              ? ''
-                              : findStatus(
-                                  cot?.student?.attendence?.presentDays,
-                                  cot?.student?.attendence?.absentDays
-                                ) === 'PRESENT'
-                              ? 'bg-[#b5e48c]'
-                              : 'bg-[#ffccd5]'
-                          }`}
-                        >
-                          <div className="max-w-[70%] flex flex-col items-center gap-1">
-                            <span className="text-black font-bold text-lg">Cot {cot?.cotNo}</span>
-                            <span className="text-black font-medium text-base">{cot?.student?.name}</span>
-                            <span className="text-black font-medium text-base">{cot?.student?.rollNo}</span>
-                          </div>
-                          <div>
-                            {findStatus(
-                              cot?.student?.attendence?.presentDays,
-                              cot?.student?.attendence?.absentDays
-                            ) === 'NM' ? (
-                              <div className="flex flex-row gap-2">
-                                <button
-                                  disabled={isButtonDisabled}
-                                  onClick={() => handleMarkPresent(cot?.student?.attendence?.id)}
-                                  className={`border border-black bg-[#b5e48c] px-3 py-1 rounded-full font-bold text-black ${
-                                    isButtonDisabled ? 'opacity-50' : ''
-                                  }`}
-                                >
-                                  P
-                                </button>
-                                <button
-                                  disabled={isButtonDisabled}
-                                  onClick={() => handleMarkAbsent(cot?.student?.attendence?.id)}
-                                  className={`border border-black bg-[#ffccd5] px-3 py-1 rounded-full font-bold text-black ${
-                                    isButtonDisabled ? 'opacity-50' : ''
-                                  }`}
-                                >
-                                  A
-                                </button>
-                              </div>
-                            ) : findStatus(
+              floorRooms?.map((room, index) => (
+                <div
+                  key={index}
+                  className="md:w-[24%] w-full border-2 border-dashed border-black rounded-xl flex flex-col gap-4 justify-start items-center px-4 py-4"
+                >
+                  <span className="text-center font-extrabold text-lg text-[#1b263b]">
+                    Room {room?.roomNumber}
+                  </span>
+                  <div className="w-full flex flex-col gap-3">
+                    {room?.cots.map(
+                      (cot, cotIndex) =>
+                        cot?.status === 'BOOKED' &&
+                        cot?.student !== null &&
+                        cot?.student?.attendence !== null && (
+                          <div
+                            key={cotIndex}
+                            className={`flex flex-row justify-between items-center w-full mx-auto border border-dotted border-black rounded-xl p-3 ${
+                              findStatus(
                                 cot?.student?.attendence?.presentDays,
                                 cot?.student?.attendence?.absentDays
-                              ) === 'PRESENT' ? (
-                              <button
-                                disabled={isButtonDisabled}
-                                onClick={() => handleUnmarkPresent(cot?.student?.attendence?.id)}
-                                className={`border border-black bg-white px-3 py-1 rounded-full font-bold text-black ${
-                                  isButtonDisabled ? 'opacity-50' : ''
-                                }`}
-                              >
-                                UP
-                              </button>
-                            ) : (
-                              <button
-                                disabled={isButtonDisabled}
-                                onClick={() => handleUnmarkAbsent(cot?.student?.attendence?.id)}
-                                className={`border border-black bg-white px-3 py-1 rounded-full font-bold text-black ${
-                                  isButtonDisabled ? 'opacity-50' : ''
-                                }`}
-                              >
-                                UA
-                              </button>
-                            )}
+                              ) === 'NM'
+                                ? ''
+                                : findStatus(
+                                    cot?.student?.attendence?.presentDays,
+                                    cot?.student?.attendence?.absentDays
+                                  ) === 'PRESENT'
+                                ? 'bg-[#b5e48c]'
+                                : 'bg-[#ffccd5]'
+                            }`}
+                          >
+                            <div className="max-w-[70%] flex flex-col items-center gap-1">
+                              <span className="text-black font-bold text-lg">Cot {cot?.cotNo}</span>
+                              <span className="text-black font-medium text-base">{cot?.student?.name}</span>
+                              <span className="text-black font-medium text-base">{cot?.student?.rollNo}</span>
+                            </div>
+                            <div>
+                              {findStatus(
+                                cot?.student?.attendence?.presentDays,
+                                cot?.student?.attendence?.absentDays
+                              ) === 'NM' ? (
+                                <div className="flex flex-row gap-2">
+                                  <button
+                                    disabled={isButtonDisabled}
+                                    onClick={() => handleMarkPresent(cot?.student?.attendence?.id)}
+                                    className={`text-[18px] bg-green-400 hover:bg-green-500 transition-all duration-200 px-3 py-1 rounded-full font-bold text-black ${
+                                      isButtonDisabled ? 'opacity-50' : ''
+                                    }`}
+                                  >
+                                    P
+                                  </button>
+                                  <button
+                                    disabled={isButtonDisabled}
+                                    onClick={() => handleMarkAbsent(cot?.student?.attendence?.id)}
+                                    className={`text-[18px] bg-red-400 hover:bg-red-500 transition-all duration-200 px-3 py-1 rounded-full font-bold text-black ${
+                                      isButtonDisabled ? 'opacity-50' : ''
+                                    }`}
+                                  >
+                                    A
+                                  </button>
+                                </div>
+                              ) : findStatus(
+                                  cot?.student?.attendence?.presentDays,
+                                  cot?.student?.attendence?.absentDays
+                                ) === 'PRESENT' ? (
+                                <button
+                                  disabled={isButtonDisabled}
+                                  onClick={() => handleUnmarkPresent(cot?.student?.attendence?.id)}
+                                  className={`border border-black hover:bg-[#caf0f8] cursor-pointer transition-all duration-200 text-[18px] bg-white px-2 py-1 rounded-full font-bold text-black ${
+                                    isButtonDisabled ? 'opacity-50' : ''
+                                  }`}
+                                >
+                                  UP
+                                </button>
+                              ) : (
+                                <button
+                                  disabled={isButtonDisabled}
+                                  onClick={() => handleUnmarkAbsent(cot?.student?.attendence?.id)}
+                                  className={`border border-black hover:bg-[#caf0f8] cursor-pointer transition-all duration-200 text-[18px] bg-white px-2 py-1 rounded-full font-bold text-black ${
+                                    isButtonDisabled ? 'opacity-50' : ''
+                                  }`}
+                                >
+                                  UA
+                                </button>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      )
-                  )}
+                        )
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+          }
+          </div>
         </div>
       )}
     </div>

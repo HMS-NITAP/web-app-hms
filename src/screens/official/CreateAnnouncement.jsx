@@ -28,6 +28,13 @@ const CreateAnnouncement = () => {
 
   return (
     <div className="flex flex-col items-center w-full min-h-screen pt-10 pb-6 px-4">
+
+      <div className="md:w-[60%] w-full bg-green-100 rounded-2xl p-4 mb-6">
+        <p className="text-center font-semibold text-base text-black">
+          If you're experiencing any issues in the hostels, feel free to raise a complaint ticket here. Just provide the necessary details, and our team will look into it as soon as possible to ensure a quick resolution.
+        </p>
+      </div>
+
       <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-2xl flex flex-col gap-8">
         
         {/* Title Field */}
@@ -60,22 +67,22 @@ const CreateAnnouncement = () => {
 
         {/* File Picker */}
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium text-gray-800">Select Document to Upload</label>
+          <label className="text-sm font-medium text-gray-800">Select Document to Upload (Optional)</label>
           <input
             type="file"
             accept="*"
             onChange={(e) => setFile(e.target.files[0])}
-            className="text-sm text-gray-700"
+            className="max-w-[250px] px-[1rem] py-2 bg-blue-500 text-white font-semibold rounded-md cursor-pointer transition-transform duration-200 hover:scale-105"
           />
-          {file && <p className="text-sm text-green-700 font-semibold">{file.name}</p>}
+          {file && <p className="text-sm text-green-700 font-semibold">File name : {file.name}</p>}
         </div>
 
         {/* Submit Button */}
-        <div className="flex justify-start">
+        <div className="flex justify-center">
           <button
             type="submit"
             disabled={isButtonDisabled}
-            className="bg-blue-600 text-white px-6 py-2 rounded-md font-semibold hover:bg-blue-700 disabled:opacity-50"
+            className={`bg-yellow-400 cursor-pointer hover:scale-105 transition-all duration-200 text-black px-6 py-2 rounded-md font-semibold ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-90'}`}
           >
             Create Announcement
           </button>

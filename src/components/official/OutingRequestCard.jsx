@@ -98,19 +98,18 @@ const OutingRequestCard = ({ application, token, toast, fetchOutingRequest }) =>
 
       {application.status === 'PENDING' && (
         <div className="flex justify-evenly mt-4">
-          <MainButton text="Accept" isButtonDisabled={isButtonDisabled} onClick={() => setIsAcceptModalOpen(true)} backgroundColor="#99d98c" />
-          <MainButton text="Reject" isButtonDisabled={isButtonDisabled} onClick={() => setIsRejectModalOpen(true)} backgroundColor="#f27059" />
+          <MainButton text="Accept" isButtonDisabled={isButtonDisabled} onPress={() => setIsAcceptModalOpen(true)} backgroundColor='bg-green-500' textColor='text-white' />
+          <MainButton text="Reject" isButtonDisabled={isButtonDisabled} onPress={() => setIsRejectModalOpen(true)} backgroundColor='bg-red-500' textColor='text-white' />
         </div>
       )}
 
       {application.status === 'RETURNED' && (
         <div className="flex flex-col items-center gap-3 mt-4">
-          <MainButton text="Returned Without Delay" isButtonDisabled={isButtonDisabled} onClick={() => setIsReturnWithoutDelayModalOpen(true)} backgroundColor="#99d98c" />
-          <MainButton text="Returned With Delay" isButtonDisabled={isButtonDisabled} onClick={() => setIsReturnWithDelayModalOpen(true)} backgroundColor="#f27059" />
+          <MainButton width='w-full' text="Returned Without Delay" isButtonDisabled={isButtonDisabled} onPress={() => setIsReturnWithoutDelayModalOpen(true)} backgroundColor='bg-yellow-500' textColor='text-white' />
+          <MainButton width='w-full' text="Returned With Delay" isButtonDisabled={isButtonDisabled} onPress={() => setIsReturnWithDelayModalOpen(true)} backgroundColor='bg-red-500' textColor='text-white' />
         </div>
       )}
 
-      {/* Modals */}
       {isAcceptModalOpen && (
         <ModalPopup
           title="Are you sure you want to accept this application?"
@@ -154,21 +153,21 @@ const OutingRequestCard = ({ application, token, toast, fetchOutingRequest }) =>
 };
 
 const ModalPopup = ({ title, onConfirm, onCancel, isButtonDisabled }) => (
-  <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
-    <div className="bg-white p-6 rounded-md w-[90%] max-w-md space-y-4">
-      <p className="text-lg font-semibold text-center">{title}</p>
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+    <div className="bg-white backdrop-blur-lg border border-white/30 shadow-xl rounded-xl p-6 md:w-full w-[90%] max-w-md" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'}}>
+      <p className="text-lg font-semibold text-center mb-[1rem]">{title}</p>
       <div className="flex justify-evenly">
-        <button onClick={onConfirm} disabled={isButtonDisabled} className="bg-green-500 text-white px-4 py-2 rounded disabled:opacity-50">Yes</button>
-        <button onClick={onCancel} disabled={isButtonDisabled} className="bg-gray-300 px-4 py-2 rounded disabled:opacity-50">Cancel</button>
+        <MainButton text={"Yes"} onPress={onConfirm} disabled={isButtonDisabled} backgroundColor='bg-green-500' textColor='text-white' />
+        <MainButton text={"Cancel"} onPress={onCancel} disabled={isButtonDisabled} backgroundColor='bg-gray-300' textColor='text-black' />
       </div>
     </div>
   </div>
 );
 
 const FormModal = ({ title, onSubmit, onCancel, control, errors, placeholder, isButtonDisabled }) => (
-  <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
-    <div className="bg-white p-6 rounded-md w-[90%] max-w-md space-y-4">
-      <p className="text-lg font-semibold text-center">{title}</p>
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+    <div className="bg-white backdrop-blur-lg border border-white/30 shadow-xl rounded-xl p-6 md:w-full w-[90%] max-w-md" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'}}>
+      <p className="text-lg font-semibold text-center mb-[1rem]">{title}</p>
       <Controller
         control={control}
         name="remarks"
@@ -178,9 +177,9 @@ const FormModal = ({ title, onSubmit, onCancel, control, errors, placeholder, is
         )}
       />
       {errors.remarks && <p className="text-red-500 text-sm">Remarks is required.</p>}
-      <div className="flex justify-evenly">
-        <button onClick={onSubmit} disabled={isButtonDisabled} className="bg-red-500 text-white px-4 py-2 rounded disabled:opacity-50">Submit</button>
-        <button onClick={onCancel} disabled={isButtonDisabled} className="bg-gray-300 px-4 py-2 rounded disabled:opacity-50">Cancel</button>
+      <div className="flex justify-evenly mt-[1rem]">
+        <MainButton text={"Submit"} onPress={onSubmit} disabled={isButtonDisabled} backgroundColor='bg-red-500' textColor='text-white' />
+        <MainButton text={"Cancel"} onPress={onCancel} disabled={isButtonDisabled} backgroundColor='bg-gray-300' textColor='text-black' />
       </div>
     </div>
   </div>

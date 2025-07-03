@@ -44,7 +44,7 @@ const OutingApplicationCard = ({ application, token, fetchData }) => {
   };
 
   return (
-    <div className="w-full border border-black bg-gray-100 rounded-lg p-4 shadow-md">
+    <div className="md:w-[350px] w-[95%] border border-black bg-gray-100 rounded-lg p-4 shadow-md">
       <p><strong>Created On:</strong> <span className="text-gray-600">{getDateFormat(application.createdAt)}</span></p>
       <p><strong>From:</strong> <span className="text-gray-600">{getDateFormat(application.from)}</span></p>
       <p><strong>To:</strong> <span className="text-gray-600">{getDateFormat(application.to)}</span></p>
@@ -78,7 +78,6 @@ const OutingApplicationCard = ({ application, token, fetchData }) => {
           <MainButton
             isButtonDisabled={isButtonDisabled}
             onPress={() => setMarkReturnModalOpen(true)}
-            backgroundColor={"#95d5b2"}
             text={"Mark Return"}
           />
         </div>

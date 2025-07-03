@@ -24,7 +24,12 @@ const ApplicationHistory = () => {
     <div className="w-full px-4 py-6 flex flex-col items-center">
       {
         !outingApplication ? (
-          <p className="text-center text-black font-semibold text-lg">Please Wait...</p>
+          <div className="flex justify-center items-center mt-8">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto mb-4"></div>
+                    <p className="text-black text-lg font-bold">Please Wait...</p>
+                </div>
+          </div>
         ) : (
           <div className="w-full flex flex-col items-center gap-6">
             
@@ -35,7 +40,7 @@ const ApplicationHistory = () => {
             </div>
 
             {/* Applications List */}
-            <div className="w-[90%] md:w-[35%] flex md:flex-row flex-col gap-[2rem] flex-wrap items-center">
+            <div className="w-full flex md:flex-row flex-col gap-[2rem] flex-wrap justify-start items-stretch">
               {
                 outingApplication.map((application, index) => (
                   <OutingApplicationCard

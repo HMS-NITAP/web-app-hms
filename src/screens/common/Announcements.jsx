@@ -56,11 +56,11 @@ const Announcements = () => {
       {announcementData?.length === 0 ? (
         <p className="text-center text-lg font-bold text-black">No Announcements Found</p>
       ) : (
-        <div className="flex md:flex-row flex-wrap flex-col gap-[1.5rem] justify-start items-start">
+        <div className="flex w-[90%] mx-auto md:flex-row flex-wrap flex-col gap-[1.5rem] justify-between items-start">
           {announcementData.map((announcement) => (
             <div
               key={announcement.id}
-              className="md:w-[45%] w-[90%] bg-white shadow-md rounded-xl p-4 flex flex-col gap-3 relative transition-all duration-300"
+              className="md:w-[48%] w-[90%] bg-white shadow-md rounded-xl p-4 flex flex-col gap-3 relative transition-all duration-300"
             >
               {isNew(announcement.createdAt) && (
                 <div

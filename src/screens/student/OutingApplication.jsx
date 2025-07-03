@@ -35,7 +35,7 @@ const OutingApplication = () => {
 
     const response = await dispatch(CreateOutingApplication(formData, token, toast));
     if (response) {
-      navigate('/application-history');
+      navigate('/student/application-history');
     }
 
     setIsButtonDisabled(false);
@@ -49,8 +49,8 @@ const OutingApplication = () => {
         <div className="flex flex-col gap-2">
           <label className="font-medium text-black">Outing Type <span className="text-red-500">*</span>:</label>
           <div className="flex w-full border border-black rounded overflow-hidden">
-            <button type="button" className={`w-1/2 py-2 ${type === 'Local' ? 'bg-yellow-300' : 'bg-white'}`} onClick={() => setType('Local')}>Local</button>
-            <button type="button" className={`w-1/2 py-2 ${type === 'NonLocal' ? 'bg-yellow-300' : 'bg-white'}`} onClick={() => setType('NonLocal')}>Non Local</button>
+            <button type="button" className={`w-1/2 cursor-pointer font-medium ${type === 'Local' ? 'hover:bg-yellow-500' : 'hover:bg-[#caf0f8]'} py-2 ${type === 'Local' ? 'bg-yellow-400' : 'bg-white'}`} onClick={() => setType('Local')}>Local</button>
+            <button type="button" className={`w-1/2 cursor-pointer font-medium ${type === 'NonLocal' ? 'hover:bg-yellow-500' : 'hover:bg-[#caf0f8]'} py-2 ${type === 'NonLocal' ? 'bg-yellow-400' : 'bg-white'}`} onClick={() => setType('NonLocal')}>Non Local</button>
           </div>
         </div>
 

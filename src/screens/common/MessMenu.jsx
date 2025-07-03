@@ -70,7 +70,7 @@ const MessMenu = () => {
 
       <button
         onClick={navigateToMenu}
-        className="mt-6 bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold"
+        className="mt-6 cursor-pointer bg-yellow-400 hover:bg-yellow-500 transition-all duration-200 text-white px-6 py-3 rounded-lg font-semibold"
       >
         View Full Menu
       </button>

@@ -119,7 +119,7 @@ export const fetchCurrentDateRatingsAndReviews = (toast) => {
             }
 
             toast.dismiss(id);
-            toast.success(response?.data?.message);
+            // toast.success(response?.data?.message);
             return response?.data?.data;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to fetch Hostel Block Rooms";

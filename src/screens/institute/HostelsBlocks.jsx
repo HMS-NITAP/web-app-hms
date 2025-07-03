@@ -35,8 +35,11 @@ const HostelBlocks = () => {
 
   if (loading) {
     return (
-      <div className="w-full flex justify-center items-center py-10">
-        <p className="text-lg font-semibold">Loading Hostel Data...</p>
+      <div className="flex justify-center items-center mt-8">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto mb-4"></div>
+                    <p className="text-black text-lg font-bold">Please Wait...</p>
+                </div>
       </div>
     );
   }

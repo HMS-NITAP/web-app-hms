@@ -35,7 +35,7 @@ export const fetchDashboardData = (token,toast) => {
             }
 
             toast.dismiss(id);
-            toast.success(response.data.message);
+            // toast.success(response.data.message);
             return response?.data?.data;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to Fetch Dashbaord Data";
@@ -82,7 +82,7 @@ export const getAllPendingApplicationByHostelBlock = (token,toast) => {
             }
 
             toast.dismiss(id);
-            toast.success("Fetched Applications Successfully");
+            // toast.success("Fetched Applications Successfully");
             return response?.data?.data;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to fetch Applications";
@@ -105,7 +105,7 @@ export const getAllCompletedApplicationByHostelBlock = (token,toast) => {
             }
 
             toast.dismiss(id);
-            toast.success("Fetched Applications Successfully");
+            // toast.success("Fetched Applications Successfully");
             return response?.data?.data;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to fetch Applications";
@@ -128,7 +128,7 @@ export const getAllInprogressApplicationByHostelBlock = (token,toast) => {
             }
 
             toast.dismiss(id);
-            toast.success("Fetched Applications Successfully");
+            // toast.success("Fetched Applications Successfully");
             return response?.data?.data;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to fetch Applications";
@@ -151,7 +151,7 @@ export const getAllReturnedApplicationByHostelBlock = (token,toast) => {
             }
 
             toast.dismiss(id);
-            toast.success("Fetched Applications Successfully");
+            // toast.success("Fetched Applications Successfully");
             return response?.data?.data;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to fetch Applications";
@@ -271,7 +271,7 @@ export const getAllUnresolvedHostelComplaints = (token,toast) => {
             }
 
             toast.dismiss(id);
-            toast.success("Fetched All Unresolved issues Successfully");
+            // toast.success("Fetched All Unresolved issues Successfully");
             return response?.data?.data;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to fetch Unresolved Issues";
@@ -294,7 +294,7 @@ export const getAllResolvedHostelComplaints = (token,toast) => {
             }
 
             toast.dismiss(id);
-            toast.success("Fetched All resolved issues Successfully");
+            // toast.success("Fetched All resolved issues Successfully");
             return response?.data?.data;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to fetch resolved Issues";
@@ -365,7 +365,7 @@ export const markStudentPresent = (presentDate,attendenceRecordId,token,toast) =
             }
 
             toast.dismiss(id);
-            toast.success(response?.data?.message);
+            // toast.success(response?.data?.message);
             return true;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to mark present";
@@ -389,7 +389,7 @@ export const markStudentAbsent = (absentDate,attendenceRecordId,token,toast) => 
             }
 
             toast.dismiss(id);
-            toast.success(response?.data?.message);
+            // toast.success(response?.data?.message);
             return true;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to mark absent";
@@ -413,7 +413,7 @@ export const unmarkStudentPresent = (presentDate,attendenceRecordId,token,toast)
             }
 
             toast.dismiss(id);
-            toast.success(response?.data?.message);
+            // toast.success(response?.data?.message);
             return true;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to unmark present";
@@ -437,7 +437,7 @@ export const unmarkStudentAbsent = (absentDate,attendenceRecordId,token,toast) =
             }
 
             toast.dismiss(id);
-            toast.success(response?.data?.message);
+            // toast.success(response?.data?.message);
             return true;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to unmark absent";
@@ -461,7 +461,7 @@ export const fetchHostelBlockRoomsForAttendance = (token,toast) => {
             }
 
             toast.dismiss(id);
-            toast.success(response?.data?.message);
+            // toast.success(response?.data?.message);
             return response?.data?.data;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to fetch Data";

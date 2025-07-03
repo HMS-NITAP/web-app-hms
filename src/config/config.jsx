@@ -90,6 +90,7 @@ export const adminRoutes = [
   { path: "/development-team", element: <DevelopmentTeam />, label: "Development Team", icon: <FaUsers />, role: null },
   { path: "/gallery", element: <Gallery />, label: "Gallery", icon: <FaImage />, role: null },
   { path: "/view-feedback", element: <ViewMessFeedBack />, label: "View Mess Feedback", icon: <FaStar />, role: null },
+  { path: "/detailed-mess-menu", element: <DetailedMessMenu />, role: null, hidden: true },
 ]
 
 export const studentRoutes = [
@@ -109,19 +110,21 @@ export const studentRoutes = [
   { path: "/contact-us", element: <ContactUs />, label: "Contact Us", icon: <FaAddressBook />, role: null },
   { path: "/development-team", element: <DevelopmentTeam />, label: "Development Team", icon: <FaUsers />, role: null },
   { path: "/gallery", element: <Gallery />, label: "Gallery", icon: <FaImage />, role: null },
+  { path: "/detailed-mess-menu", element: <DetailedMessMenu />, role: null, hidden: true },
 ]
 
 export const officialRoutes = [
   { path: "/official/dashboard", element: <OfficialDashboard />, label: "Dashboard", icon: <FaIdBadge />, role: [USER_ROLES.OFFICIAL] },
   { path: "/official/create-announcement", element: <CreateAnnouncement />, label: "Create Announcement", icon: <FaBullhorn />, role: [USER_ROLES.OFFICIAL] },
+  { path: "/announcements", element: <Announcements />, label: "Announcements", icon: <FaBullhorn />, role: null },
   { path: "/official/outing-request", element: <OutingRequest />, label: "Outing Request", icon: <FaWpforms />, role: [USER_ROLES.OFFICIAL] },
   { path: "/official/take-attendance", element: <TakeAttendance />, label: "Take Attendance", icon: <FaPeopleRoof />, role: [USER_ROLES.OFFICIAL] },
   { path: "/official/hostel-complaints", element: <HostelComplaints />, label: "Hostel Complaints", icon: <FaCircleExclamation />, role: [USER_ROLES.OFFICIAL] },
   { path: "/view-feedback", element: <ViewMessFeedBack />, label: "View Mess Feedback", icon: <FaStar />, role: null },
-  { path: "/announcements", element: <Announcements />, label: "Announcements", icon: <FaBullhorn />, role: null },
   { path: "/hostel-blocks", element: <HostelsBlocks />, label: "Hostel Blocks", icon: <FaBuilding />, role: null },
   { path: "/mess-menu", element: <MessMenu />, label: "Mess Menu", icon: <FaBowlFood />, role: null },
   { path: "/contact-us", element: <ContactUs />, label: "Contact Us", icon: <FaAddressBook />, role: null },
   { path: "/development-team", element: <DevelopmentTeam />, label: "Development Team", icon: <FaUsers />, role: null },
   { path: "/gallery", element: <Gallery />, label: "Gallery", icon: <FaImage />, role: null },
+  { path: "/detailed-mess-menu", element: <DetailedMessMenu />, role: null, hidden: true },
 ];

@@ -80,12 +80,12 @@ const DetailedMessMenu = () => {
       </div>
 
       {/* Menu Items */}
-      <div className="w-full">
-        <p className="text-lg font-semibold text-black mb-2">Menu Items :</p>
-        <div className="mt-4 mx-auto md:w-[70%] w-full flex md:flex-row flex-col gap-[2rem] justify-center items-center flex-wrap">
+      <div className="md:w-[60%] w-full mx-auto border-1 border-gray-500 rounded-2xl p-[1rem]">
+        <p className="text-lg text-center font-semibold text-black mb-2">Menu Items</p>
+        <div className="w-full mt-4 flex md:flex-row flex-col gap-[2rem] justify-center items-center flex-wrap">
           {menu && menu.length > 0 ? (
             menu.map((menuItem, index) => (
-              <div key={index} className="bg-green-100 md:w-[200px] w-[90%] text-center font-semibold rounded-lg p-3 text-gray-800 shadow-sm">
+              <div key={index} className="bg-green-100 md:w-[45%] w-[95%] text-center font-semibold rounded-lg p-3 text-gray-800 shadow-sm">
                 {menuItem}
               </div>
             ))
