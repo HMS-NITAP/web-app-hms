@@ -20,10 +20,13 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="w-full min-h-screen flex justify-start items-center flex-col px-4">
+    <div className="w-full h-full flex justify-start md:justify-center md:mt-0 mt-[5rem] items-center flex-col px-4">
+      <div className='max-w-[800px] px-[1rem] py-[1rem] rounded-2xl text-black bg-green-100 text-center'>
+        To regain access to your account, please enter your registered institute email ID. We'll send you the instructions to reset your password and get you back on track in no time.
+      </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full max-w-md flex flex-col justify-center items-start gap-10 pt-24 pb-10"
+        className="w-full max-w-md flex flex-col justify-center items-start gap-10 my-[2rem]"
       >
         {/* Email Input */}
         <div className="w-full flex flex-col gap-2">
@@ -50,7 +53,7 @@ const ForgotPassword = () => {
         </div>
 
         {/* Submit Button */}
-        <div className="w-full">
+        <div className="w-full flex justify-center">
           <MainButton
             text="Send Reset Password Link"
             onPress={handleSubmit(onSubmit)}

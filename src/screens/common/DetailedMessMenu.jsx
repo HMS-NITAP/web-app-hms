@@ -51,7 +51,7 @@ const DetailedMessMenu = () => {
             <button
               key={index}
               onClick={() => setSelectedDay(day)}
-              className={`cursor-pointer Cpx-3 py-2 rounded-lg text-sm font-semibold ${
+              className={`cursor-pointer px-3 py-2 rounded-lg text-sm font-semibold ${
                 selectedDay === day ? 'bg-blue-900 text-white' : 'bg-lime-300 text-black'
               }`}
             >

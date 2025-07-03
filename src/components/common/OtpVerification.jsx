@@ -37,8 +37,8 @@ const OtpVerification = () => {
 
   return (
     <div className="w-full flex flex-col items-center gap-6">
-      <div className="w-full bg-[#e9edc9] rounded-2xl px-4 py-4">
-        <p className="text-center text-[15px] text-black">
+      <div className="mx-auto bg-[#e9edc9] rounded-2xl px-4 py-4">
+        <p className="text-center text-[15px] text-black font-semibold">
           Please enter the OTP sent to your institute email ID,{' '}
           <span className="font-extrabold">{registrationData?.email}</span>, to complete the verification of your account.
         </p>
@@ -49,23 +49,20 @@ const OtpVerification = () => {
           value={otp}
           onChange={setOtp}
           numInputs={6}
+          inputStyle="text-center text-[2rem] border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
           renderInput={(props) => (
             <input
               {...props}
-              className="w-12 h-12 text-black text-xl text-center border border-gray-400 rounded-md outline-none focus:border-gray-700"
             />
           )}
           containerStyle="flex justify-center gap-3"
         />
 
-        <div className="flex justify-center items-center">
-          <MainButton
-            isButtonDisabled={isButtonDisabled}
-            text="Submit"
-            onClick={submitHandler}
-            backgroundColor="#eddea4"
-          />
-        </div>
+        <MainButton
+          isButtonDisabled={isButtonDisabled}
+          text="Submit"
+          onClick={submitHandler}
+        />
       </div>
     </div>
   );

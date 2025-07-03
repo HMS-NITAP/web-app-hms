@@ -53,7 +53,7 @@ const Login = () => {
 
         {/* Password Field */}
         <div className="relative">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700">
             Password <span className="text-red-500">*</span>
           </label>
           <Controller
@@ -86,7 +86,7 @@ const Login = () => {
         {/* Forgot Password */}
         <div className="text-right">
           <span
-            className="text-sm text-blue-600 font-semibold cursor-pointer hover:underline"
+            className="text-sm text-blue-500 font-semibold cursor-pointer hover:underline"
             onClick={() => navigate("/forgot-password")}
           >
             Forgot Password?
@@ -99,6 +99,7 @@ const Login = () => {
             text="Log In"
             type="submit"
             isButtonDisabled={isButtonDisabled}
+            width='w-full'
           />
         </div>
 
@@ -107,7 +108,7 @@ const Login = () => {
           <p className="text-sm text-gray-700">
             Are you a student and haven't registered yet?{" "}
             <span
-              className="text-blue-600 cursor-pointer font-semibold hover:underline"
+              className="text-blue-500 cursor-pointer font-semibold hover:underline"
               onClick={() => navigate("/student-registration")}
             >
               Click here to register!

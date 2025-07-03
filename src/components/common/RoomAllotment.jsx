@@ -142,9 +142,9 @@ const RoomAllotment = () => {
           <span className="font-extrabold text-lg">Data Loading...</span>
         </div>
       ) : (
-        <div className="flex flex-col gap-6 w-full px-2">
+        <div className="flex flex-col gap-6 px-2">
           {(!hostelBlocks || hostelBlocks.length === 0) ? (
-            <div className="w-full bg-[#ff928b] rounded-2xl px-4 py-4">
+            <div className="bg-[#ff928b] justify-center rounded-2xl mx-auto px-4 py-4">
               <span className="text-center text-base text-black font-extrabold block">
                 No Hostel Blocks Alloted as per your Requirements.
               </span>
@@ -198,8 +198,8 @@ const RoomAllotment = () => {
           )}
 
           {(!floorRooms || floorRooms.length === 0) ? (
-            <div>
-              <span className="text-red-600 text-base font-semibold">No Rooms Are Present With This Requirements</span>
+            <div className='w-full text-center'>
+              <span className="text-red-600 text-center text-base font-semibold">No Rooms Are Present With This Requirements</span>
             </div>
           ) : (
             <div className="w-full flex flex-col gap-4 justify-center items-center">

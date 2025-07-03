@@ -22,7 +22,7 @@ const HostelBlocks = () => {
 
         setBoysHostelData(data.filter((item) => item.gender === 'M'));
         setGirlsHostelData(data.filter((item) => item.gender === 'F'));
-        toast.success('Hostel data loaded successfully');
+        // toast.success('Hostel data loaded successfully');
       } catch (error) {
         toast.error('Something went wrong while fetching hostel data');
       } finally {

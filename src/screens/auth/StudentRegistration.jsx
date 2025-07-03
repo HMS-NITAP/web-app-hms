@@ -1,15 +1,12 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import ProgressIndicator from '../../components/common/ProgressIndicator';
 import StudentRegistrationForm from '../../components/common/StudentRegistrationForm';
 import OtpVerification from '../../components/common/OtpVerification';
 import RoomAllotment from '../../components/common/RoomAllotment';
 import AwaitingConfirmation from '../../components/common/AwaitingConfirmation';
-import MainButton from '../../components/common/MainButton';
 
 const StudentRegistration = () => {
   const { registrationStep } = useSelector((state) => state.Auth);
-  const dispatch = useDispatch();
 
   return (
     <div className="w-full flex flex-col items-center py-5 px-2">

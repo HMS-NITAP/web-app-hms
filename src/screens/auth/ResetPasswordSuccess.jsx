@@ -15,7 +15,7 @@ const ResetPasswordSuccess = () => {
           Please log in to your account with the new credentials.
         </p>
       </div>
-      <MainButton text="Login" onPress={() => navigate('/login')} />
+      <MainButton text="Login" onPress={() => navigate('/')} />
     </div>
   );
 };

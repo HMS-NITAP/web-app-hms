@@ -7,6 +7,7 @@ import { adminRoutes, authRoutes, officialRoutes, studentRoutes, USER_ROLES } fr
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import LogoutModal from './LogoutModal';
+import ClgLogo from '../../assets/logo/logo.png';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,16 +36,20 @@ const Navbar = () => {
           <AiOutlineMenu size={24} />
         </div>
 
-        {
-          token && user && (
-            <button
-              className="cursor-pointer flex items-center gap-2 text-lg font-medium tracking-wide hover:text-red-400 transition focus:outline-none"
-              onClick={() => setShowLogoutModal(true)}
-            >
-              <FaRightToBracket size={22} />
-            </button>
-          )
-        }
+        <img src={ClgLogo} className='h-[90%]' />
+
+        <div>
+          {
+            token && user && (
+              <button
+                className="cursor-pointer hover:scale-105 duration-200 flex items-center gap-2 text-lg font-medium tracking-wide hover:text-red-400 transition focus:outline-none"
+                onClick={() => setShowLogoutModal(true)}
+              >
+                <FaRightToBracket size={22} />
+              </button>
+            )
+          }
+        </div>
       </div>
 
       <Drawer

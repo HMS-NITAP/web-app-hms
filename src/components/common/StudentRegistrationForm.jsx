@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
 import { setRegistrationData, setRegistrationStep } from '../../reducers/slices/AuthSlice';
 import { sendOtpToStudent } from '../../services/operations/AuthAPI';
+import { FiEye, FiEyeOff } from 'react-icons/fi';
 
 const MAX_FILE_SIZE = 250 * 1024;
 const MAX_IMAGE_SIZE = 250 * 1024;
@@ -154,7 +155,7 @@ const StudentRegistrationForm = () => {
     }
 
     return (
-        <div className="w-full flex flex-col justify-center items-center gap-6">
+        <div className="w-full overflow-x-hidden flex flex-col justify-center items-center gap-6">
             <div className="w-full bg-[#e9edc9] rounded-2xl px-4 py-4 gap-2">
                 <p className="text-center text-lg font-bold text-black mb-2">INSTRUCTIONS (ODD SEM REGISTRATION):</p>
                 <ul className="text-black text-base font-semibold list-disc pl-5 space-y-1">
@@ -169,9 +170,9 @@ const StudentRegistrationForm = () => {
                     <li>Do not share your OTP and credentials with anyone.</li>
                 </ul>
             </div>
-            <form className="w-[90%] flex flex-col gap-5" onSubmit={handleSubmit(submitHandler)}>
+            <form className="w-full flex md:flex-row justify-between items-center flex-wrap flex-col gap-[1rem]" onSubmit={handleSubmit(submitHandler)}>
                 {/* Student Name */}
-                <div className="flex flex-col gap-1">
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
                     <label className="font-medium text-black">Student Name <span className="text-xs text-red-600">*</span> :</label>
                     <Controller
                         control={control}
@@ -185,7 +186,7 @@ const StudentRegistrationForm = () => {
                     {errors.name && <span className="text-red-600 text-sm">Student Name is required.</span>}
                 </div>
                 {/* Institute Email ID */}
-                <div className="flex flex-col gap-1">
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
                     <label className="font-medium text-black">Institute Email ID <span className="text-xs text-red-600">*</span> :</label>
                     <Controller
                         control={control}
@@ -199,7 +200,7 @@ const StudentRegistrationForm = () => {
                     {errors.email && <span className="text-red-600 text-sm">Institute Email is required.</span>}
                 </div>
                 {/* Password */}
-                <div className="flex flex-col gap-1 relative">
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem] relative">
                     <label className="font-medium text-black">Password <span className="text-xs text-red-600">*</span> :</label>
                     <Controller
                         control={control}
@@ -210,13 +211,17 @@ const StudentRegistrationForm = () => {
                         name="password"
                         defaultValue=""
                     />
-                    <button type="button" className="absolute right-3 top-9 text-gray-400" onClick={() => setSecureText1(!secureText1)}>
-                        {secureText1 ? '🙈' : '👁️'}
+                    <button
+                        type="button"
+                        className="cursor-pointer absolute right-3 top-[55%] text-gray-400"
+                        onClick={() => setSecureText1(!secureText1)}
+                        >
+                        {secureText1 ? <FiEyeOff size={20} /> : <FiEye size={20} />}
                     </button>
                     {errors.password && <span className="text-red-600 text-sm">Password is required.</span>}
                 </div>
                 {/* Confirm Password */}
-                <div className="flex flex-col gap-1 relative">
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem] relative">
                     <label className="font-medium text-black">Confirm Password <span className="text-xs text-red-600">*</span> :</label>
                     <Controller
                         control={control}
@@ -227,25 +232,30 @@ const StudentRegistrationForm = () => {
                         name="confirmPassword"
                         defaultValue=""
                     />
-                    <button type="button" className="absolute right-3 top-9 text-gray-400" onClick={() => setSecureText2(!secureText2)}>
-                        {secureText2 ? '🙈' : '👁️'}
+                    <button type="button" className="cursor-pointer absolute right-3 top-[55%] text-gray-400" onClick={() => setSecureText2(!secureText2)}>
+                        {secureText2 ? <FiEyeOff size={20} /> : <FiEye size={20} />}
                     </button>
                     {errors.confirmPassword && <span className="text-red-600 text-sm">Please confirm your password.</span>}
                 </div>
                 {/* Profile Image */}
-                <div className="flex flex-col gap-1">
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
                     <label className="font-medium text-black">Profile Image <span className="text-xs text-red-600">*</span> :</label>
-                    <div className="flex items-center gap-4">
-                        <input type="file" accept="image/jpeg,image/jpg" onChange={pickUpImage} className="block" />
+                    <div className="flex w-full items-center justify-between gap-[1rem]">
+                        <input
+                            type="file"
+                            accept="image/jpeg,image/jpg"
+                            onChange={pickUpImage}
+                            className="max-w-[250px] px-[1rem] py-2 bg-blue-500 text-white font-semibold rounded-md cursor-pointer transition-transform duration-200 hover:scale-105"
+                        />
                         {imageResponse ? (
                             <img src={URL.createObjectURL(imageResponse)} alt="Profile Preview" className="w-20 h-20 rounded-full object-cover" />
                         ) : (
-                            <span className="font-bold text-black">No Image Selected</span>
+                            <span className="font-bold text-black text-center">No Image Selected</span>
                         )}
                     </div>
                 </div>
                 {/* Roll Number */}
-                <div className="flex flex-col gap-1">
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
                     <label className="font-medium text-black">Roll Number <span className="text-xs text-red-600">*</span> :</label>
                     <Controller
                         control={control}
@@ -265,7 +275,7 @@ const StudentRegistrationForm = () => {
                     {errors.rollNo && <span className="text-red-600 text-sm">{errors.rollNo.message}</span>}
                 </div>
                 {/* Registration Number */}
-                <div className="flex flex-col gap-1">
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
                     <label className="font-medium text-black">Registration Number <span className="text-xs text-red-600">*</span> :</label>
                     <Controller
                         control={control}
@@ -285,7 +295,7 @@ const StudentRegistrationForm = () => {
                     {errors.regNo && <span className="text-red-600 text-sm">{errors.regNo.message}</span>}
                 </div>
                 {/* Year */}
-                <div className="flex flex-col gap-1">
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
                     <label className="font-medium text-black">Year <span className="text-xs text-red-600">*</span> :</label>
                     <select className="w-full p-2 border border-gray-400 rounded-lg text-black" value={selectedYear || ''} onChange={e => setSelectedYear(Number(e.target.value))}>
                         <option value="">Select Your Enrollment Year</option>
@@ -295,7 +305,7 @@ const StudentRegistrationForm = () => {
                     </select>
                 </div>
                 {/* Branch */}
-                <div className="flex flex-col gap-1">
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
                     <label className="font-medium text-black">Branch <span className="text-xs text-red-600">*</span> :</label>
                     <select className="w-full p-2 border border-gray-400 rounded-lg text-black" value={selectedBranch || ''} onChange={e => setSelectedBranch(e.target.value)}>
                         <option value="">Select Branch</option>
@@ -305,9 +315,9 @@ const StudentRegistrationForm = () => {
                     </select>
                 </div>
                 {/* Gender */}
-                <div className="flex flex-row items-center gap-6">
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
                     <label className="font-medium text-black">Gender <span className="text-xs text-red-600">*</span> :</label>
-                    <div className="flex flex-row gap-4">
+                    <div className="w-full flex flex-row ml-[6rem] gap-[3rem]">
                         <label className="flex items-center gap-1">
                             <input type="radio" name="gender" value="M" checked={selectedGender === 'M'} onChange={() => setSelectedGender('M')} />
                             <span className="font-bold text-black">Male</span>
@@ -319,7 +329,7 @@ const StudentRegistrationForm = () => {
                     </div>
                 </div>
                 {/* Community */}
-                <div className="flex flex-col gap-1">
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
                     <label className="font-medium text-black">Community <span className="text-xs text-red-600">*</span> :</label>
                     <select className="w-full p-2 border border-gray-400 rounded-lg text-black" value={selectedCommunity || ''} onChange={e => setSelectedCommunity(e.target.value)}>
                         <option value="">Select Community</option>
@@ -329,9 +339,9 @@ const StudentRegistrationForm = () => {
                     </select>
                 </div>
                 {/* PWD Status */}
-                <div className="flex flex-row items-center gap-6">
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
                     <label className="font-medium text-black">PWD Status <span className="text-xs text-red-600">*</span> :</label>
-                    <div className="flex flex-row gap-4">
+                    <div className="w-full flex flex-row ml-[6rem] gap-[3rem]">
                         <label className="flex items-center gap-1">
                             <input type="radio" name="pwdStatus" value="Yes" checked={pwdStatus === 'Yes'} onChange={() => setPwdStatus('Yes')} />
                             <span className="font-bold text-black">Yes</span>
@@ -343,15 +353,15 @@ const StudentRegistrationForm = () => {
                     </div>
                 </div>
                 {/* Date of Birth */}
-                <div className="flex flex-col gap-1">
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
                     <label className="font-medium text-black">Date of Birth <span className="text-xs text-red-600">*</span> :</label>
-                    <div className="flex flex-row items-center gap-4">
+                    <div className="flex flex-row justify-start items-center gap-[2rem] ml-[3rem]">
                         <input type="date" className="p-2 border border-gray-400 rounded-lg text-black" value={dob || ''} onChange={e => setDob(e.target.value)} max={new Date().toISOString().split('T')[0]} />
-                        <span className="font-bold text-black">{formatDate(dob)}</span>
+                        <span className="font-bold text-center text-black">{formatDate(dob)}</span>
                     </div>
                 </div>
                 {/* Aadhaar Number */}
-                <div className="flex flex-col gap-1">
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
                     <label className="font-medium text-black">Aadhaar Number <span className="text-xs text-red-600">*</span> :</label>
                     <Controller
                         control={control}
@@ -371,7 +381,7 @@ const StudentRegistrationForm = () => {
                     {errors.aadhaarNumber && <span className="text-red-600 text-sm">{errors.aadhaarNumber.message}</span>}
                 </div>
                 {/* Blood Group */}
-                <div className="flex flex-col gap-1">
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
                     <label className="font-medium text-black">Blood Group <span className="text-xs text-red-600">*</span> :</label>
                     <Controller
                         control={control}
@@ -385,7 +395,7 @@ const StudentRegistrationForm = () => {
                     {errors.bloodGroup && <span className="text-red-600 text-sm">Blood group is required.</span>}
                 </div>
                 {/* Student Mobile Number */}
-                <div className="flex flex-col gap-1">
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
                     <label className="font-medium text-black">Student Mobile Number <span className="text-xs text-red-600">*</span> :</label>
                     <Controller
                         control={control}
@@ -405,7 +415,7 @@ const StudentRegistrationForm = () => {
                     {errors.phone && <span className="text-red-600 text-sm">{errors.phone.message}</span>}
                 </div>
                 {/* Father Name */}
-                <div className="flex flex-col gap-1">
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
                     <label className="font-medium text-black">Father Name <span className="text-xs text-red-600">*</span> :</label>
                     <Controller
                         control={control}
@@ -419,7 +429,7 @@ const StudentRegistrationForm = () => {
                     {errors.fatherName && <span className="text-red-600 text-sm">Father Name is required.</span>}
                 </div>
                 {/* Mother Name */}
-                <div className="flex flex-col gap-1">
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
                     <label className="font-medium text-black">Mother Name <span className="text-xs text-red-600">*</span> :</label>
                     <Controller
                         control={control}
@@ -433,7 +443,7 @@ const StudentRegistrationForm = () => {
                     {errors.motherName && <span className="text-red-600 text-sm">Mother Name is required.</span>}
                 </div>
                 {/* Parent Mobile Number */}
-                <div className="flex flex-col gap-1">
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
                     <label className="font-medium text-black">Parent Mobile Number <span className="text-xs text-red-600">*</span> :</label>
                     <Controller
                         control={control}
@@ -453,7 +463,7 @@ const StudentRegistrationForm = () => {
                     {errors.parentsPhone && <span className="text-red-600 text-sm">{errors.parentsPhone.message}</span>}
                 </div>
                 {/* Emergency Contact Number */}
-                <div className="flex flex-col gap-1">
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
                     <label className="font-medium text-black">Emergency Contact Number <span className="text-xs text-red-600">*</span> :</label>
                     <Controller
                         control={control}
@@ -473,7 +483,7 @@ const StudentRegistrationForm = () => {
                     {errors.emergencyPhone && <span className="text-red-600 text-sm">{errors.emergencyPhone.message}</span>}
                 </div>
                 {/* Address */}
-                <div className="flex flex-col gap-1">
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
                     <label className="font-medium text-black">Address <span className="text-xs text-red-600">*</span> :</label>
                     <Controller
                         control={control}
@@ -487,33 +497,33 @@ const StudentRegistrationForm = () => {
                     {errors.address && <span className="text-red-600 text-sm">Address is required.</span>}
                 </div>
                 {/* Institute Fee Receipt */}
-                <div className="flex flex-col gap-1">
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
                     <label className="font-medium text-black">Institute Fee Receipt :</label>
-                    <div className="flex items-center gap-4">
-                        <input type="file" accept="application/pdf" onChange={pickUpInstituteFeeReceipt} className="block" />
+                    <div className="flex w-full items-center justify-between gap-[1rem]">
+                        <input type="file" accept="application/pdf" onChange={pickUpInstituteFeeReceipt} className="max-w-[250px] px-[1rem] py-2 bg-blue-500 text-white font-semibold rounded-md cursor-pointer transition-transform duration-200 hover:scale-105" />
                         {instituteFeeReceiptResponse ? (
-                            <span className="font-bold text-black">{instituteFeeReceiptResponse.name}</span>
+                            <span className="font-bold text-black text-wrap text-[0.75rem]">{instituteFeeReceiptResponse.name}</span>
                         ) : (
-                            <span className="font-bold text-black">No File Selected</span>
+                            <span className="font-bold text-black text-wrap">No File Selected</span>
                         )}
                     </div>
                 </div>
                 {/* Hostel Fee Receipt */}
-                <div className="flex flex-col gap-1">
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
                     <label className="font-medium text-black">Hostel Fee Receipt <span className="text-xs text-red-600">*</span> :</label>
-                    <div className="flex items-center gap-4">
-                        <input type="file" accept="application/pdf" onChange={pickUpHostelFeeReceipt} className="block" />
+                    <div className="flex w-full items-center justify-between gap-[1rem]">
+                        <input type="file" accept="application/pdf" onChange={pickUpHostelFeeReceipt} className="max-w-[250px] px-[1rem] py-2 bg-blue-500 text-white font-semibold rounded-md cursor-pointer transition-transform duration-200 hover:scale-105" />
                         {hostelfeeReceiptResponse ? (
-                            <span className="font-bold text-black">{hostelfeeReceiptResponse.name}</span>
+                            <span className="font-bold text-black text-wrap text-[0.75rem]">{hostelfeeReceiptResponse.name}</span>
                         ) : (
-                            <span className="font-bold text-black">No File Selected</span>
+                            <span className="font-bold text-black text-wrap">No File Selected</span>
                         )}
                     </div>
                 </div>
                 {/* Hostel Fee Payment Mode */}
-                <div className="flex flex-col gap-1">
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
                     <label className="font-medium text-black">Hostel Fee Payment Mode <span className="text-xs text-red-600">*</span> :</label>
-                    <select className="w-full p-2 border border-gray-400 rounded-lg text-black" value={paymentMode || ''} onChange={e => setPaymentMode(e.target.value)}>
+                    <select className="max-w-full p-2 border border-gray-400 rounded-lg text-black" value={paymentMode || ''} onChange={e => setPaymentMode(e.target.value)}>
                         <option value="">Select Your Payment Mode</option>
                         {paymentOption.map((mode, idx) => (
                             <option key={idx} value={mode.value}>{mode.label}</option>
@@ -521,15 +531,15 @@ const StudentRegistrationForm = () => {
                     </select>
                 </div>
                 {/* Hostel Fee Payment Date */}
-                <div className="flex flex-col gap-1">
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
                     <label className="font-medium text-black">Hostel Fee Payment Date <span className="text-xs text-red-600">*</span> :</label>
-                    <div className="flex flex-row items-center gap-4">
+                    <div className="flex flex-row justify-start items-center gap-[2rem] ml-[3rem]">
                         <input type="date" className="p-2 border border-gray-400 rounded-lg text-black" value={paymentDate || ''} onChange={e => setPaymentDate(e.target.value)} />
-                        <span className="font-bold text-black">{formatDate(paymentDate)}</span>
+                        <span className="font-bold text-center text-black">{formatDate(paymentDate)}</span>
                     </div>
                 </div>
                 {/* Hostel Fee Payment Amount */}
-                <div className="flex flex-col gap-1">
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
                     <label className="font-medium text-black">Hostel Fee Payment Amount <span className="text-xs text-red-600">*</span> :</label>
                     <Controller
                         control={control}
@@ -542,7 +552,9 @@ const StudentRegistrationForm = () => {
                     />
                     {errors.amountPaid && <span className="text-red-600 text-sm">Amount Paid is required.</span>}
                 </div>
-                <button type="submit" className="w-full py-3 rounded-xl font-bold text-lg text-black bg-[#b5e48c] mt-2 disabled:opacity-60" disabled={isButtonDisabled}>Submit Data</button>
+                <div className='w-full overflow-hidden flex justify-center items-center'>
+                    <button type="submit" className="cursor-pointer hover:scale-105 transition-all duration-200 px-[1.5rem] py-[0.5rem] rounded-xl font-bold text-lg text-black bg-yellow-400 mt-2 disabled:opacity-60" disabled={isButtonDisabled}>Submit Data</button>
+                </div>
             </form>
         </div>
     )

@@ -21,7 +21,7 @@ const LogoutModal = ({ logoutModalVisible, setLogoutModalVisible }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
-      <div className="bg-white backdrop-blur-lg border border-white/30 shadow-xl rounded-xl p-6 w-full max-w-md" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'}}>
+      <div className="bg-white backdrop-blur-lg border border-white/30 shadow-xl rounded-xl p-6 md:w-full w-[90%] max-w-md" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'}}>
         <p className="text-lg font-semibold text-center text-black mb-6">
           Are you sure you want to log out?
         </p>

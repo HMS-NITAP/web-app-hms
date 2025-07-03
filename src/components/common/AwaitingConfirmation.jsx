@@ -18,7 +18,7 @@ const AwaitingConfirmation = () => {
   return (
     <div className="w-full flex flex-col justify-center items-center gap-4">
       <h2 className="text-2xl font-extrabold text-black">Application Submitted!</h2>
-      <div className="w-full bg-green-100 rounded-2xl p-4 mb-6">
+      <div className="md:w-[50%] w-full bg-green-100 rounded-2xl p-4 mb-6">
         <p className="text-center text-base text-black">
           Your hostel registration application has been successfully submitted to the hostel office and is currently under review.
           You will receive a confirmation email at your institute email address,{' '}

@@ -47,7 +47,7 @@ export const fetchHostelData = (toast) => {
             }
     
             toast.dismiss(id);
-            toast.success(response?.data?.message);
+            // toast.success(response?.data?.message);
             return response?.data?.data;
         } catch (e) {
             const errorMessage = e?.response?.data?.message || "Failed to Fetch Hostel Data";

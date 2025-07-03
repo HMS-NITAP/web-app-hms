@@ -5,7 +5,8 @@ const MainButton = ({
   textColor = 'text-black',
   backgroundColor = 'bg-yellow-400',
   onPress,
-  isButtonDisabled = false
+  isButtonDisabled = false,
+  width = 'w-auto',
 }) => {
   return (
     <button
@@ -14,8 +15,8 @@ const MainButton = ({
       className={`cursor-pointer
         px-5 py-3 rounded-xl font-bold 
         flex justify-center items-center 
-        transition-opacity duration-200
-        ${backgroundColor} ${textColor}
+        hover:scale-105 transition-all duration-200
+        ${backgroundColor} ${textColor} ${width}
         ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-90'}
       `}
     >

@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
 import Rating from 'react-rating';
 import MainButton from '../../components/common/MainButton';
-import LogoutModal from '../../components/common/LogoutModal';
 import { addEvenSemFeeReceipt, getStudentDashboardData } from '../../services/operations/StudentAPI';
 
 const quotes = [
@@ -164,9 +163,9 @@ const StudentDashboardScreen = () => {
       )}
 
       {evenSemFeeModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-lg flex flex-col gap-4">
-            <h2 className="text-xl font-bold text-center text-black">Upload Even Sem Hostel Fee Receipt</h2>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="bg-white backdrop-blur-lg border border-white/30 shadow-xl rounded-xl p-6 md:w-full w-[90%] max-w-md" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'}}>
+            <h2 className="text-xl font-bold text-center text-black mb-[1rem]">Upload Even Sem Hostel Fee Receipt</h2>
             <div className="flex flex-col md:flex-row gap-4 items-center w-full">
               <MainButton text="Select File" onPress={() => document.getElementById('evenSemFileInput').click()} />
               <input
@@ -366,7 +365,6 @@ const StudentDashboardScreen = () => {
           </>
         )}
       </div>
-      <LogoutModal logoutModalVisible={showLogoutModal} setLogoutModalVisible={setShowLogoutModal} />
     </div>
   );
 };

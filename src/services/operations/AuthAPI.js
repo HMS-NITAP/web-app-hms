@@ -4,48 +4,7 @@ import { setUser } from "../../reducers/slices/ProfileSlice";
 import { APIconnector } from "../APIconnector";
 import { authEndPoints } from "../APIs";
 
-const {SENDOTP_API,SIGNUP_API,LOGIN_API,RESET_PASSWORD_TOKEN,RESET_PASSWORD,VERIFY_OTP,CREATE_STUDENT_ACCOUNT_API} = authEndPoints;
-
-export const sendOTP = (email,navigation,toast) => {
-    return async() => {
-        try{ 
-            const response = await APIconnector("POST",SENDOTP_API,{email});
-            if(!response.data.success){
-                toast.error(response.data.message);
-                throw new Error(response.data.message);
-            }
-            toast.success("OTP Sent Successfully");
-            navigation.navigate("OtpInput");
-        }catch(e){
-            const errorMessage = e?.response?.data?.message || "OTP generation Unsuccessful";
-            toast.error(errorMessage);
-            console.log(e);
-        }
-    }
-}
-
-export const signUp = (data,otp,navigation,toast) => {
-    return async() => {
-        let id = toast("Creating your Account...");
-        try{
-            const {email,password,confirmPassword,accountType} = data;
-            const response = await APIconnector("POST",SIGNUP_API,{email,password,confirmPassword,accountType,otp});
-            if(!response.data.success){
-                toast.dismiss(id);
-                toast.error(response.data.message);
-                throw new Error(response.data.message);
-            }
-            toast.dismiss(id);
-            toast.success("Account created Successfully");
-            navigation.navigate("Login");
-        }catch(e){
-            const errorMessage = e?.response?.data?.message || "Signup Unsuccessful";
-            toast.dismiss(id);
-            toast.error(errorMessage);
-            console.log(e);
-        }
-    }
-}
+const {SENDOTP_API,LOGIN_API,RESET_PASSWORD_TOKEN,RESET_PASSWORD,VERIFY_OTP,CREATE_STUDENT_ACCOUNT_API} = authEndPoints;
 
 export const login = (email,password,toast,navigate) => {
     return async(dispatch) => {
@@ -82,7 +41,7 @@ export const login = (email,password,toast,navigate) => {
     }
 }
 
-export const sendResetPasswordEmail = (email,navigation,toast) => {
+export const sendResetPasswordEmail = (email,navigate,toast) => {
     return async() => {
         let id = toast("Please Wait...");
         try{
@@ -96,7 +55,7 @@ export const sendResetPasswordEmail = (email,navigation,toast) => {
 
             toast.dismiss(id);
             toast.success(response?.data?.message);
-            navigation.navigate("Reset Password Email Sent");
+            navigate("/reset-password-email-sent");
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to send mail";
             toast.dismiss(id);
@@ -106,7 +65,7 @@ export const sendResetPasswordEmail = (email,navigation,toast) => {
     }
 }
 
-export const resetPassword = (token,newPassword,confirmNewPassword,navigation,toast) => {
+export const resetPassword = (token,newPassword,confirmNewPassword,navigate,toast) => {
     return async() => {
         let id = toast("Please Wait...");
         try{
@@ -120,7 +79,7 @@ export const resetPassword = (token,newPassword,confirmNewPassword,navigation,to
 
             toast.dismiss(id);
             toast.success(response?.data?.message);
-            navigation.navigate("Reset Password Success");
+            navigate("/reset-password-success");
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to reset password";
             toast.dismiss(id);

@@ -26,7 +26,7 @@ const ResetPassword = () => {
   return (
     <div className="w-full min-h-screen flex flex-col items-center justify-start pt-20 px-4">
       <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md flex flex-col gap-8">
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-[0.25rem]">
           <label className="font-medium text-gray-800">
             Token <span className="text-red-600 text-sm">*</span>
           </label>
@@ -38,14 +38,14 @@ const ResetPassword = () => {
               <input
                 {...field}
                 placeholder="Token received in Email"
-                className="w-full p-3 border border-gray-300 rounded-lg text-black"
+                className="w-full p-2 border border-gray-400 rounded-lg text-black"
               />
             )}
           />
           {errors.token && <p className="text-sm text-red-500">Token is required.</p>}
         </div>
 
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-[0.25rem]">
           <label className="font-medium text-gray-800">
             New Password <span className="text-red-600 text-sm">*</span>
           </label>
@@ -58,14 +58,14 @@ const ResetPassword = () => {
                 {...field}
                 type="password"
                 placeholder="Enter your New Password"
-                className="w-full p-3 border border-gray-300 rounded-lg text-black"
+                className="w-full p-2 border border-gray-400 rounded-lg text-black"
               />
             )}
           />
           {errors.newPassword && <p className="text-sm text-red-500">New Password is required.</p>}
         </div>
 
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-[0.25rem]">
           <label className="font-medium text-gray-800">
             Confirm New Password <span className="text-red-600 text-sm">*</span>
           </label>
@@ -78,7 +78,7 @@ const ResetPassword = () => {
                 {...field}
                 type="password"
                 placeholder="Re-type your New Password"
-                className="w-full p-3 border border-gray-300 rounded-lg text-black"
+                className="w-full p-2 border border-gray-400 rounded-lg text-black"
               />
             )}
           />
