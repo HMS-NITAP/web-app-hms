@@ -26,15 +26,15 @@ const CotDetails = () => {
   }, [roomId, token]);
 
   return (
-    <div className="w-full flex flex-col items-center justify-center py-8 px-4">
+    <div className="w-full flex flex-col items-center justify-start py-[2rem] px-4">
       {cotDetails && (
-        <div className="w-full max-w-4xl flex flex-col items-center justify-center gap-4">
+        <div className="w-full flex flex-col items-center justify-center gap-[0.5rem]">
           <h2 className="text-center text-black font-bold text-2xl">Room - {cotDetails.roomNumber}</h2>
-          <p className="text-center text-black font-normal text-lg">Floor - {cotDetails.floorNumber}</p>
+          <p className="text-center text-black text-lg font-semibold">Floor - {cotDetails.floorNumber}</p>
 
-          <div className="w-full flex flex-col items-center justify-center gap-6 mt-6">
+          <div className="w-full flex md:flex-row flex-wrap flex-col items-center justify-center gap-6 mt-6">
             {cotDetails?.cots?.map((cot, index) => (
-              <div key={index} className="w-full border border-black border-dashed rounded-xl p-4">
+              <div key={index} className="md:w-[45%] w-full border border-black border-dashed rounded-xl p-4">
                 <h3 className="text-center text-black font-medium text-lg">
                   Cot No: <span className="text-gray-600">{cot.cotNo} ({cot.status})</span>
                 </h3>
@@ -54,7 +54,7 @@ const CotDetails = () => {
                       </>
                     )}
 
-                    <div className="w-full text-sm font-medium text-black flex flex-col gap-1">
+                    <div className="w-full text-center text-[1rem] font-medium text-black flex flex-col gap-1">
                       <p>Name: <span className="text-gray-700">{cot.student.name}</span></p>
                       <p>Reg No: <span className="text-gray-700">{cot.student.regNo}</span></p>
                       <p>Roll No: <span className="text-gray-700">{cot.student.rollNo}</span></p>

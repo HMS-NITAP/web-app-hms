@@ -52,8 +52,8 @@ const BlockRooms = () => {
       <h1 className="text-black font-bold text-2xl text-center">{hostelBlockName}</h1>
 
       <div className="w-11/12 flex justify-end">
-        <button onClick={downloadData}>
-          <FaFileArrowDown className="text-gray-500 text-xl" />
+        <button onClick={downloadData} className='cursor-pointer hover:scale-105 transition-all duration-200'>
+          <FaFileArrowDown className="text-gray-500 text-[1.5rem]" />
         </button>
       </div>
 
@@ -66,10 +66,10 @@ const BlockRooms = () => {
               <button
                 key={index}
                 onClick={() => setSelectedFloor(floor.id)}
-                className={`px-4 py-1 rounded-full border text-sm font-bold ${
+                className={`px-4 py-2 cursor-pointer rounded-full border text-sm font-bold ${
                   selectedFloor === floor.id
-                    ? 'bg-lime-200 border-transparent'
-                    : 'bg-white border-black'
+                    ? 'bg-yellow-400 border-transparent hover:bg-yellow-500'
+                    : 'bg-white border-black hover:bg-[#caf0f8]'
                 }`}
               >
                 {floor.id}
@@ -88,7 +88,7 @@ const BlockRooms = () => {
             <button
               key={index}
               onClick={() => moveInsideRoom(room.id)}
-              className="w-[30%] border border-black border-dotted rounded-lg p-4 flex flex-col items-center justify-center hover:bg-gray-100 transition"
+              className="md:w-[18%] w-[30%] cursor-pointer hover:bg-[#caf0f8] hover:scale-105 border border-black border-dotted rounded-lg p-4 flex flex-col items-center justify-center transition-all duration-200"
             >
               <p className="text-center font-extrabold text-base text-[#1b263b]">
                 Room {room.roomNumber}

@@ -61,7 +61,7 @@ const OtpVerification = () => {
         <MainButton
           isButtonDisabled={isButtonDisabled}
           text="Submit"
-          onClick={submitHandler}
+          onPress={submitHandler}
         />
       </div>
     </div>

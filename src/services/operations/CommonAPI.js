@@ -22,7 +22,7 @@ export const getAllAnnouncements = (toast) => {
                 throw new Error(response.data.message);
             }
             toast.dismiss(id);
-            toast.success("Fetched all Announcements Successfully");
+            // toast.success("Fetched all Announcements Successfully");
             return (response?.data?.data);            
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Fetched all Announcements Successfully";
@@ -71,7 +71,7 @@ export const fetchHostelBlockNames = (toast) => {
             }
 
             toast.dismiss(id);
-            toast.success(response?.data?.message);
+            // toast.success(response?.data?.message);
             return response?.data?.data;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to fetch Hostel Blocks";

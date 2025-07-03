@@ -4,6 +4,8 @@ import toast from 'react-hot-toast';
 import { fetchHostelBlockRooms, fetchHostelBlockNames } from '../../services/operations/CommonAPI';
 import { setRegistrationStep } from '../../reducers/slices/AuthSlice';
 import { createStudentAccount } from '../../services/operations/AuthAPI';
+import { FiRefreshCcw } from 'react-icons/fi';
+import MainButton from './MainButton';
 
 const RoomAllotment = () => {
   const [loading, setLoading] = useState(true);
@@ -28,7 +30,7 @@ const RoomAllotment = () => {
     if (!registrationData) return;
     if (response && response.length > 0) {
       const filteredBlocks = response.filter(
-        (block) => block?.gender === registrationData?.gender && block?.year === registrationData?.year
+        (block) => ((block?.gender === registrationData?.gender) && (parseInt(block?.year) === registrationData?.year))
       );
       setHostelBlocks(filteredBlocks);
     }
@@ -52,36 +54,29 @@ const RoomAllotment = () => {
   };
 
   useEffect(() => {
-    if (selectedBlock) {
-      fetchRooms();
-    }
-    // eslint-disable-next-line
+    if (selectedBlock) fetchRooms();
   }, [selectedBlock]);
 
   useEffect(() => {
-    const filterRoomsFloorWise = () => {
-      if (!hostelBlockRooms) return;
-      const filterRooms = hostelBlockRooms.filter((room) => room?.floorNumber === selectedFloor);
-      setFloorRooms(filterRooms);
-    };
-    filterRoomsFloorWise();
+    if (!hostelBlockRooms) return;
+    const filtered = hostelBlockRooms.filter((room) => room?.floorNumber === selectedFloor);
+    setFloorRooms(filtered);
   }, [selectedFloor, hostelBlockRooms]);
 
   useEffect(() => {
     fetchHostelBlocks();
     setLoading(false);
-    // eslint-disable-next-line
   }, []);
 
   const selectCot = (cot, room) => {
     if (cot?.status === 'BOOKED' || cot?.status === 'BLOCKED') return;
     setSelectedCot(cot?.id);
-    setSubmitDetails((prevDetails) => ({
-      ...prevDetails,
+    setSubmitDetails({
+      ...submitDetails,
       cotNo: cot?.cotNo,
       roomNo: room?.roomNumber,
       floorNo: room?.floorNumber,
-    }));
+    });
     setModalVisible(true);
   };
 
@@ -94,36 +89,11 @@ const RoomAllotment = () => {
     if (!registrationData) return;
     setIsButtonDisabled(true);
     const formdata = new FormData();
-    formdata.append('email', registrationData?.email);
-    formdata.append('password', registrationData?.password);
-    formdata.append('confirmPassword', registrationData?.confirmPassword);
-    formdata.append('name', registrationData?.name);
-    formdata.append('regNo', registrationData?.regNo);
-    formdata.append('rollNo', registrationData?.rollNo);
-    formdata.append('year', registrationData?.year);
-    formdata.append('branch', registrationData?.branch);
-    formdata.append('gender', registrationData?.gender);
-    formdata.append('pwd', registrationData?.pwd);
-    formdata.append('community', registrationData?.community);
-    formdata.append('aadhaarNumber', registrationData?.aadhaarNumber);
-    formdata.append('dob', registrationData?.dob);
-    formdata.append('bloodGroup', registrationData?.bloodGroup);
-    formdata.append('fatherName', registrationData?.fatherName);
-    formdata.append('motherName', registrationData?.motherName);
-    formdata.append('phone', registrationData?.phone);
-    formdata.append('parentsPhone', registrationData?.parentsPhone);
-    formdata.append('emergencyPhone', registrationData?.emergencyPhone);
-    formdata.append('address', registrationData?.address);
+    Object.entries(registrationData).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) formdata.append(key, value);
+    });
     formdata.append('hostelBlockId', selectedBlock);
     formdata.append('cotId', selectedCot);
-    formdata.append('image', registrationData?.image);
-    if (registrationData?.instituteFeeReceipt) {
-      formdata.append('instituteFeeReceipt', registrationData.instituteFeeReceipt);
-    }
-    formdata.append('hostelFeeReceipt', registrationData?.hostelFeeReceipt);
-    formdata.append('paymentMode', registrationData?.paymentMode);
-    formdata.append('paymentDate', registrationData?.paymentDate);
-    formdata.append('amountPaid', registrationData?.amountPaid);
     const response = await dispatch(createStudentAccount(formdata, toast));
     if (response) {
       setModalVisible(false);
@@ -139,14 +109,14 @@ const RoomAllotment = () => {
     <div className="w-full flex flex-col gap-6">
       {loading ? (
         <div className="flex justify-center items-center mt-8">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto mb-4"></div>
-                    <p className="text-black text-lg font-bold">Please Wait...</p>
-                </div>
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto mb-4"></div>
+            <p className="text-black text-lg font-bold">Please Wait...</p>
+          </div>
         </div>
       ) : (
         <div className="flex flex-col gap-6 px-2">
-          {(!hostelBlocks || hostelBlocks.length === 0) ? (
+          {!hostelBlocks?.length ? (
             <div className="bg-[#ff928b] justify-center rounded-2xl mx-auto px-4 py-4">
               <span className="text-center text-base text-black font-extrabold block">
                 No Hostel Blocks Alloted as per your Requirements.
@@ -156,13 +126,13 @@ const RoomAllotment = () => {
             <div className="flex flex-row items-center gap-5">
               <span className="font-semibold text-black text-base">Select Block :</span>
               <div className="flex flex-row flex-wrap gap-2 max-w-[70%]">
-                {hostelBlocks?.map((hostel, index) => (
+                {hostelBlocks?.map((hostel) => (
                   <button
-                    key={index}
+                    key={hostel.id}
                     onClick={() => setSelectedBlock(hostel.id)}
-                    className={`px-3 py-2 rounded-lg border ${
-                      selectedBlock === hostel?.id ? 'bg-[#b5e48c] border-transparent' : 'bg-white border-black'
-                    } font-bold`}
+                    className={`px-3 py-2 rounded-lg cursor-pointer border font-bold ${
+                      selectedBlock === hostel?.id ? 'bg-[#b5e48c] border-transparent' : 'bg-white border-black hover:bg-[#caf0f8]'
+                    }`}
                     disabled={isButtonDisabled}
                   >
                     {hostel?.name}
@@ -176,13 +146,13 @@ const RoomAllotment = () => {
             <div className="flex flex-row items-center gap-5">
               <span className="font-semibold text-black text-base">Select Floor :</span>
               <div className="flex flex-row flex-wrap gap-2 max-w-[70%]">
-                {floorsArray?.map((floor, index) => (
+                {floorsArray.map((floor) => (
                   <button
-                    key={index}
+                    key={floor.id}
                     onClick={() => setSelectedFloor(floor?.id)}
-                    className={`px-4 py-1 rounded-full border ${
-                      selectedFloor === floor?.id ? 'bg-[#b5e48c] border-transparent' : 'bg-white border-black'
-                    } font-bold`}
+                    className={`px-4 py-2 rounded-full cursor-pointer border font-bold ${
+                      selectedFloor === floor?.id ? 'bg-[#b5e48c] border-transparent' : 'bg-white border-black hover:bg-[#caf0f8]'
+                    }`}
                     disabled={isButtonDisabled}
                   >
                     {floor?.id}
@@ -194,22 +164,22 @@ const RoomAllotment = () => {
 
           {selectedBlock && selectedFloor !== null && (
             <div className="w-[90%] flex flex-row justify-end items-center mx-auto">
-              <button type="button" disabled={isButtonDisabled} onClick={fetchRooms} className="text-[#003049] text-xl">
-                &#x21bb;
+              <button type="button" disabled={isButtonDisabled} onClick={fetchRooms} className="cursor-pointer hover:rotate-180 hover:bg-[#caf0f8] transition-all duration-200 text-[#003049] text-xl p-[0.4rem] rounded-2xl border border-black">
+                <FiRefreshCcw />
               </button>
             </div>
           )}
 
-          {(!floorRooms || floorRooms.length === 0) ? (
+          {!floorRooms?.length ? (
             <div className='w-full text-center'>
-              <span className="text-red-600 text-center text-base font-semibold">No Rooms Are Present With This Requirements</span>
+              <span className="text-red-600 text-base font-semibold">No Rooms Are Present With This Requirements</span>
             </div>
           ) : (
-            <div className="w-full flex flex-col gap-4 justify-center items-center">
+            <div className="w-full flex md:flex-row flex-wrap flex-col gap-[1rem] justify-center items-center">
               {floorRooms.map((room, index) => (
                 <div
                   key={index}
-                  className="w-[90%] border border-dashed border-black rounded-xl flex flex-col gap-4 justify-center items-center px-4 py-4"
+                  className="md:w-[24%] w-full border border-dashed border-black rounded-xl flex flex-col gap-4 justify-center items-center px-4 py-4"
                 >
                   <span className="text-center font-extrabold text-lg text-[#1b263b]">Room {room?.roomNumber}</span>
                   <div className="flex flex-row flex-wrap gap-2 justify-center items-center">
@@ -221,7 +191,7 @@ const RoomAllotment = () => {
                           selectedCot === cot?.id
                             ? 'bg-yellow-300'
                             : cot?.status === 'AVAILABLE'
-                            ? 'bg-transparent'
+                            ? 'bg-transparent hover:bg-[#caf0f8] transition-all duration-200 cursor-pointer'
                             : 'bg-gray-400'
                         }`}
                         disabled={cot?.status !== 'AVAILABLE' || isButtonDisabled}
@@ -236,42 +206,22 @@ const RoomAllotment = () => {
           )}
         </div>
       )}
-      {/* Modal */}
+
       {modalVisible && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white rounded-lg p-6 flex flex-col items-center gap-4 w-[90vw] max-w-md">
-            <span className="text-lg text-gray-600 text-center">
-              Verify your selected Room Details and submit your Application
-            </span>
-            <div className="flex flex-col items-center gap-1">
-              <span className="font-semibold text-black">
-                Block Name : <span className="font-normal">{submitDetails?.blockName}</span>
-              </span>
-              <span className="font-semibold text-black">
-                Floor No : <span className="font-normal">{submitDetails?.floorNo}</span>
-              </span>
-              <span className="font-semibold text-black">
-                Room No : <span className="font-normal">{submitDetails?.roomNo}</span>
-              </span>
-              <span className="font-semibold text-black">
-                Cot No : <span className="font-normal">{submitDetails?.cotNo}</span>
-              </span>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="bg-white backdrop-blur-lg border border-white/30 shadow-xl rounded-xl p-6 md:w-full w-[90%] max-w-md flex flex-col gap-[1rem]" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'}}>
+            <div className="text-[1rem] bg-green-100 p-[0.5rem] rounded-[1rem] text-black font-semibold text-center">
+              Please verify the selected hostel cot booking details provided below carefully. Once submitted, the booking cannot be changed, and no requests for modifications or reassignments will be entertained under any circumstances.
             </div>
-            <div className="flex flex-row gap-4 w-full">
-              <button
-                disabled={isButtonDisabled}
-                className={`flex-1 bg-[#76c893] py-2 rounded text-white font-bold ${isButtonDisabled ? 'opacity-50' : ''}`}
-                onClick={handleSubmit}
-              >
-                Submit
-              </button>
-              <button
-                disabled={isButtonDisabled}
-                className={`flex-1 bg-gray-500 py-2 rounded text-white font-bold ${isButtonDisabled ? 'opacity-50' : ''}`}
-                onClick={cancelHandler}
-              >
-                Cancel
-              </button>
+            <div className="flex flex-col items-center gap-1">
+              <span className="font-semibold text-black">Block Name : <span className="font-normal">{submitDetails?.blockName}</span></span>
+              <span className="font-semibold text-black">Floor No : <span className="font-normal">{submitDetails?.floorNo}</span></span>
+              <span className="font-semibold text-black">Room No : <span className="font-normal">{submitDetails?.roomNo}</span></span>
+              <span className="font-semibold text-black">Cot No : <span className="font-normal">{submitDetails?.cotNo}</span></span>
+            </div>
+            <div className="flex flex-row gap-[2rem] w-full justify-center items-center">
+              <MainButton text={"Submit"} onPress={handleSubmit} disabled={isButtonDisabled} backgroundColor='bg-green-500' textColor='text-white' />
+              <MainButton text={"Cancel"} onPress={cancelHandler} disabled={isButtonDisabled} backgroundColor='bg-gray-300' textColor='text-black' />
             </div>
           </div>
         </div>

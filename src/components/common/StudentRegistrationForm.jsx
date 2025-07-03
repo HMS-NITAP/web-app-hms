@@ -239,7 +239,7 @@ const StudentRegistrationForm = () => {
                 </div>
                 {/* Profile Image */}
                 <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
-                    <label className="font-medium text-black">Profile Image <span className="text-xs text-red-600">*</span> :</label>
+                    <label className="font-medium text-black">Profile Image (Decent passport size photo) <span className="text-xs text-red-600">*</span> :</label>
                     <div className="flex w-full items-center justify-between gap-[1rem]">
                         <input
                             type="file"
