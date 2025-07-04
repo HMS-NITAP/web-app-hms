@@ -93,7 +93,8 @@ const StudentRegistrationForm = () => {
     }
 
     const submitHandler = async(data) => {
-        if(!data?.email.endsWith("@student.nitandhra.ac.in")){
+        if(!data?.email.endsWith("@student.nitandhra.ac.in") && selectedYear !== 1){
+            // For 1st year students
             toast("Please Use Your Institute Email ID",{icon:"⚠️"});
             return;
         }
