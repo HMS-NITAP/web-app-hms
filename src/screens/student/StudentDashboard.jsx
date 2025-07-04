@@ -153,11 +153,11 @@ const StudentDashboardScreen = () => {
   return (
     <div className="w-full h-full bg-gray-50 flex flex-col items-center py-4 px-2 md:px-8">
       {showBirthdayModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="bg-white rounded-xl shadow-lg p-8 max-w-md w-full flex flex-col items-center">
-            <h2 className="text-2xl font-bold text-green-700 mb-2">Happy Birthday, {dashboardData?.data?.name}!</h2>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="bg-white backdrop-blur-lg border border-white/30 shadow-xl rounded-xl flex flex-col justify-center items-center p-6 md:w-full w-[90%] max-w-md" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'}}>
+            <h2 className="text-2xl font-bold text-green-700 mb-2 text-center">Happy Birthday, {dashboardData?.data?.name}!</h2>
             <p className="text-center text-gray-800 mb-4">{getRandomQuote()}</p>
-            <button className="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold" onClick={() => setShowBirthdayModal(false)}>Thank you!</button>
+            <MainButton text={"Have a Nice Day !"} onPress={() => setShowBirthdayModal(false)} backgroundColor='bg-green-500' textColor='text-white' />
           </div>
         </div>
       )}
@@ -282,7 +282,7 @@ const StudentDashboardScreen = () => {
                 <MainButton onPress={() => setEvenSemFeeModal(true)} text={"Upload Even Sem Hostel Fee Receipt"} />
               )}
               {dashboardData?.data?.user?.status === "ACTIVE1" && dashboardData?.data?.hostelFeeReceipt2 && (
-                <div className="text-green-600 font-bold text-lg text-center">Even Semester Registration Under Review</div>
+                <div className="text-green-600 font-bold text-lg text-center">(Even Semester Registration Under Review)</div>
               )}
             </div>
 

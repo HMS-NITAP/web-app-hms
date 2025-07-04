@@ -36,8 +36,8 @@ import StudentRegistration from '../screens/auth/StudentRegistration';
 import StudentRegistrationApplications from '../screens/admin/StudentRegistrationApplications';
 import OfficialDashboard from '../screens/official/OfficialDashboard';
 import GiveMessFeedback from '../screens/student/GiveMessFeedback';
-import GenerateMessReceipt from '../screens/student/GenerateMessReceipt';
-import MessReceiptsHistory from '../screens/student/MessReceiptsHistory';
+// import GenerateMessReceipt from '../screens/student/GenerateMessReceipt';
+// import MessReceiptsHistory from '../screens/student/MessReceiptsHistory';
 import FreezedApplications from '../screens/admin/FreezedApplications';
 import AdminDashboard from '../screens/admin/AdminDashboard';
 import BlockRooms from '../screens/admin/BlockRooms';
@@ -102,8 +102,8 @@ export const studentRoutes = [
   { path: "/student/application-history", element: <ApplicationHistory />, label: "Application History", icon: <FaClockRotateLeft />, role: [USER_ROLES.STUDENT] },
   { path: "/student/register-complaint", element: <RegisterComplaint />, label: "Register Complaint", icon: <FaBookBookmark />, role: [USER_ROLES.STUDENT] },
   { path: "/student/complaints", element: <RegisterComplaints />, label: "Complaints Registered", icon: <FaPersonCircleExclamation />, role: [USER_ROLES.STUDENT] },
-  { path: "/student/mess-receipt", element: <GenerateMessReceipt />, label: "Generate Mess Receipt", icon: <FaCashRegister />, role: [USER_ROLES.STUDENT] },
-  { path: "/student/mess-receipt-history", element: <MessReceiptsHistory />, label: "Mess Receipts History", icon: <FaReceipt />, role: [USER_ROLES.STUDENT] },
+  // { path: "/student/mess-receipt", element: <GenerateMessReceipt />, label: "Generate Mess Receipt", icon: <FaCashRegister />, role: [USER_ROLES.STUDENT] },
+  // { path: "/student/mess-receipt-history", element: <MessReceiptsHistory />, label: "Mess Receipts History", icon: <FaReceipt />, role: [USER_ROLES.STUDENT] },
   { path: "/view-feedback", element: <ViewMessFeedBack />, label: "View Mess Feedback", icon: <FaStar />, role: null },
   { path: "/student/give-feedback", element: <GiveMessFeedback />, role: [USER_ROLES.STUDENT], hidden: true },
   { path: "/hostel-blocks", element: <HostelsBlocks />, label: "Hostel Blocks", icon: <FaBuilding />, role: null },

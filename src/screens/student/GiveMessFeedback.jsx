@@ -5,9 +5,11 @@ import { createMessFeedBack } from '../../services/operations/StudentAPI';
 import Rating from 'react-rating'; // npm install react-rating
 import { FaStar } from 'react-icons/fa';
 import MainButton from '../../components/common/MainButton';
+import { useNavigate } from 'react-router-dom';
 
-const GiveMessFeedback = ({ navigate }) => {
+const GiveMessFeedback = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { token } = useSelector((state) => state.Auth);
 
   const [displaySession, setDisplaySession] = useState('');
@@ -55,7 +57,7 @@ const GiveMessFeedback = ({ navigate }) => {
 
     const response = await dispatch(createMessFeedBack(formData, token, toast));
     if (response) {
-      navigate('View Mess Feedback');
+      navigate('/view-feedback');
     }
 
     setIsButtonDisabled(false);
@@ -63,8 +65,8 @@ const GiveMessFeedback = ({ navigate }) => {
 
   return (
     <div className="flex flex-col items-center w-full px-4 py-6">
-      <div className="w-[90%] p-4 bg-green-50 border border-black/10 rounded-2xl text-center text-black text-base mb-6">
-        Let us know how you find the food quality at mess, by sharing your valuable feedback.
+      <div className="md:max-w-[40%] max-[95%] p-4 bg-green-100 border border-black/10 rounded-2xl font-semibold text-center text-black text-base mb-6">
+        Let us know how the food at the mess is by sharing your honest feedback.
       </div>
 
       <div className="w-full max-w-2xl flex flex-col gap-6">
@@ -86,9 +88,9 @@ const GiveMessFeedback = ({ navigate }) => {
           ></textarea>
         </div>
 
-        <div className="flex flex-col gap-1">
-          <label className="text-sm font-medium text-black">
-            Rating <span className="text-red-600">*</span> :
+        <div className="flex flex-col justify-center items-center gap-1">
+          <label className="text-md font-medium text-black">
+            Rating
           </label>
           <Rating
             initialRating={rating}
@@ -98,13 +100,12 @@ const GiveMessFeedback = ({ navigate }) => {
           />
         </div>
 
-        <div className="w-fit mt-4">
-          <MainButton
-            text="Submit"
-            isButtonDisabled={isButtonDisabled}
-            onPress={onSubmit}
-          />
-        </div>
+        <MainButton
+          width='w-full'
+          text="Submit"
+          isButtonDisabled={isButtonDisabled}
+          onPress={onSubmit}
+        />
       </div>
     </div>
   );

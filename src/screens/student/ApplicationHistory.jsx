@@ -36,11 +36,11 @@ const ApplicationHistory = () => {
             {/* Total Count */}
             <div className="flex items-center gap-4">
               <span className="text-black font-semibold text-base">Total Applications</span>
-              <span className="bg-purple-400 text-white font-bold px-4 py-1 rounded-full">{outingApplication.length}</span>
+              <span className="bg-purple-400 text-white font-bold px-4 py-2 rounded-full">{outingApplication.length}</span>
             </div>
 
             {/* Applications List */}
-            <div className="w-full flex md:flex-row flex-col gap-[2rem] flex-wrap justify-start items-stretch">
+            <div className="w-full flex md:flex-row flex-col gap-[1rem] flex-wrap justify-center items-stretch">
               {
                 outingApplication.map((application, index) => (
                   <OutingApplicationCard

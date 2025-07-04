@@ -94,16 +94,20 @@ const RegisterComplaint = () => {
         </div>
 
         <div className="flex flex-col gap-1">
-          <label className="font-semibold text-gray-800">Select Document to Upload:</label>
-          <input type="file" onChange={pickUpFile} />
-          {fileResponse && (
-            <span className="text-black font-semibold mt-1">{fileResponse.name}</span>
-          )}
+          <label className="font-semibold text-gray-800">Select Document to Upload (Optional):</label>
+          <div className="flex w-full items-center justify-between gap-[1rem]">
+            <input type="file" onChange={pickUpFile} className="max-w-[250px] px-[1rem] py-2 bg-blue-500 text-white font-semibold rounded-md cursor-pointer transition-transform duration-200 hover:scale-105" />
+            {fileResponse ? (
+                  <span className="font-bold text-black text-wrap text-[0.75rem]">{fileResponse.name}</span>
+              ) : (
+                  <span className="font-bold text-black text-wrap">No File Selected</span>
+            )}
+          </div>
         </div>
 
         <button
           type="submit"
-          className={`px-5 py-2 rounded text-white font-bold ${isButtonDisabled ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}
+          className={`px-5 py-2 rounded transition-all duration-200 text-white font-bold cursor-pointer ${isButtonDisabled ? 'bg-gray-400 cursor-not-allowed' : 'bg-yellow-400 hover:bg-yellow-500'}`}
           disabled={isButtonDisabled}
         >
           Generate Complaint

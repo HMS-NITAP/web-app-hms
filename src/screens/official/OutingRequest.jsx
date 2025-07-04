@@ -56,7 +56,7 @@ const OutingRequest = () => {
       </div>
 
       {/* Applications List */}
-      <div className="w-full flex md:flex-row flex-col flex-wrap gap-[1.5rem] justify-center items-center">
+      <div className="w-full flex md:flex-row flex-col flex-wrap gap-[1.5rem] justify-center items-stretch">
         {!outingApplication ? (
           <div className="flex justify-center items-center mt-8">
                 <div className="text-center">

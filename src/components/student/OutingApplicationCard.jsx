@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { deletePendingOutingApplication, markReturnFromOuting } from '../../services/operations/StudentAPI';
 import toast from 'react-hot-toast';
 import MainButton from '../common/MainButton';
+import { FaTrash } from 'react-icons/fa6';
 
 const OutingApplicationCard = ({ application, token, fetchData }) => {
   const dispatch = useDispatch();
@@ -44,7 +45,7 @@ const OutingApplicationCard = ({ application, token, fetchData }) => {
   };
 
   return (
-    <div className="md:w-[350px] w-[95%] border border-black bg-gray-100 rounded-lg p-4 shadow-md">
+    <div className="md:w-[30%] w-[95%] border border-black bg-gray-100 rounded-lg p-4 shadow-md">
       <p><strong>Created On:</strong> <span className="text-gray-600">{getDateFormat(application.createdAt)}</span></p>
       <p><strong>From:</strong> <span className="text-gray-600">{getDateFormat(application.from)}</span></p>
       <p><strong>To:</strong> <span className="text-gray-600">{getDateFormat(application.to)}</span></p>
@@ -88,32 +89,21 @@ const OutingApplicationCard = ({ application, token, fetchData }) => {
           <button
             disabled={isButtonDisabled}
             onClick={() => setModalVisible(true)}
-            className={`cursor-pointer bg-red-100 text-red-600 border border-red-500 rounded-full px-4 py-2 font-semibold transition ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-200'}`}
+            className={`cursor-pointer bg-red-100 text-red-600 border border-red-500 rounded-full flex gap-[1rem] justify-center items-center px-4 py-2 font-semibold transition ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-200'}`}
           >
-            🗑 Delete
+            <FaTrash className="text-red-600" /> Delete
           </button>
         </div>
       )}
 
       {/* Delete Modal */}
       {modalVisible && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded shadow-md w-[300px] text-center space-y-4">
-            <p className="text-lg text-black">Are you sure you want to delete this Outing Application?</p>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="bg-white backdrop-blur-lg border border-white/30 shadow-xl rounded-xl flex flex-col justify-center items-center p-6 md:w-full w-[90%] max-w-md gap-[2rem]" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'}}>
+            <p className="text-lg text-black text-center font-semibold">Are you sure you want to delete this Outing Application?</p>
             <div className="flex justify-between gap-4">
-              <button
-                disabled={isButtonDisabled}
-                onClick={handleConfirmDelete}
-                className="cursor-pointer bg-red-600 text-white px-4 py-2 rounded w-full disabled:opacity-50"
-              >
-                Yes
-              </button>
-              <button
-                onClick={() => setModalVisible(false)}
-                className="cursor-pointer bg-gray-500 text-white px-4 py-2 rounded w-full"
-              >
-                No
-              </button>
+              <MainButton text={"Yes"} onPress={handleConfirmDelete} disabled={isButtonDisabled} backgroundColor='bg-red-500' textColor='text-white' />
+              <MainButton text={"No"} onPress={() => setModalVisible(false)} disabled={isButtonDisabled} backgroundColor='bg-gray-300' textColor='text-black' />
             </div>
           </div>
         </div>
@@ -121,23 +111,12 @@ const OutingApplicationCard = ({ application, token, fetchData }) => {
 
       {/* Mark Return Modal */}
       {markReturnModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded shadow-md w-[300px] text-center space-y-4">
-            <p className="text-lg text-black">Are you sure you want to log return from vacation?</p>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="bg-white backdrop-blur-lg border border-white/30 shadow-xl rounded-xl flex flex-col justify-center items-center p-6 md:w-full w-[90%] gap-[2rem] max-w-md" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'}}>
+            <p className="text-lg text-black text-center font-semibold">Are you sure, you want to log return from vacation?</p>
             <div className="flex justify-between gap-4">
-              <button
-                disabled={isButtonDisabled}
-                onClick={handleMarkReturn}
-                className="cursor-pointer bg-green-600 text-white px-4 py-2 rounded w-full disabled:opacity-50"
-              >
-                Yes
-              </button>
-              <button
-                onClick={() => setMarkReturnModalOpen(false)}
-                className="cursor-pointer bg-gray-500 text-white px-4 py-2 rounded w-full"
-              >
-                No
-              </button>
+              <MainButton text={"Yes"} onPress={handleMarkReturn} disabled={isButtonDisabled} backgroundColor='bg-green-500' textColor='text-white' />
+              <MainButton text={"No"} onPress={() => setMarkReturnModalOpen(false)} disabled={isButtonDisabled} backgroundColor='bg-gray-300' textColor='text-black' />
             </div>
           </div>
         </div>

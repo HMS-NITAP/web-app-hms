@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getStudentAttendance } from '../../services/operations/StudentAPI';
 import toast from 'react-hot-toast';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 
 const AttendanceHistory = () => {
   const [selectedMonth, setSelectedMonth] = useState(new Date());
@@ -94,20 +95,25 @@ const AttendanceHistory = () => {
       </div>
 
       {/* Month Header */}
-      <div className="flex items-center justify-between w-full max-w-md">
+      <div className="flex items-center justify-between md:w-[30%] w-full">
         <button
           onClick={handlePrevMonth}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          className="cursor-pointer px-4 py-3 bg-blue-500 text-white rounded hover:bg-blue-600"
         >
-          &lt;
+          <FaChevronLeft />
         </button>
-        <h2 className="text-xl font-bold text-black">{getMonthYearString(selectedMonth)}</h2>
+
+        <h2 className="text-xl font-bold text-black">
+          {getMonthYearString(selectedMonth)}
+        </h2>
+
         <button
           onClick={handleNextMonth}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          className="cursor-pointer px-4 py-3 bg-blue-500 text-white rounded hover:bg-blue-600"
         >
-          &gt;
+          <FaChevronRight />
         </button>
+
       </div>
 
       {/* Calendar Grid */}

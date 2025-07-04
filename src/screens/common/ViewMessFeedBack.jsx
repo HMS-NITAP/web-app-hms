@@ -49,13 +49,13 @@ const ViewMessFeedback = () => {
         <div className="w-full flex justify-end">
           <button
             onClick={() => navigate('/student/give-feedback')}
-            className="flex items-center gap-2 bg-[#ccd5ae] text-black px-4 py-2 rounded-lg hover:opacity-90 transition"
+            className="flex items-center gap-2 bg-yellow-400 cursor-pointer text-black px-4 py-2 rounded-lg hover:opacity-90 transition"
           >
-            <FaCirclePlus size={20} className="text-gray-600" />
+            <FaCirclePlus size={20} className="text-yellow-800" />
             <span className="font-semibold">Give Feedback</span>
           </button>
         </div>
-      )}
+      )} 
 
       {loading ? (
         <div className="flex justify-center items-center mt-8">
