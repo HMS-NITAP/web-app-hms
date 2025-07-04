@@ -72,12 +72,12 @@ export const authRoutes = [
 
 export const adminRoutes = [
   { path: "/", element: <AdminDashboard />, label: "Dashboard", icon: <FaIdBadge />, role: [USER_ROLES.ADMIN] },
-  { path: "/admin/odd-sem-applications", element: <StudentRegistrationApplications />, label: "Odd Sem Registration Applications", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
-  { path: "/admin/even-sem-applications", element: <EvenSemRegistrationApplications />, label: "Even Sem Registration Applications", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
+  { path: "/admin/odd-sem-applications", element: <StudentRegistrationApplications />, label: "Odd Sem Reg. Apps", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
+  { path: "/admin/even-sem-applications", element: <EvenSemRegistrationApplications />, label: "Even Sem Reg. Apps", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/manage-students", element: <ManageStudentAccounts />, label: "Manage Students", icon: <FaChild />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/manage-officials", element: <ManageOfficialAccounts />, label: "Manage Officials", icon: <FaUserShield />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/create-official-account", element: <CreateOfficialAccount />, role: [USER_ROLES.ADMIN], hidden: true },
-  { path: "/admin/manage-hostels", element: <ManageHostels />, label: "Manage Hostel Blocks", icon: <FaUserGear />, role: [USER_ROLES.ADMIN] },
+  { path: "/admin/manage-hostels", element: <ManageHostels />, label: "Manage Hostels", icon: <FaUserGear />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/create-hostel-block", element: <CreateHostelBlock />, role: [USER_ROLES.ADMIN], hidden: true },
   { path: "/admin/freezed-applications", element: <FreezedApplications />, role: [USER_ROLES.ADMIN], hidden: true },
   { path: "/admin/block-rooms", element: <BlockRooms />, role: [USER_ROLES.ADMIN], hidden: true },

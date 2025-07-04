@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { FaBuilding } from 'react-icons/fa6';
 
 const AnimatedCardHostelBlock = ({ data }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
   const toggleCard = () => {
     setIsExpanded(!isExpanded);
@@ -12,19 +12,8 @@ const AnimatedCardHostelBlock = ({ data }) => {
     <div className="w-full md:w-[350px] border border-black rounded-xl bg-white my-4 shadow-lg overflow-hidden transition-all duration-300">
       {/* Header */}
       <div className="flex items-center gap-4 p-4">
-        <div className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center relative">
-          {isLoading && (
-            <div className="absolute inset-0 flex items-center justify-center bg-white z-10">
-              <div className="w-5 h-5 border-4 border-blue-500 border-t-transparent animate-spin rounded-full" />
-            </div>
-          )}
-          <img
-            src={data.image}
-            alt="hostel"
-            onLoadStart={() => setIsLoading(true)}
-            onLoad={() => setIsLoading(false)}
-            className="w-full h-full object-cover"
-          />
+        <div className="w-[4rem] h-[4rem] rounded-full border border-gray-500 overflow-hidden flex items-center justify-center relative">
+          <FaBuilding className="text-3xl text-gray-500" />
         </div>
         <div className="flex flex-col">
           <p className="text-gray-600 font-bold text-lg">

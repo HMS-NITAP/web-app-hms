@@ -87,7 +87,7 @@ const AdminDashboard = () => {
             HOSTEL BLOCKS
           </h2>
 
-          <div className="w-full flex md:flex-row flex-col mx-auto flex-wrap justify-start items-center gap-[1.5rem]">
+          <div className="w-full flex md:flex-row flex-col mx-auto flex-wrap justify-center items-center gap-[1.5rem]">
             {dashboardData.formattedResult?.map((data, index) => (
               <button
                 key={index}
