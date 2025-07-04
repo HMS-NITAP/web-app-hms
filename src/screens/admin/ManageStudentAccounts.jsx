@@ -98,6 +98,7 @@ const ManageStudentAccounts = () => {
       toast('Something Went wrong', { icon: '⚠️' });
       setIsButtonDisabled(false);
       setChangeProfilePicModalVisible(false);
+      setImageResponse(false);
       return;
     }
     if (imageResponse === null) {
@@ -111,7 +112,8 @@ const ManageStudentAccounts = () => {
     const response = await dispatch(changeStudentProfilePhoto(formData, token, toast));
     setChangeProfilePicModalVisible(false);
     setIsButtonDisabled(false);
-    if (response) searchStudentWithId();
+    setImageResponse(false);
+    if(response) searchStudentWithId();
   };
 
   const changeStudentCotHandler = () => {
@@ -279,15 +281,13 @@ const ManageStudentAccounts = () => {
                 )}
               </div>
               {/* Payment Details */}
-              <div className="min-w-[220px] p-4 border border-gray-300 rounded-lg bg-white">
+              <div className="min-w-[220px] p-4 border flex flex-col gap-[1rem] border-gray-300 rounded-lg bg-white">
                 <span className="font-bold text-green-700 block mb-2">Payment Details</span>
-                <a href={studentData?.hostelFeeReceipt} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline block mb-2">
-                  Hostel Fee Receipt
-                </a>
-                {studentData?.instituteFeeReceipt && (
-                  <a href={studentData?.instituteFeeReceipt} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline block">
-                    Institute Fee Receipt
-                  </a>
+                {studentData?.hostelFeeReceipt && (
+                  <a href={studentData?.hostelFeeReceipt} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline font-semibold">Odd Sem Hostel Fee Receipt</a>
+                )}
+                {studentData?.hostelFeeReceipt2 && (
+                  <a href={studentData?.hostelFeeReceipt2} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline font-semibold">Even Sem Hostel Fee Receipt</a>
                 )}
               </div>
             </div>

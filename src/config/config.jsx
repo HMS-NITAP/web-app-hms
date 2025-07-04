@@ -1,6 +1,6 @@
 import {
   FaRightToBracket, FaAddressCard, FaBullhorn, FaBuilding, FaBowlFood, FaAddressBook,
-  FaUsers, FaImage, FaStar, FaIdBadge, FaUserShield, FaChild, FaUserGear, FaTableList,
+  FaUsers, FaImage, FaStar, FaIdBadge, FaUserShield, FaChild, FaTableList,
   FaWpforms, FaClockRotateLeft, FaBookBookmark, FaPersonCircleExclamation,
   FaCashRegister, FaReceipt, FaCommentDots, FaCircleExclamation, FaPeopleRoof
 } from "react-icons/fa6";
@@ -77,7 +77,7 @@ export const adminRoutes = [
   { path: "/admin/manage-students", element: <ManageStudentAccounts />, label: "Manage Students", icon: <FaChild />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/manage-officials", element: <ManageOfficialAccounts />, label: "Manage Officials", icon: <FaUserShield />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/create-official-account", element: <CreateOfficialAccount />, role: [USER_ROLES.ADMIN], hidden: true },
-  { path: "/admin/manage-hostels", element: <ManageHostels />, label: "Manage Hostels", icon: <FaUserGear />, role: [USER_ROLES.ADMIN] },
+  { path: "/admin/manage-hostels", element: <ManageHostels />, label: "Manage Hostels", icon: <FaBuilding />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/create-hostel-block", element: <CreateHostelBlock />, role: [USER_ROLES.ADMIN], hidden: true },
   { path: "/admin/freezed-applications", element: <FreezedApplications />, role: [USER_ROLES.ADMIN], hidden: true },
   { path: "/admin/block-rooms", element: <BlockRooms />, role: [USER_ROLES.ADMIN], hidden: true },

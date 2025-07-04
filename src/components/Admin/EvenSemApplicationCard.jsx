@@ -82,7 +82,7 @@ const EvenSemApplicationCard = ({ application, token, fetchData }) => {
           <p className="text-base font-semibold text-black">Amount: <span className="font-medium">{student?.amountPaid2}</span></p>
           {student?.hostelFeeReceipt2 && (
             <p className="text-sm font-medium text-black">
-              Even Sem Hostel Fee Receipt: <a href={student?.hostelFeeReceipt2} className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">Click Here</a>
+              Even Sem Hostel Fee Receipt: <a href={student?.hostelFeeReceipt2} className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">Even Sem Receipt</a>
             </p>
           )}
         </div>
