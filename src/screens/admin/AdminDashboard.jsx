@@ -94,7 +94,7 @@ const AdminDashboard = () => {
                 onClick={() =>
                   moveToBlock(data.blockId, data.blockName, data.floorCount)
                 }
-                className="cursor-pointer hover:bg-[#caf0f8] hover:scale-105 transition-all duration-200 md:w-[32%] py-[1rem] w-full border border-black rounded-xl justify-center flex flex-col items-center"
+                className="cursor-pointer hover:bg-[#caf0f8] hover:scale-105 transition-all duration-200 md:w-[30%] py-[1rem] w-full border border-black rounded-xl justify-center flex flex-col items-center"
               >
                 <h3 className="text-lg font-bold text-black text-center">
                   {data.blockName}
