@@ -282,8 +282,8 @@ const StudentRegistrationForm = () => {
                         rules={{ 
                             required: true,
                             pattern: {
-                                value: /^[0-9]{7}$/,
-                                message: 'Roll number must be exactly 7 digits and only numbers.'
+                                value: /^[0-9]{6,7}$/,
+                                message: 'Roll number must be exactly 6 or 7 digits.'
                             }
                         }}
                         render={({ field }) => (

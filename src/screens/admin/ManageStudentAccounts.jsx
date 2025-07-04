@@ -123,7 +123,7 @@ const ManageStudentAccounts = () => {
       <div className="w-full flex items-center md:justify-center justify-between gap-4">
         <input
           className="w-full max-w-md border border-gray-400 rounded-lg p-2 text-black"
-          placeholder="Search with Roll No / Reg No"
+          placeholder="Search Student with Roll Number"
           onChange={(e) => setSearchQuery(e.target.value)}
         />
         <button
