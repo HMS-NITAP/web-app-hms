@@ -117,7 +117,7 @@ export const fetchOfficialAccounts = (token,toast) => {
             }
 
             toast.dismiss(id);
-            toast.success(response?.data?.message);
+            // toast.success(response?.data?.message);
             return response?.data?.data;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to fetch Accounts";
@@ -415,12 +415,12 @@ export const fetchRoomsInHostelBlock = (hostelBlockId,token,toast) => {
             const response = await APIconnector("POST",FETCH_ROOMS_IN_HOSTEL_BLOCK_API,{hostelBlockId},{Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
-                toast.success(response?.data?.message);
+                toast.error(response?.data?.message);
                 throw new Error(response?.data?.message);
             }
 
             toast.dismiss(id);
-            toast.success(response?.data?.message);
+            // toast.success(response?.data?.message);
             return response?.data?.data;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to fetch Data";
@@ -444,7 +444,7 @@ export const fetchCotsInRooms = (roomId,token,toast) => {
             }
 
             toast.dismiss(id);
-            toast.success(response?.data?.message);
+            // toast.success(response?.data?.message);
             return response?.data?.data;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to fetch Data";
@@ -588,7 +588,7 @@ export const fetchCotsForChangeCotOption = (userId,token,toast) => {
             }
 
             toast.dismiss(id);
-            toast.success(response?.data?.message);
+            // toast.success(response?.data?.message);
             return response?.data?.data;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to Fetch Cots";
