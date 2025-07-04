@@ -53,10 +53,15 @@ const CreateHostelBlock = () => {
   };
 
   return (
-    <div className="w-full flex justify-center items-center py-10">
+    <div className="w-full flex flex-col items-center py-10">
+      <div className="md:w-[40%] w-[90%] bg-green-100 rounded-2xl p-4 mb-6">
+        <p className="text-center font-semibold text-base text-black">
+          Create a hostel block here. Please be careful while entering the details and ensure all data is accurate.
+        </p>
+      </div>
       <form
         onSubmit={handleSubmit(submitHandler)}
-        className="w-full max-w-2xl flex flex-col gap-6"
+        className="md:w-[50%] w-[95%] flex flex-col gap-6"
       >
         <div>
           <label className="font-semibold text-sm">Hostel Block Name *</label>
@@ -77,13 +82,19 @@ const CreateHostelBlock = () => {
 
         <div>
           <label className="font-semibold text-sm">Hostel Block Image *</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            className="w-full border rounded-md p-2"
-          />
-          {file && <img src={URL.createObjectURL(file)} alt="preview" className="w-20 h-20 rounded-full mt-2" />}
+          <div className="flex w-full items-center justify-between gap-[1rem]">
+              <input
+                  type="file"
+                  accept="image/jpeg,image/jpg"
+                  onChange={handleFileChange}
+                  className="max-w-[250px] px-[1rem] py-2 bg-blue-500 text-white font-semibold rounded-md cursor-pointer transition-transform duration-200 hover:scale-105"
+              />
+              {file ? (
+                  <img src={URL.createObjectURL(file)} alt="Image Preview" className="w-20 h-20 rounded-full object-cover" />
+              ) : (
+                  <span className="font-bold text-black text-center">Select an Image</span>
+              )}
+          </div>
         </div>
 
         <div>

@@ -28,7 +28,7 @@ const ManageHostels = () => {
   return (
     <div className="w-full flex flex-col items-center justify-center px-4 py-3">
       {!loading && (
-        <div className="w-full max-w-5xl">
+        <div className="w-full">
           {/* Header */}
           <div className="w-full flex items-center justify-between px-4 py-4 border-b border-gray-300 mb-6">
             <div className="flex flex-col items-center gap-1">
@@ -39,14 +39,14 @@ const ManageHostels = () => {
             </div>
             <button
               onClick={() => navigate('/admin/create-hostel-block')}
-              className="bg-blue-900 p-2 rounded-md border border-black"
+              className="bg-blue-900 hover:bg-blue-700 transition-all duration-200 cursor-pointer p-2 rounded-md border border-black"
             >
               <FaHouseMedical className="text-white text-xl" />
             </button>
           </div>
 
           {/* Hostel Cards */}
-          <div className="w-full flex flex-col items-center gap-4">
+          <div className="w-full flex md:flex-row flex-wrap flex-col items-stretch justify-center gap-[1rem]">
             {accounts &&
               accounts.map((account, index) => (
                 <HostelCard

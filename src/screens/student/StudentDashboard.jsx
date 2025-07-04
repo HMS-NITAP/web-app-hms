@@ -164,24 +164,15 @@ const StudentDashboardScreen = () => {
 
       {evenSemFeeModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
-          <div className="bg-white backdrop-blur-lg border border-white/30 shadow-xl rounded-xl p-6 md:w-full w-[90%] max-w-md" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'}}>
+          <div className="bg-white backdrop-blur-lg border border-white/30 shadow-xl rounded-xl p-6 md:w-full w-[90%] max-w-md flex flex-col gap-[1rem]" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'}}>
             <h2 className="text-xl font-bold text-center text-black mb-[1rem]">Upload Even Sem Hostel Fee Receipt</h2>
             <div className="flex flex-col md:flex-row gap-4 items-center w-full">
-              <MainButton text="Select File" onPress={() => document.getElementById('evenSemFileInput').click()} />
-              <input
-                id="evenSemFileInput"
-                type="file"
-                accept="application/pdf"
-                className="hidden"
-                onChange={pickUpHostelFeeReceipt}
-              />
-              <div className="flex-1 text-center">
-                {hostelEvenSemFeeReceiptResponse ? (
-                  <span className="text-black font-semibold text-base">{hostelEvenSemFeeReceiptResponse[0].name}</span>
-                ) : (
-                  <span className="text-red-600 font-bold text-base">No File Selected</span>
+              <input type="file" accept="application/pdf" onChange={pickUpHostelFeeReceipt} className="max-w-[250px] px-[1rem] py-2 bg-blue-500 text-white font-semibold rounded-md cursor-pointer transition-transform duration-200 hover:scale-105" />
+                        {hostelEvenSemFeeReceiptResponse ? (
+                            <span className="font-bold text-black text-wrap text-[0.75rem]">{hostelEvenSemFeeReceiptResponse[0].name}</span>
+                        ) : (
+                            <span className="font-bold text-black text-wrap">No File Selected</span>
                 )}
-              </div>
             </div>
             <div className="flex flex-col gap-2">
               <label className="font-medium text-black">Hostel Fee Payment Mode <span className="text-red-500">*</span></label>
@@ -205,7 +196,7 @@ const StudentDashboardScreen = () => {
                 onChange={e => setPaymentDate2(e.target.value)}
                 max={covertToLocalDate(new Date())}
               />
-              <span className="font-semibold text-black">{formatDate(paymentDate2)}</span>
+              {/* <span className="font-semibold text-black">{formatDate(paymentDate2)}</span> */}
             </div>
             <div className="flex flex-col gap-2">
               <label className="font-medium text-black">Hostel Fee Payment Amount <span className="text-red-500">*</span></label>
@@ -226,16 +217,8 @@ const StudentDashboardScreen = () => {
               {errors.amountPaid2 && <span className="text-red-600 text-sm">Amount Paid is required.</span>}
             </div>
             <div className="flex flex-row gap-4 justify-center mt-2">
-              <button
-                disabled={isButtonDisabled}
-                onClick={handleSubmit(submitModalHandler)}
-                className={`px-6 py-2 rounded-lg font-semibold bg-lime-500 text-black ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-lime-600'}`}
-              >Submit</button>
-              <button
-                disabled={isButtonDisabled}
-                onClick={cancelModalHandler}
-                className={`px-6 py-2 rounded-lg font-semibold bg-gray-300 text-black ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-400'}`}
-              >Cancel</button>
+              <MainButton text="Submit" backgroundColor="bg-green-500" textColor='text-white' disabled={isButtonDisabled} onPress={handleSubmit(submitModalHandler)} />
+              <MainButton text="Cancel" backgroundColor="bg-gray-300" textColor='text-black' disabled={isButtonDisabled} onPress={cancelModalHandler} />
             </div>
           </div>
         </div>

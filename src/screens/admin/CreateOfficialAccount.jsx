@@ -35,10 +35,15 @@ const CreateOfficialAccount = () => {
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col items-center py-10">
+    <div className="w-full flex flex-col items-center py-10">
+      <div className="md:w-[40%] w-[90%] bg-green-100 rounded-2xl p-4 mb-6">
+        <p className="text-center font-semibold text-base text-black">
+          Create the official (warden/caretaker) accounts here, share the respective email IDs and passwords with them, and assign hostel blocks if required.
+        </p>
+      </div>
       <form
         onSubmit={handleSubmit(submitHandler)}
-        className="w-full max-w-2xl flex flex-col gap-6"
+        className="md:w-[50%] w-[95%] flex flex-col gap-6"
       >
         {/* Email */}
         <div className="flex flex-col gap-1">
@@ -83,7 +88,7 @@ const CreateOfficialAccount = () => {
                   className="border border-gray-400 px-3 py-2 rounded-md text-black w-full"
                 />
                 <span
-                  className="absolute right-3 bottom-[10px] text-gray-500 cursor-pointer"
+                  className="absolute right-3 top-[55%] text-gray-500 cursor-pointer"
                   onClick={() => setSecureText(!secureText)}
                 >
                   {secureText ? <FaEyeSlash /> : <FaEye />}
@@ -152,7 +157,7 @@ const CreateOfficialAccount = () => {
             control={control}
             defaultValue="M"
             render={({ field: { onChange } }) => (
-              <div className="flex gap-8 mt-1">
+              <div className="flex gap-8 mt-1 md:ml-[2rem] ml-[6rem]">
                 <label className="flex items-center gap-2">
                   <input
                     type="radio"
@@ -210,8 +215,8 @@ const CreateOfficialAccount = () => {
         <button
           type="submit"
           disabled={isButtonDisabled}
-          className={`bg-blue-700 text-white py-2 px-4 rounded-md font-semibold ${
-            isButtonDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-800'
+          className={`bg-yellow-400 text-white py-2 px-4 rounded-md transition-all duration-200 cursor-pointer font-semibold ${
+            isButtonDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-yellow-500'
           }`}
         >
           Create Account

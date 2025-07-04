@@ -59,7 +59,7 @@ const Navbar = () => {
         className="bg-zinc-900 text-white overflow-y-auto"
       >
         <div className="py-[0.5rem]">
-          <h2 className="text-xl mb-4 text-blue-600 font-bold text-center">HMS NIT AP</h2>
+          <h2 className="text-xl mb-2 text-blue-600 font-bold text-center">HMS NIT AP</h2>
           <div>
             {
               !token && (

@@ -22,14 +22,16 @@ export const login = (email,password,toast,navigate) => {
             dispatch(setToken(response?.data?.token));
             dispatch(setUser(response?.data?.user));
 
-            if(response?.data?.user?.accountType === USER_ROLES.STUDENT){
-                navigate('/student/dashboard');
-            }else if(response?.data?.user?.accountType === USER_ROLES.OFFICIAL){
-                console.log("FDFDGFG");
-                navigate('/official/dashboard');
-            }else if(response?.data?.user?.accountType === USER_ROLES.ADMIN){
-                navigate('/admin/dashboard');
-            }
+            navigate("/");
+
+            // if(response?.data?.user?.accountType === USER_ROLES.STUDENT){
+            //     navigate('/student/dashboard');
+            // }else if(response?.data?.user?.accountType === USER_ROLES.OFFICIAL){
+            //     console.log("FDFDGFG");
+            //     navigate('/official/dashboard');
+            // }else if(response?.data?.user?.accountType === USER_ROLES.ADMIN){
+            //     navigate('/admin/dashboard');
+            // }
 
             toast.dismiss(id);
             toast.success("Login Successful");

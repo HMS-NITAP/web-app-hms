@@ -7,14 +7,14 @@ import {
   fetchStudentByRollNoAndRegNo,
   sendAcknowledgementLetter,
 } from '../../services/operations/AdminAPI';
-// import { AirbnbRating } from 'react-native-ratings'; // Replace with stars or similar if needed
-// import MainButton from '../../components/common/MainButton'; // Replace with button
-// import DocumentPicker from 'react-native-document-picker'; // Use <input type="file" />
-// import { useFocusEffect } from '@react-navigation/native'; // Use useEffect
+import { FaMagnifyingGlass } from 'react-icons/fa6';
+import MainButton from '../../components/common/MainButton';
+import { FiEdit } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
 
 const MAX_IMAGE_SIZE = 250 * 1024;
 
-const ManageStudentAccounts = ({ navigation }) => {
+const ManageStudentAccounts = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [studentData, setStudentData] = useState(null);
   const [tabChoice, setTabChoice] = useState(1);
@@ -28,6 +28,7 @@ const ManageStudentAccounts = ({ navigation }) => {
   const [imageResponse, setImageResponse] = useState(null);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { token } = useSelector((state) => state.Auth);
 
   // File picker for image
@@ -114,27 +115,23 @@ const ManageStudentAccounts = ({ navigation }) => {
   };
 
   const changeStudentCotHandler = () => {
-    // navigation.navigate("Change Student Cot", { currentCotId: studentData?.cot?.id, userId: studentData?.user?.id });
-    // For web, use react-router-dom's useNavigate
-    window.location.href = `/admin/change-student-cot/${studentData?.cot?.id}/${studentData?.user?.id}`;
+    navigate(`/admin/change-student-cot/${studentData?.cot?.id}/${studentData?.user?.id}`);
   };
 
   return (
     <div className="w-full flex flex-col items-center px-4 py-6">
-      <div className="flex flex-row w-[95%] items-center gap-2 mb-4">
+      <div className="w-full flex items-center md:justify-center justify-between gap-4">
         <input
-          className="w-4/5 p-2 border border-gray-400 rounded-lg text-black"
+          className="w-full max-w-md border border-gray-400 rounded-lg p-2 text-black"
           placeholder="Search with Roll No / Reg No"
           onChange={(e) => setSearchQuery(e.target.value)}
         />
         <button
-          disabled={isButtonDisabled}
-          onClick={searchStudentWithId}
-          className="p-2 border border-black border-dotted rounded-full"
-        >
-          <span role="img" aria-label="search">
-            🔍
-          </span>
+            disabled={isButtonDisabled}
+            onClick={searchStudentWithId}
+            className="p-3 border hover:bg-[#caf0f8] transition-all duration-200 cursor-pointer border-black border-dotted rounded-full"
+          >
+            <FaMagnifyingGlass className="text-gray-500 text-lg" />
         </button>
       </div>
 
@@ -148,19 +145,19 @@ const ManageStudentAccounts = ({ navigation }) => {
         <div className="w-full flex flex-col items-center">
           <div className="w-full flex flex-row justify-center items-center my-4 rounded-lg border border-black overflow-hidden">
             <button
-              className={`w-1/3 py-2 ${tabChoice === 1 ? 'bg-yellow-400' : 'bg-white'} text-black`}
+              className={`w-1/3 font-semibold py-2 cursor-pointer ${tabChoice === 1 ? 'bg-yellow-400 hover:bg-yellow-500' : 'bg-white hover:bg-[#caf0f8]'} text-black`}
               onClick={() => setTabChoice(1)}
             >
               About
             </button>
             <button
-              className={`w-1/3 py-2 ${tabChoice === 2 ? 'bg-yellow-400' : 'bg-white'} text-black`}
+              className={`w-1/3 font-semibold py-2 cursor-pointer border-l border-r border-black ${tabChoice === 2 ? 'bg-yellow-400 hover:bg-yellow-500' : 'bg-white hover:bg-[#caf0f8]'} text-black`}
               onClick={() => setTabChoice(2)}
             >
               Complaints
             </button>
             <button
-              className={`w-1/3 py-2 ${tabChoice === 3 ? 'bg-yellow-400' : 'bg-white'} text-black`}
+              className={`w-1/3 font-semibold py-2 cursor-pointer ${tabChoice === 3 ? 'bg-yellow-400 hover:bg-yellow-500' : 'bg-white hover:bg-[#caf0f8]'} text-black`}
               onClick={() => setTabChoice(3)}
             >
               Outings
@@ -206,11 +203,9 @@ const ManageStudentAccounts = ({ navigation }) => {
               />
               <button
                 onClick={() => setChangeProfilePicModalVisible(true)}
-                className="p-2 border border-black bg-yellow-300 rounded-lg flex flex-col items-center"
+                className="p-2 bg-yellow-400 hover:bg-yellow-500 cursor-pointer transition-all duration-200 rounded-lg flex flex-col items-center"
               >
-                <span role="img" aria-label="edit">
-                  ✏️
-                </span>
+                <FiEdit size={20} className="text-gray-600" />
               </button>
             </div>
             <span className="text-xl font-extrabold text-black">{studentData?.name}</span>
@@ -247,7 +242,7 @@ const ManageStudentAccounts = ({ navigation }) => {
             </div>
           </div>
           {/* Section: Hostel, Room, Mess, Payment */}
-          <div className="w-full overflow-x-auto mb-4">
+          <div className="w-full md:justify-center md:flex overflow-x-auto mb-4">
             <div className="flex flex-row gap-4">
               {/* Hostel Details */}
               <div className="min-w-[220px] p-4 border border-gray-300 rounded-lg bg-white">
@@ -302,14 +297,14 @@ const ManageStudentAccounts = ({ navigation }) => {
 
       {/* Complaints Tab */}
       {studentData && tabChoice === 2 && (
-        <div className="w-full flex flex-col items-center">
+        <div className="w-full flex md:flex-row flex-wrap flex-col justify-center items-stretch gap-[1rem]">
           {studentData?.hostelComplaints.length === 0 ? (
             <div className="text-gray-500 font-bold text-lg text-center">No Complaints Registered!</div>
           ) : (
             studentData?.hostelComplaints.map((complaint) => (
               <div
                 key={complaint?.id}
-                className="w-full max-w-xl p-4 my-2 bg-gray-50 rounded-lg border border-gray-200 shadow"
+                className="md:w-[48%] w-full max-w-xl p-4 my-2 bg-gray-50 rounded-lg border border-gray-200 shadow"
               >
                 <div className="font-bold text-base mb-1 text-gray-800">
                   Registered On:{' '}
@@ -343,7 +338,7 @@ const ManageStudentAccounts = ({ navigation }) => {
                     <span className="font-normal text-gray-600">{getDateFormat(complaint?.resolvedOn)}</span>
                   </div>
                 )}
-                {complaint?.resolvedById && (
+                {complaint?.resolvedById !== null && (
                   <div className="font-bold text-base mb-1 text-gray-800">
                     Resolved By:{' '}
                     <span className="font-normal text-gray-600">
@@ -359,14 +354,14 @@ const ManageStudentAccounts = ({ navigation }) => {
 
       {/* Outings Tab */}
       {studentData && tabChoice === 3 && (
-        <div className="w-full flex flex-col items-center">
+        <div className="w-full flex md:flex-row flex-wrap flex-col justify-center items-stretch gap-[1rem]">
           {studentData?.outingApplication.length === 0 ? (
             <div className="text-gray-500 font-bold text-lg text-center">No Outing Application Found!</div>
           ) : (
             studentData?.outingApplication.map((application, index) => (
               <div
                 key={index}
-                className="w-full max-w-xl p-4 my-2 bg-gray-50 rounded-lg border border-black shadow"
+                className="md:w-[48%] w-full max-w-xl p-4 my-2 bg-gray-50 rounded-lg border border-black shadow"
               >
                 <div className="font-bold text-base mb-1 text-gray-800">
                   Created On:{' '}
@@ -447,110 +442,63 @@ const ManageStudentAccounts = ({ navigation }) => {
 
       {/* Action Buttons */}
       {studentData && (studentData?.user?.status === 'ACTIVE' || studentData?.user?.status === 'ACTIVE1') && (
-        <div className="mt-6 flex flex-col w-[90%] gap-3">
-          <button
-            className="w-full py-3 rounded-xl font-bold text-lg text-black bg-[#aacc00]"
-            onClick={() => setSendAcknowledgementLetterModalVisible(true)}
-          >
-            Send Acknowledgement Letter
-          </button>
-          <button
-            className="w-full py-3 rounded-xl font-bold text-lg text-white bg-[#c9184a]"
-            onClick={() => setDeleteStudentAccountModalVisible(true)}
-          >
-            Delete Student Account
-          </button>
-          <button
-            className="w-full py-3 rounded-xl font-bold text-lg text-white bg-[#023047]"
-            onClick={changeStudentCotHandler}
-          >
-            Swap / Exchange Student Cot
-          </button>
+        <div className="mt-6 flex md:flex-row flex-col justify-center items-stretch w-[80%] gap-3">
+          <MainButton text="Re-send Acknowledgement Letter" isButtonDisabled={isButtonDisabled} onPress={() => setSendAcknowledgementLetterModalVisible(true)} backgroundColor='bg-yellow-500' textColor='text-black' />
+          <MainButton text="Delete Student Account" isButtonDisabled={isButtonDisabled} onPress={() => setDeleteStudentAccountModalVisible(true)} backgroundColor='bg-red-500' textColor='text-black' />
+          <MainButton text="Exchange Student Cot" isButtonDisabled={isButtonDisabled} onPress={changeStudentCotHandler} backgroundColor='bg-gray-300' textColor='text-black' />
         </div>
       )}
 
-      {/* Modals */}
       {sendAcknowledgementLetterModalVisible && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white rounded-lg p-6 flex flex-col items-center gap-4 w-[90vw] max-w-md">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="bg-white flex justify-center flex-col gap-[1rem] backdrop-blur-lg border border-white/30 shadow-xl rounded-xl p-6 md:w-full w-[90%] max-w-md" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'}}>
             <span className="text-lg font-semibold text-center">
               Do you want to send Acknowledgement Letter to this student.
             </span>
             <div className="flex flex-row gap-4 w-full justify-center">
-              <button
-                disabled={isButtonDisabled}
-                className={`flex-1 bg-[#aacc00] py-2 rounded text-black font-bold ${isButtonDisabled ? 'opacity-50' : ''}`}
-                onClick={sendAcknowledgementLetterHandler}
-              >
-                Continue
-              </button>
-              <button
-                disabled={isButtonDisabled}
-                className={`flex-1 bg-gray-300 py-2 rounded text-black font-bold ${isButtonDisabled ? 'opacity-50' : ''}`}
-                onClick={() => setSendAcknowledgementLetterModalVisible(false)}
-              >
-                Cancel
-              </button>
+              <MainButton text="Continue" isButtonDisabled={isButtonDisabled} onPress={sendAcknowledgementLetterHandler} backgroundColor='bg-green-500' textColor='text-white' />
+              <MainButton text="Cancel" isButtonDisabled={isButtonDisabled} onPress={() => setSendAcknowledgementLetterModalVisible(false)} backgroundColor='bg-gray-300' textColor='text-black' />
             </div>
           </div>
         </div>
       )}
 
       {deleteStudentAccountModalVisible && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white rounded-lg p-6 flex flex-col items-center gap-4 w-[90vw] max-w-md">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="bg-white flex justify-center flex-col gap-[1rem] backdrop-blur-lg border border-white/30 shadow-xl rounded-xl p-6 md:w-full w-[90%] max-w-md" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'}}>
             <span className="text-lg font-semibold text-center">
               Are you sure, this student will be deleted permanently.
             </span>
             <div className="flex flex-row gap-4 w-full justify-center">
-              <button
-                disabled={isButtonDisabled}
-                className={`flex-1 bg-[#c9184a] py-2 rounded text-white font-bold ${isButtonDisabled ? 'opacity-50' : ''}`}
-                onClick={deleteStudentAccountHandler}
-              >
-                Delete
-              </button>
-              <button
-                disabled={isButtonDisabled}
-                className={`flex-1 bg-gray-300 py-2 rounded text-black font-bold ${isButtonDisabled ? 'opacity-50' : ''}`}
-                onClick={() => setDeleteStudentAccountModalVisible(false)}
-              >
-                Cancel
-              </button>
+              <MainButton text="Delete" isButtonDisabled={isButtonDisabled} onPress={deleteStudentAccountHandler} backgroundColor='bg-red-500' textColor='text-white' />
+              <MainButton text="Cancel" isButtonDisabled={isButtonDisabled} onPress={() => setDeleteStudentAccountModalVisible(false)} backgroundColor='bg-gray-300' textColor='text-black' />
             </div>
           </div>
         </div>
       )}
 
       {changeProfilePicModalVisible && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white rounded-lg p-6 flex flex-col items-center gap-4 w-[90vw] max-w-md">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="bg-white flex justify-center flex-col gap-[1rem] backdrop-blur-lg border border-white/30 shadow-xl rounded-xl p-6 md:w-full w-[90%] max-w-md" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'}}>
             <span className="text-lg font-semibold text-center">
               Upload new Profile Picture below 250KB.
             </span>
             <div className="flex flex-col items-center gap-2 my-2">
-              <input type="file" accept="image/jpeg,image/jpg" onChange={pickUpImage} />
+              <input
+                  type="file"
+                  accept="image/jpeg,image/jpg"
+                  onChange={pickUpImage}
+                  className="max-w-[250px] px-[1rem] py-2 bg-blue-500 text-white font-semibold rounded-md cursor-pointer transition-transform duration-200 hover:scale-105"
+              />
               {imageResponse ? (
-                <img src={URL.createObjectURL(imageResponse)} alt="Preview" className="w-20 h-20 rounded-full object-cover" />
+                  <img src={URL.createObjectURL(imageResponse)} alt="Profile Preview" className="w-20 h-20 rounded-full object-cover" />
               ) : (
-                <span className="font-bold text-black">No Image Selected</span>
+                  <span className="font-bold text-black text-center">No Image Selected</span>
               )}
             </div>
             <div className="flex flex-row gap-4 w-full justify-center">
-              <button
-                disabled={isButtonDisabled}
-                className={`flex-1 bg-[#aacc00] py-2 rounded text-black font-bold ${isButtonDisabled ? 'opacity-50' : ''}`}
-                onClick={changeStudentProfilePhotoHandler}
-              >
-                Update
-              </button>
-              <button
-                disabled={isButtonDisabled}
-                className={`flex-1 bg-gray-300 py-2 rounded text-black font-bold ${isButtonDisabled ? 'opacity-50' : ''}`}
-                onClick={() => setChangeProfilePicModalVisible(false)}
-              >
-                Cancel
-              </button>
+              <MainButton text="Update" isButtonDisabled={isButtonDisabled} onPress={changeStudentProfilePhotoHandler} backgroundColor='bg-green-500' textColor='text-white' />
+              <MainButton text="Cancel" isButtonDisabled={isButtonDisabled} onPress={() => setChangeProfilePicModalVisible(false)} backgroundColor='bg-gray-300' textColor='text-black' />
             </div>
           </div>
         </div>

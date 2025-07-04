@@ -25,6 +25,7 @@ const FreezedApplications = () => {
   }, [fetchData]);
 
   const searchRollNumber = () => {
+    console.log("FDDF");
     if (!searchQuery) {
       fetchData();
       return;
@@ -54,7 +55,7 @@ const FreezedApplications = () => {
             </span>
           </div>
 
-          <div className="w-full flex items-center justify-between gap-4">
+          <div className="w-full flex items-center md:justify-center justify-between gap-4">
             <input
               type="text"
               placeholder="Search with Roll No"
@@ -64,7 +65,7 @@ const FreezedApplications = () => {
             />
             <button
               onClick={searchRollNumber}
-              className="p-3 border border-black border-dotted rounded-full"
+              className="p-3 border hover:bg-[#caf0f8] transition-all duration-200 cursor-pointer border-black border-dotted rounded-full"
             >
               <FaMagnifyingGlass className="text-gray-500 text-lg" />
             </button>
@@ -72,7 +73,7 @@ const FreezedApplications = () => {
         </div>
       )}
 
-      <div className="w-full flex flex-col items-center gap-4">
+      <div className="w-full flex md:flex-row flex-wrap flex-col justify-center items-stretch gap-4">
         {applications.map((application, index) => (
           <FreezeApplicationCard
             key={index}

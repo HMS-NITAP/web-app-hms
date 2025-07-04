@@ -32,13 +32,13 @@ const StudentRegistrationApplications = () => {
             <p className="text-lg font-semibold text-black">Pending Applications</p>
             <span className="bg-purple-400 text-white font-bold px-3 py-1 rounded-full">{applications.length}</span>
           </div>
-          <button onClick={() => navigate('/admin/freezed-applications')}>
-            <FaLock size={25} className="text-gray-600" />
+          <button onClick={() => navigate('/admin/freezed-applications')} className='px-[0.5rem] py-[0.5rem] hover:animate-pulse cursor-pointer border border-gray-300 rounded-full hover:bg-[#caf0f8] transition-colors'>
+            <FaLock size={22} className="text-gray-600" />
           </button>
         </div>
       )}
 
-      <div className="w-full flex flex-col items-center gap-4">
+      <div className="w-full flex md:flex-row flex-wrap flex-col justify-center items-stretch gap-4">
         {applications &&
           applications.map((application, index) => (
             <ApplicationCard
@@ -48,7 +48,8 @@ const StudentRegistrationApplications = () => {
               token={token}
               fetchData={fetchData}
             />
-          ))}
+          ))
+        }
       </div>
     </div>
   );

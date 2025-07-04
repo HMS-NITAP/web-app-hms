@@ -71,7 +71,7 @@ export const authRoutes = [
 ]
 
 export const adminRoutes = [
-  { path: "/admin/dashboard", element: <AdminDashboard />, label: "Dashboard", icon: <FaIdBadge />, role: [USER_ROLES.ADMIN] },
+  { path: "/", element: <AdminDashboard />, label: "Dashboard", icon: <FaIdBadge />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/odd-sem-applications", element: <StudentRegistrationApplications />, label: "Odd Sem Registration Applications", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/even-sem-applications", element: <EvenSemRegistrationApplications />, label: "Even Sem Registration Applications", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/manage-students", element: <ManageStudentAccounts />, label: "Manage Students", icon: <FaChild />, role: [USER_ROLES.ADMIN] },
@@ -82,19 +82,20 @@ export const adminRoutes = [
   { path: "/admin/freezed-applications", element: <FreezedApplications />, role: [USER_ROLES.ADMIN], hidden: true },
   { path: "/admin/block-rooms", element: <BlockRooms />, role: [USER_ROLES.ADMIN], hidden: true },
   { path: "/admin/cot-details", element: <CotDetails />, role: [USER_ROLES.ADMIN], hidden: true },
-  { path: "/admin/change-student-cot/:roomId/:cotId", element: <ChangeStudentCot />, role: [USER_ROLES.ADMIN], hidden: true },
+  { path: "/admin/change-student-cot/:cotId/:userId", element: <ChangeStudentCot />, role: [USER_ROLES.ADMIN], hidden: true },
   { path: "/announcements", element: <Announcements />, label: "Announcements", icon: <FaBullhorn />, role: null },
-  { path: "/hostel-blocks", element: <HostelsBlocks />, label: "Hostel Blocks", icon: <FaBuilding />, role: null },
+  { path: "/view-feedback", element: <ViewMessFeedBack />, label: "View Mess Feedback", icon: <FaStar />, role: null },
+  // { path: "/hostel-blocks", element: <HostelsBlocks />, label: "Hostel Blocks", icon: <FaBuilding />, role: null },
   { path: "/mess-menu", element: <MessMenu />, label: "Mess Menu", icon: <FaBowlFood />, role: null },
   { path: "/contact-us", element: <ContactUs />, label: "Contact Us", icon: <FaAddressBook />, role: null },
   { path: "/development-team", element: <DevelopmentTeam />, label: "Development Team", icon: <FaUsers />, role: null },
   { path: "/gallery", element: <Gallery />, label: "Gallery", icon: <FaImage />, role: null },
-  { path: "/view-feedback", element: <ViewMessFeedBack />, label: "View Mess Feedback", icon: <FaStar />, role: null },
   { path: "/detailed-mess-menu", element: <DetailedMessMenu />, role: null, hidden: true },
+  // { path: "*", element: <AdminDashboard />, role: [USER_ROLES.ADMIN], hidden: true },
 ]
 
 export const studentRoutes = [
-  { path: "/student/dashboard", element: <StudentDashboard />, label: "Dashboard", icon: <FaIdBadge />, role: [USER_ROLES.STUDENT] },
+  { path: "/", element: <StudentDashboard />, label: "Dashboard", icon: <FaIdBadge />, role: [USER_ROLES.STUDENT] },
   { path: "/announcements", element: <Announcements />, label: "Announcements", icon: <FaBullhorn />, role: null },
   { path: "/student/attendance-history", element: <AttendanceHistory />, label: "Attendance History", icon: <FaTableList />, role: [USER_ROLES.STUDENT] },
   { path: "/student/outing-application", element: <OutingApplication />, label: "Outing Application", icon: <FaWpforms />, role: [USER_ROLES.STUDENT] },
@@ -111,10 +112,11 @@ export const studentRoutes = [
   { path: "/development-team", element: <DevelopmentTeam />, label: "Development Team", icon: <FaUsers />, role: null },
   { path: "/gallery", element: <Gallery />, label: "Gallery", icon: <FaImage />, role: null },
   { path: "/detailed-mess-menu", element: <DetailedMessMenu />, role: null, hidden: true },
+  // { path: "*", element: <StudentDashboard />, role: [USER_ROLES.STUDENT], hidden: true },
 ]
 
 export const officialRoutes = [
-  { path: "/official/dashboard", element: <OfficialDashboard />, label: "Dashboard", icon: <FaIdBadge />, role: [USER_ROLES.OFFICIAL] },
+  { path: "/", element: <OfficialDashboard />, label: "Dashboard", icon: <FaIdBadge />, role: [USER_ROLES.OFFICIAL] },
   { path: "/official/create-announcement", element: <CreateAnnouncement />, label: "Create Announcement", icon: <FaBullhorn />, role: [USER_ROLES.OFFICIAL] },
   { path: "/announcements", element: <Announcements />, label: "Announcements", icon: <FaBullhorn />, role: null },
   { path: "/official/outing-request", element: <OutingRequest />, label: "Outing Request", icon: <FaWpforms />, role: [USER_ROLES.OFFICIAL] },

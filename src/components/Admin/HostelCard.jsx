@@ -16,7 +16,7 @@ const HostelCard = ({ data, token, toast, fetchData }) => {
   };
 
   return (
-    <div className="w-full border border-black rounded-lg p-4 bg-white shadow-sm flex flex-col gap-4">
+    <div className="md:w-[32%] w-full border border-black rounded-lg p-4 flex flex-col justify-between gap-4 bg-white shadow-sm">
       {/* Top Section */}
       <div className="flex justify-between items-center gap-4">
         <div className="relative w-[120px] h-[120px] rounded-full overflow-hidden flex justify-center items-center">
@@ -74,7 +74,8 @@ const HostelCard = ({ data, token, toast, fetchData }) => {
       ) : (
         <div>
           <p className="text-[#14213d] font-extrabold mb-2">Warden(s):</p>
-          {data?.wardens.map((warden, index) => (
+          {
+            data?.wardens.map((warden, index) => (
             <p key={index} className="text-[#003554] font-bold text-sm">
               {index + 1}) {warden.name} ( +91 {warden.phone} )
             </p>

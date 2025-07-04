@@ -49,7 +49,7 @@ export const fetchAllHostelBlocksData = (token,toast) => {
             }
 
             toast.dismiss(id);
-            toast.success(response?.data?.message);
+            // toast.success(response?.data?.message);
             return response?.data?.data;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to fetch data";
@@ -229,7 +229,7 @@ export const fetchStudentRegistrationApplications = (token,toast) => {
             }
 
             toast.dismiss(id);
-            toast.success(response?.data?.message);
+            // toast.success(response?.data?.message);
             return response?.data?.data;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to fetch Application";
@@ -301,7 +301,7 @@ export const fetchFreezedStudentRegistrationApplications = (token,toast) => {
             }
 
             toast.dismiss(id);
-            toast.success(response?.data?.message);
+            // toast.success(response?.data?.message);
             return response?.data?.data;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to fetch Application";

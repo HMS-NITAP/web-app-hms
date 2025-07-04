@@ -7,6 +7,7 @@ import {
   removeWardenFromHostelBlock,
 } from '../../services/operations/AdminAPI';
 import { FaBuildingCircleCheck, FaBuildingCircleXmark } from 'react-icons/fa6';
+import MainButton from '../common/MainButton';
 
 const OfficialCard = ({ data, token, toast, fetchData }) => {
   const [editModalVisible, setEditModalVisible] = useState(false);
@@ -59,7 +60,7 @@ const OfficialCard = ({ data, token, toast, fetchData }) => {
   };
 
   return (
-    <div className="w-full border border-black rounded-lg p-4 flex justify-between gap-4 bg-white shadow-sm">
+    <div className="md:w-[32%] w-full border border-black rounded-lg p-4 flex justify-between gap-4 bg-white shadow-sm">
       {/* Info */}
       <div className="w-4/5 flex flex-col gap-1">
         <p className="text-black font-semibold">
@@ -94,7 +95,7 @@ const OfficialCard = ({ data, token, toast, fetchData }) => {
       <div className="w-1/5 flex flex-col items-center justify-center gap-4">
         <button
           onClick={() => setEditModalVisible(true)}
-          className="border border-black rounded-full bg-green-100 p-3"
+          className="border cursor-pointer border-black rounded-full bg-green-100 hover:bg-green-200 transition-all duration-200 p-3"
         >
           {data?.hostelBlockId ? (
             <FaBuildingCircleXmark className="text-xl text-green-900" />
@@ -106,29 +107,16 @@ const OfficialCard = ({ data, token, toast, fetchData }) => {
 
       {/* Modal */}
       {editModalVisible && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center px-4">
-          <div className="bg-white w-full max-w-md rounded-lg p-6 shadow-lg">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="bg-white flex justify-center flex-col gap-[1rem] backdrop-blur-lg border border-white/30 shadow-xl rounded-xl p-6 md:w-full w-[90%] max-w-md" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'}}>
             {data?.hostelBlockId ? (
               <>
                 <p className="text-lg font-semibold text-center mb-4">
                   Are you sure you want to unallocate this Official from the hostel block?
                 </p>
                 <div className="flex gap-4 justify-center">
-                  <button
-                    disabled={isButtonDisabled}
-                    onClick={handleUnallocate}
-                    className={`bg-red-600 text-white px-4 py-2 rounded-md ${
-                      isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''
-                    }`}
-                  >
-                    Yes
-                  </button>
-                  <button
-                    onClick={() => setEditModalVisible(false)}
-                    className="bg-gray-600 text-white px-4 py-2 rounded-md"
-                  >
-                    No
-                  </button>
+                  <MainButton text="Yes" isButtonDisabled={isButtonDisabled} onPress={handleUnallocate} backgroundColor='bg-green-500' textColor='text-white' />
+                  <MainButton text="No" isButtonDisabled={isButtonDisabled} onPress={() => setEditModalVisible(false)} backgroundColor='bg-gray-300' textColor='text-black' />
                 </div>
               </>
             ) : (
@@ -136,7 +124,7 @@ const OfficialCard = ({ data, token, toast, fetchData }) => {
                 <p className="text-lg font-semibold text-center mb-4">Allocate a Hostel Block</p>
                 <select
                   onChange={(e) => setSelectedHostelBlock(e.target.value)}
-                  className="w-full border border-gray-400 rounded-md px-3 py-2 mb-5 text-sm"
+                  className="w-full cursor-pointer border border-gray-400 rounded-md px-3 py-2 mb-5 text-sm"
                   defaultValue=""
                 >
                   <option disabled value="">
@@ -149,23 +137,8 @@ const OfficialCard = ({ data, token, toast, fetchData }) => {
                   ))}
                 </select>
                 <div className="flex gap-4 justify-center">
-                  <button
-                    disabled={isButtonDisabled || !selectedHostelBlock}
-                    onClick={handleAllocate}
-                    className={`bg-green-600 text-white px-4 py-2 rounded-md ${
-                      isButtonDisabled || !selectedHostelBlock
-                        ? 'opacity-50 cursor-not-allowed'
-                        : ''
-                    }`}
-                  >
-                    Confirm
-                  </button>
-                  <button
-                    onClick={() => setEditModalVisible(false)}
-                    className="bg-gray-600 text-white px-4 py-2 rounded-md"
-                  >
-                    Cancel
-                  </button>
+                  <MainButton text="Confirm" isButtonDisabled={isButtonDisabled || !selectedHostelBlock} onPress={handleAllocate} backgroundColor='bg-green-500' textColor='text-white' />
+                  <MainButton text="Cancel" isButtonDisabled={isButtonDisabled} onPress={() => setEditModalVisible(false)} backgroundColor='bg-gray-300' textColor='text-black' />
                 </div>
               </>
             )}

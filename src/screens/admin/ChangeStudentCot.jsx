@@ -5,8 +5,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 const ChangeStudentCot = () => {
-  // For react-router-dom v6+
-  const { currentCotId, userId } = useParams();
+  const { cotId, userId } = useParams();
+  console.log(cotId, userId);
   const navigate = useNavigate();
 
   const [completeData, setCompleteData] = useState(null);
@@ -68,7 +68,7 @@ const ChangeStudentCot = () => {
     setCompleteData(null);
     setSelectedHostelBlockRooms(null);
     setSelectedHostelBlock(null);
-    if (!currentCotId || !userId) {
+    if (!cotId || !userId) {
       toast.error('Data is Missing');
       return;
     }
@@ -117,7 +117,7 @@ const ChangeStudentCot = () => {
 
   const handleSubmit = async () => {
     setIsButtonDisabled(true);
-    await dispatch(swapOrExchangeCot(currentCotId, selectedCot?.changeToCotId, token, toast));
+    await dispatch(swapOrExchangeCot(cotId, selectedCot?.changeToCotId, token, toast));
     setIsModalVisible(false);
     setIsButtonDisabled(false);
     setSelectedCot({

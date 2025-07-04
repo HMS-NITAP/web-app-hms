@@ -48,9 +48,9 @@ const ApplicationCard = ({ application, toast, token, fetchData }) => {
   };
 
   return (
-    <div className={`w-full border ${Students.includes(application?.instituteStudent?.rollNo) ? 'border-red-500' : 'border-black'} rounded-xl p-4 flex flex-col gap-4 bg-white`}>
-      <div className="flex items-center gap-4">
-        <div className="w-20 h-20 rounded-full overflow-hidden relative">
+    <div className={`md:w-[48%] w-full border ${Students.includes(application?.instituteStudent?.rollNo) ? 'border-red-500' : 'border-black'} rounded-xl p-4 flex flex-col gap-4 bg-white`}>
+      <div className="flex justify-center items-center gap-4">
+        <div className="w-[6rem] h-[6rem] rounded-full overflow-hidden relative">
           {imageLoading && <div className="absolute inset-0 flex items-center justify-center"><div className="loader"></div></div>}
           <img
             src={application?.instituteStudent?.image}
@@ -60,61 +60,68 @@ const ApplicationCard = ({ application, toast, token, fetchData }) => {
             onLoad={() => setImageLoading(false)}
           />
         </div>
-        <div className="text-sm text-gray-800">
-          <p><strong>Name:</strong> {application?.instituteStudent?.name}</p>
-          <p><strong>Roll No:</strong> {application?.instituteStudent?.rollNo}</p>
-          <p><strong>Reg. No:</strong> {application?.instituteStudent?.regNo}</p>
-          <p><strong>Gender:</strong> {application?.instituteStudent?.gender === 'M' ? 'Male' : 'Female'}</p>
+        
+      </div>
+
+      <div className='w-full flex flex-col gap-[1rem] md:flex-row flex-wrap'>
+        <div className="md:w-[48%] w-full text-sm text-gray-800">
+            <p><strong>Name: </strong> {application?.instituteStudent?.name}</p>
+            <p><strong>Roll No: </strong> {application?.instituteStudent?.rollNo}</p>
+            <p><strong>Reg. No: </strong> {application?.instituteStudent?.regNo}</p>
+            <p><strong>Gender: </strong> {application?.instituteStudent?.gender === 'M' ? 'Male' : 'Female'}</p>
+        </div>
+
+        <div className="md:w-[48%] w-full text-sm text-gray-800">
+          <p><strong>Email: </strong> {application?.email}</p>
+          <p><strong>Year: </strong> {application?.instituteStudent?.year}</p>
+          <p><strong>Branch: </strong> {application?.instituteStudent?.branch}</p>
+          <p><strong>Phone: </strong> {application?.instituteStudent?.phone}</p>
         </div>
       </div>
 
-      <div className="text-sm text-gray-800 space-y-1">
-        <p><strong>Email:</strong> {application?.email}</p>
-        <p><strong>Year:</strong> {application?.instituteStudent?.year}</p>
-        <p><strong>Branch:</strong> {application?.instituteStudent?.branch}</p>
-        <p><strong>Phone:</strong> {application?.instituteStudent?.phone}</p>
+      <div className='w-full flex flex-col gap-[1rem] md:flex-row flex-wrap'>
+        <div className="md:w-[48%] w-full text-sm text-gray-800">
+          <p><strong>Payment Mode:</strong> {application?.instituteStudent?.paymentMode}</p>
+          <p><strong>Paid On:</strong> {application?.instituteStudent?.paymentDate}</p>
+          <p><strong>Amount:</strong> {application?.instituteStudent?.amountPaid}</p>
+          {application?.instituteStudent?.instituteFeeReceipt && (
+            <p><strong>Institute Fee:</strong> <a href={application?.instituteStudent?.instituteFeeReceipt} className="text-blue-600" target="_blank" rel="noreferrer">Click Here</a></p>
+          )}
+          {application?.instituteStudent?.hostelFeeReceipt && (
+            <p><strong>Hostel Fee:</strong> <a href={application?.instituteStudent?.hostelFeeReceipt} className="text-blue-600" target="_blank" rel="noreferrer">Click Here</a></p>
+          )}
+        </div>
+
+        <div className="md:w-[48%] w-full text-sm text-gray-800">
+          <p><strong>Hostel Block:</strong> {application?.instituteStudent?.hostelBlock?.name}</p>
+          <p><strong>Room No:</strong> {application?.instituteStudent?.cot?.room?.roomNumber}</p>
+          <p><strong>Floor No:</strong> {application?.instituteStudent?.cot?.room?.floorNumber}</p>
+          <p><strong>Cot No:</strong> {application?.instituteStudent?.cot?.cotNo}</p>
+        </div>
       </div>
 
-      <div className="text-sm text-gray-800 space-y-1">
-        <p><strong>Payment Mode:</strong> {application?.instituteStudent?.paymentMode}</p>
-        <p><strong>Paid On:</strong> {application?.instituteStudent?.paymentDate}</p>
-        <p><strong>Amount:</strong> {application?.instituteStudent?.amountPaid}</p>
-        {application?.instituteStudent?.instituteFeeReceipt && (
-          <p><strong>Institute Fee:</strong> <a href={application?.instituteStudent?.instituteFeeReceipt} className="text-blue-600" target="_blank" rel="noreferrer">Click Here</a></p>
-        )}
-        {application?.instituteStudent?.hostelFeeReceipt && (
-          <p><strong>Hostel Fee:</strong> <a href={application?.instituteStudent?.hostelFeeReceipt} className="text-blue-600" target="_blank" rel="noreferrer">Click Here</a></p>
-        )}
-      </div>
-
-      <div className="text-sm text-gray-800 space-y-1">
-        <p><strong>Hostel Block:</strong> {application?.instituteStudent?.hostelBlock?.name}</p>
-        <p><strong>Room No:</strong> {application?.instituteStudent?.cot?.room?.roomNumber}</p>
-        <p><strong>Floor No:</strong> {application?.instituteStudent?.cot?.room?.floorNumber}</p>
-        <p><strong>Cot No:</strong> {application?.instituteStudent?.cot?.cotNo}</p>
-      </div>
 
       <div className="flex justify-evenly mt-2">
-        <MainButton text="ACCEPT" backgroundColor="#aacc00" onClick={() => setAcceptModalVisible(true)} />
-        <MainButton text="REJECT" backgroundColor="#c9184a" textColor="white" onClick={() => setRejectModalVisible(true)} />
-        <MainButton text="FREEZE" backgroundColor="#00b4d8" textColor="white" onClick={() => setFreezeModalVisible(true)} />
+        <MainButton text="ACCEPT" backgroundColor="bg-green-500" textColor='text-white' onPress={() => setAcceptModalVisible(true)} />
+        <MainButton text="REJECT" backgroundColor="bg-red-500" textColor='text-white' onPress={() => setRejectModalVisible(true)} />
+        <MainButton text="FREEZE" backgroundColor="bg-blue-500" textColor='text-white' onPress={() => setFreezeModalVisible(true)} />
       </div>
 
       {acceptModalVisible && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg max-w-md w-full">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="bg-white backdrop-blur-lg border border-white/30 shadow-xl rounded-xl p-6 md:w-full w-[90%] max-w-md" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'}}>
             <h2 className="text-xl font-semibold text-center mb-4">Accept Application</h2>
             <div className="flex justify-evenly mt-4">
-              <button onClick={acceptHandler} disabled={isButtonDisabled} className="px-4 py-2 bg-lime-500 text-black font-semibold rounded disabled:opacity-50">Accept</button>
-              <button onClick={() => setAcceptModalVisible(false)} disabled={isButtonDisabled} className="px-4 py-2 bg-gray-300 text-black font-semibold rounded disabled:opacity-50">Cancel</button>
+              <MainButton text="Accept" backgroundColor="bg-green-500" textColor='text-white' disabled={isButtonDisabled} onPress={acceptHandler} />
+              <MainButton text="Cancel" backgroundColor="bg-gray-300" textColor='text-black' disabled={isButtonDisabled} onPress={() => setAcceptModalVisible(false)} />
             </div>
           </div>
         </div>
       )}
 
       {rejectModalVisible && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg max-w-md w-full">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="bg-white backdrop-blur-lg border border-white/30 shadow-xl rounded-xl p-6 md:w-full w-[90%] max-w-md" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'}}>
             <h2 className="text-xl font-semibold text-center mb-4">Reject Application</h2>
             <label className="block mb-1 text-sm font-medium">Reason for Rejection</label>
             <Controller
@@ -127,16 +134,16 @@ const ApplicationCard = ({ application, toast, token, fetchData }) => {
             />
             {errors.remarks && <p className="text-red-500 text-sm mt-1">Remarks is required.</p>}
             <div className="flex justify-evenly mt-4">
-              <button onClick={handleSubmit(rejectHandler)} disabled={isButtonDisabled} className="px-4 py-2 bg-red-600 text-white font-semibold rounded disabled:opacity-50">Reject</button>
-              <button onClick={() => setRejectModalVisible(false)} disabled={isButtonDisabled} className="px-4 py-2 bg-gray-300 text-black font-semibold rounded disabled:opacity-50">Cancel</button>
+              <MainButton text="Reject" backgroundColor="bg-red-500" textColor='text-white' disabled={isButtonDisabled} onPress={handleSubmit(rejectHandler)} />
+              <MainButton text="Cancel" backgroundColor="bg-gray-300" textColor='text-black' disabled={isButtonDisabled} onPress={() => setRejectModalVisible(false)} />
             </div>
           </div>
         </div>
       )}
 
       {freezeModalVisible && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg max-w-md w-full">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="bg-white backdrop-blur-lg border border-white/30 shadow-xl rounded-xl p-6 md:w-full w-[90%] max-w-md" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'}}>
             <h2 className="text-xl font-semibold text-center mb-4">Freeze Application</h2>
             <label className="block mb-1 text-sm font-medium">Reason for Freezing</label>
             <Controller
@@ -149,8 +156,8 @@ const ApplicationCard = ({ application, toast, token, fetchData }) => {
             />
             {errors.remarks1 && <p className="text-red-500 text-sm mt-1">Remarks is required.</p>}
             <div className="flex justify-evenly mt-4">
-              <button onClick={handleSubmit(freezeHandler)} disabled={isButtonDisabled} className="px-4 py-2 bg-sky-500 text-white font-semibold rounded disabled:opacity-50">Freeze</button>
-              <button onClick={() => setFreezeModalVisible(false)} disabled={isButtonDisabled} className="px-4 py-2 bg-gray-300 text-black font-semibold rounded disabled:opacity-50">Cancel</button>
+              <MainButton text="Freeze" backgroundColor="bg-blue-500" textColor='text-white' disabled={isButtonDisabled} onPress={handleSubmit(freezeHandler)} />
+              <MainButton text="Cancel" backgroundColor="bg-gray-300" textColor='text-black' disabled={isButtonDisabled} onPress={() => setFreezeModalVisible(false)} />
             </div>
           </div>
         </div>

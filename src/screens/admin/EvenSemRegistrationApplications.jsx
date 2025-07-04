@@ -27,20 +27,17 @@ const EvenSemRegistrationApplications = () => {
   return (
     <div className="w-full flex flex-col items-center px-4 py-2">
       {applications && (
-        <div className="w-full flex justify-between items-center px-4 py-4">
+        <div className="w-full flex justify-center items-center px-4 py-4">
           <div className="flex items-center gap-4">
             <p className="font-semibold text-black text-base">Pending Applications</p>
             <span className="py-1 px-3 bg-purple-400 text-white font-bold rounded-full">
               {applications.length}
             </span>
           </div>
-          {/* <button onClick={() => navigate('/freezed-applications')}>
-            <FaLock size={20} className="text-gray-600" />
-          </button> */}
         </div>
       )}
 
-      <div className="w-full flex flex-col items-center gap-4">
+      <div className="w-full flex md:flex-row flex-wrap flex-col justify-center items-stretch gap-4">
         {applications.map((application, index) => (
           <EvenSemApplicationCard
             key={index}
