@@ -467,7 +467,7 @@ const ManageStudentAccounts = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
           <div className="bg-white flex justify-center flex-col gap-[1rem] backdrop-blur-lg border border-white/30 shadow-xl rounded-xl p-6 md:w-full w-[90%] max-w-md" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'}}>
             <span className="text-lg font-semibold text-center">
-              Are you sure, this student will be deleted permanently.
+              Are you sure you want to permanently delete this student. This action cannot be undone.
             </span>
             <div className="flex flex-row gap-4 w-full justify-center">
               <MainButton text="Delete" isButtonDisabled={isButtonDisabled} onPress={deleteStudentAccountHandler} backgroundColor='bg-red-500' textColor='text-white' />
