@@ -2,7 +2,7 @@
 // const SERVER_BASE_URL = "https://backend-lxur.onrender.com/api/v1"
 
 // NEW SERVER (Backend1)
-// const SERVER_BASE_URL = "https://backend1-itzt.onrender.com/api/v1"
+const SERVER_BASE_URL = "https://backend1-itzt.onrender.com/api/v1"
 
 // PURCHASED SERVER 
 // const SERVER_BASE_URL = "https://backend-c938.onrender.com/api/v1"
@@ -11,7 +11,7 @@
 // NOTE : USE YOUR LAPTOP IPv4 host Address - cmd : ipconfig
 
 // LOCALHOST SERVER
-const SERVER_BASE_URL = "http://localhost:4000/api/v1"
+// const SERVER_BASE_URL = "http://localhost:4000/api/v1"
 
 
 export const authEndPoints = {
