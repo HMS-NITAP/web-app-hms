@@ -11,7 +11,10 @@
 // NOTE : USE YOUR LAPTOP IPv4 host Address - cmd : ipconfig
 
 // LOCALHOST SERVER
-const SERVER_BASE_URL = "http://localhost:4000/api/v1"
+// const SERVER_BASE_URL = "http://localhost:4000/api/v1"
+
+// AWS SERVER
+const SERVER_BASE_URL = "ec2-13-233-255-118.ap-south-1.compute.amazonaws.com:4000/api/v1"
 
 
 export const authEndPoints = {
