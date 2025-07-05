@@ -45,6 +45,7 @@ import CotDetails from '../screens/admin/CotDetails';
 import ManageStudentAccounts from '../screens/admin/ManageStudentAccounts';
 import ChangeStudentCot from '../screens/admin/ChangeStudentCot';
 import EvenSemRegistrationApplications from '../screens/admin/EvenSemRegistrationApplications';
+import ViewAllPendingComplaints from "../screens/admin/ViewAllPendingComplaints";
 
 export const USER_ROLES = {
   ADMIN: 'ADMIN',
@@ -75,6 +76,7 @@ export const adminRoutes = [
   { path: "/admin/odd-sem-applications", element: <StudentRegistrationApplications />, label: "Odd Sem Reg. Apps", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/even-sem-applications", element: <EvenSemRegistrationApplications />, label: "Even Sem Reg. Apps", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/manage-students", element: <ManageStudentAccounts />, label: "Manage Students", icon: <FaChild />, role: [USER_ROLES.ADMIN] },
+  { path: "/admin/view-all-unresolved-complaints", element: <ViewAllPendingComplaints />, label: "Unresolved Complaints", icon: <FaBookBookmark />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/manage-officials", element: <ManageOfficialAccounts />, label: "Manage Officials", icon: <FaUserShield />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/create-official-account", element: <CreateOfficialAccount />, role: [USER_ROLES.ADMIN], hidden: true },
   { path: "/admin/manage-hostels", element: <ManageHostels />, label: "Manage Hostels", icon: <FaBuilding />, role: [USER_ROLES.ADMIN] },
