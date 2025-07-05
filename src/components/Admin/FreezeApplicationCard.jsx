@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { confirmFreezeRegistrationApplication } from '../../services/operations/AdminAPI';
+import { confirmFreezeRegistrationApplication, deleteFreezedRegistrationApplication } from '../../services/operations/AdminAPI';
 import { Students } from '../../static/IndisciplinaryStudents';
 import MainButton from '../common/MainButton';
+import { Controller, useForm } from 'react-hook-form';
 
 const FreezeApplicationCard = ({ application, toast, token, fetchData }) => {
   const [acceptModalVisible, setAcceptModalVisible] = useState(false);
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const dispatch = useDispatch();
+
+  const { control, handleSubmit, reset, formState: { errors } } = useForm();
 
   const acceptHandler = async () => {
     setIsButtonDisabled(true);
@@ -18,6 +22,17 @@ const FreezeApplicationCard = ({ application, toast, token, fetchData }) => {
     setAcceptModalVisible(false);
     setIsButtonDisabled(false);
   };
+
+  const deleteHandler = async(data) => {
+    setIsButtonDisabled(true);
+    let formdata = new FormData();
+    formdata.append("userId", application?.id);
+    formdata.append("remarks", data?.remarks);
+    await dispatch(deleteFreezedRegistrationApplication(formdata, token, toast));
+    fetchData();
+    setDeleteModalVisible(false);
+    setIsButtonDisabled(false);
+  }
 
   const student = application?.instituteStudent;
   const isIndisciplinary = Students.includes(student?.rollNo);
@@ -76,8 +91,9 @@ const FreezeApplicationCard = ({ application, toast, token, fetchData }) => {
       </div>
 
       {/* Accept Button */}
-      <div className="mt-4 flex justify-center">
+      <div className="mt-4 flex justify-center gap-[2rem]">
         <MainButton text="ACCEPT" backgroundColor="bg-green-500" textColor='text-white' onPress={() => setAcceptModalVisible(true)} />
+        <MainButton text="DELETE" backgroundColor="bg-red-500" textColor='text-white' onPress={() => setDeleteModalVisible(true)} />
       </div>
 
       {/* Modal */}
@@ -88,6 +104,40 @@ const FreezeApplicationCard = ({ application, toast, token, fetchData }) => {
             <div className="flex justify-evenly mt-4">
               <MainButton text="Accept" backgroundColor="bg-green-500" textColor='text-white' disabled={isButtonDisabled} onPress={acceptHandler} />
               <MainButton text="Cancel" backgroundColor="bg-gray-300" textColor='text-black' disabled={isButtonDisabled} onPress={() => setAcceptModalVisible(false)} />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {deleteModalVisible && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="bg-white backdrop-blur-lg border border-white/30 shadow-xl rounded-xl p-6 md:w-full w-[90%] max-w-md" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'}}>
+            <p className="text-lg font-semibold text-center text-black mb-4">Are you sure, this application will be deleted.</p>
+            <div className="flex justify-evenly mt-4">
+              <MainButton text="Delete" backgroundColor="bg-red-500" textColor='text-white' disabled={isButtonDisabled} onPress={deleteHandler} />
+              <MainButton text="Cancel" backgroundColor="bg-gray-300" textColor='text-black' disabled={isButtonDisabled} onPress={() => setDeleteModalVisible(false)} />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {deleteModalVisible && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="bg-white backdrop-blur-lg border border-white/30 shadow-xl rounded-xl p-6 md:w-full w-[90%] max-w-md" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'}}>
+            <h2 className="text-xl font-semibold text-center mb-4">Delete Freezed Application</h2>
+            <label className="block mb-1 text-sm font-medium">Reason for Rejection</label>
+            <Controller
+              control={control}
+              name="remarks"
+              rules={{ required: true }}
+              render={({ field }) => (
+                <textarea {...field} className="w-full border rounded p-2" rows={2} placeholder="Enter reason for rejection" />
+              )}
+            />
+            {errors.remarks && <p className="text-red-500 text-sm mt-1">Remarks is required.</p>}
+            <div className="flex justify-evenly mt-4">
+              <MainButton text="Delete" backgroundColor="bg-red-500" textColor='text-white' disabled={isButtonDisabled} onPress={handleSubmit(deleteHandler)} />
+              <MainButton text="Cancel" backgroundColor="bg-gray-300" textColor='text-black' disabled={isButtonDisabled} onPress={() => setDeleteModalVisible(false)} />
             </div>
           </div>
         </div>

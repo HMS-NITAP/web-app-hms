@@ -31,6 +31,8 @@ const {
     FETCH_EVEN_SEM_REGISTRATION_APPLICATIONS_API,
     ACCEPT_EVEN_SEM_REGISTRATION_APPLICATIONS_API,
     REJECT_EVEN_SEM_REGISTRATION_APPLICATIONS_API,
+    DELETE_FREEZED_REGISTRATION_APPLICATION_API,
+    FETCH_ALL_PENDING_HOSTEL_COMPLAINTS_API
 } = adminEndPoints;
 
 const {
@@ -692,6 +694,55 @@ export const rejectEvenSemRegistrationApplication = (formData,token,toast) => {
             toast.dismiss(id);
             toast.error(errorMessage);
             return false;
+        }
+    }
+}
+
+export const deleteFreezedRegistrationApplication = (formData,token,toast) => {
+    return async() => {
+        let id = toast("Please Wait...");
+        try{    
+            console.log("FORMDATA", formData);
+            const response = await APIconnector("PUT",DELETE_FREEZED_REGISTRATION_APPLICATION_API,formData,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                toast.dismiss(id);
+                toast.success(response?.data?.message);
+                throw new Error(response?.data?.message);
+            }
+
+            toast.dismiss(id);
+            toast.success(response?.data?.message);
+            return true;
+        }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to Delete Application";
+            console.log(e);
+            toast.dismiss(id);
+            toast.error(errorMessage);
+            return false;
+        }
+    }
+}
+
+export const fetchAllPendingComplaints = (token,toast) => {
+    return async() => {
+        let id = toast("Please Wait...");
+        try{    
+            const response = await APIconnector("GET",FETCH_ALL_PENDING_HOSTEL_COMPLAINTS_API,null,{Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                toast.dismiss(id);
+                toast.success(response?.data?.message);
+                throw new Error(response?.data?.message);
+            }
+
+            toast.dismiss(id);
+            // toast.success(response?.data?.message);
+            return response?.data?.data;
+        }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to fetch Complaints";
+            console.log(e);
+            toast.dismiss(id);
+            toast.error(errorMessage);
+            return null;
         }
     }
 }

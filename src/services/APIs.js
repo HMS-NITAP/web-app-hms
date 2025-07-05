@@ -125,6 +125,8 @@ export const adminEndPoints = {
     FETCH_EVEN_SEM_REGISTRATION_APPLICATIONS_API : SERVER_BASE_URL + '/admin/fetchEvenSemRegistrationApplications',
     ACCEPT_EVEN_SEM_REGISTRATION_APPLICATIONS_API : SERVER_BASE_URL + '/admin/acceptEvenSemRegistrationApplication',
     REJECT_EVEN_SEM_REGISTRATION_APPLICATIONS_API : SERVER_BASE_URL + '/admin/rejectEvenSemRegistrationApplication',
+    DELETE_FREEZED_REGISTRATION_APPLICATION_API : SERVER_BASE_URL + '/admin/deleteFreezedStudentApplication',
+    FETCH_ALL_PENDING_HOSTEL_COMPLAINTS_API : SERVER_BASE_URL + '/admin/getPendingComplaints',
 
     // ANNOUCEMENT APIs : 
     DELETE_ANNOUNCEMENT_API : SERVER_BASE_URL + '/admin/deleteAnnouncement',
