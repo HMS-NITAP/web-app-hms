@@ -112,8 +112,8 @@ const ApplicationCard = ({ application, toast, token, fetchData }) => {
           <div className="bg-white backdrop-blur-lg border border-white/30 shadow-xl rounded-xl p-6 md:w-full w-[90%] max-w-md" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'}}>
             <h2 className="text-xl font-semibold text-center mb-4">Accept Application</h2>
             <div className="flex justify-evenly mt-4">
-              <MainButton text="Accept" backgroundColor="bg-green-500" textColor='text-white' disabled={isButtonDisabled} onPress={acceptHandler} />
-              <MainButton text="Cancel" backgroundColor="bg-gray-300" textColor='text-black' disabled={isButtonDisabled} onPress={() => setAcceptModalVisible(false)} />
+              <MainButton text="Accept" backgroundColor="bg-green-500" textColor='text-white' isButtonDisabled={isButtonDisabled} onPress={acceptHandler} />
+              <MainButton text="Cancel" backgroundColor="bg-gray-300" textColor='text-black' isButtonDisabled={isButtonDisabled} onPress={() => setAcceptModalVisible(false)} />
             </div>
           </div>
         </div>
@@ -134,8 +134,8 @@ const ApplicationCard = ({ application, toast, token, fetchData }) => {
             />
             {errors.remarks && <p className="text-red-500 text-sm mt-1">Remarks is required.</p>}
             <div className="flex justify-evenly mt-4">
-              <MainButton text="Reject" backgroundColor="bg-red-500" textColor='text-white' disabled={isButtonDisabled} onPress={handleSubmit(rejectHandler)} />
-              <MainButton text="Cancel" backgroundColor="bg-gray-300" textColor='text-black' disabled={isButtonDisabled} onPress={() => setRejectModalVisible(false)} />
+              <MainButton text="Reject" backgroundColor="bg-red-500" textColor='text-white' isButtonDisabled={isButtonDisabled} onPress={handleSubmit(rejectHandler)} />
+              <MainButton text="Cancel" backgroundColor="bg-gray-300" textColor='text-black' isButtonDisabled={isButtonDisabled} onPress={() => setRejectModalVisible(false)} />
             </div>
           </div>
         </div>
@@ -156,8 +156,8 @@ const ApplicationCard = ({ application, toast, token, fetchData }) => {
             />
             {errors.remarks1 && <p className="text-red-500 text-sm mt-1">Remarks is required.</p>}
             <div className="flex justify-evenly mt-4">
-              <MainButton text="Freeze" backgroundColor="bg-blue-500" textColor='text-white' disabled={isButtonDisabled} onPress={handleSubmit(freezeHandler)} />
-              <MainButton text="Cancel" backgroundColor="bg-gray-300" textColor='text-black' disabled={isButtonDisabled} onPress={() => setFreezeModalVisible(false)} />
+              <MainButton text="Freeze" backgroundColor="bg-blue-500" textColor='text-white' isButtonDisabled={isButtonDisabled} onPress={handleSubmit(freezeHandler)} />
+              <MainButton text="Cancel" backgroundColor="bg-gray-300" textColor='text-black' isButtonDisabled={isButtonDisabled} onPress={() => setFreezeModalVisible(false)} />
             </div>
           </div>
         </div>

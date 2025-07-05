@@ -217,8 +217,8 @@ const StudentDashboardScreen = () => {
               {errors.amountPaid2 && <span className="text-red-600 text-sm">Amount Paid is required.</span>}
             </div>
             <div className="flex flex-row gap-4 justify-center mt-2">
-              <MainButton text="Submit" backgroundColor="bg-green-500" textColor='text-white' disabled={isButtonDisabled} onPress={handleSubmit(submitModalHandler)} />
-              <MainButton text="Cancel" backgroundColor="bg-gray-300" textColor='text-black' disabled={isButtonDisabled} onPress={cancelModalHandler} />
+              <MainButton text="Submit" backgroundColor="bg-green-500" textColor='text-white' isButtonDisabled={isButtonDisabled} onPress={handleSubmit(submitModalHandler)} />
+              <MainButton text="Cancel" backgroundColor="bg-gray-300" textColor='text-black' isButtonDisabled={isButtonDisabled} onPress={cancelModalHandler} />
             </div>
           </div>
         </div>

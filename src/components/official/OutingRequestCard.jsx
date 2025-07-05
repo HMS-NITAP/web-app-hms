@@ -157,8 +157,8 @@ const ModalPopup = ({ title, onConfirm, onCancel, isButtonDisabled }) => (
     <div className="bg-white backdrop-blur-lg border border-white/30 shadow-xl rounded-xl p-6 md:w-full w-[90%] max-w-md" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'}}>
       <p className="text-lg font-semibold text-center mb-[1rem]">{title}</p>
       <div className="flex justify-evenly">
-        <MainButton text={"Yes"} onPress={onConfirm} disabled={isButtonDisabled} backgroundColor='bg-green-500' textColor='text-white' />
-        <MainButton text={"Cancel"} onPress={onCancel} disabled={isButtonDisabled} backgroundColor='bg-gray-300' textColor='text-black' />
+        <MainButton text={"Yes"} onPress={onConfirm} isButtonDisabled={isButtonDisabled} backgroundColor='bg-green-500' textColor='text-white' />
+        <MainButton text={"Cancel"} onPress={onCancel} isButtonDisabled={isButtonDisabled} backgroundColor='bg-gray-300' textColor='text-black' />
       </div>
     </div>
   </div>
@@ -178,8 +178,8 @@ const FormModal = ({ title, onSubmit, onCancel, control, errors, placeholder, is
       />
       {errors.remarks && <p className="text-red-500 text-sm">Remarks is required.</p>}
       <div className="flex justify-evenly mt-[1rem]">
-        <MainButton text={"Submit"} onPress={onSubmit} disabled={isButtonDisabled} backgroundColor='bg-red-500' textColor='text-white' />
-        <MainButton text={"Cancel"} onPress={onCancel} disabled={isButtonDisabled} backgroundColor='bg-gray-300' textColor='text-black' />
+        <MainButton text={"Submit"} onPress={onSubmit} isButtonDisabled={isButtonDisabled} backgroundColor='bg-red-500' textColor='text-white' />
+        <MainButton text={"Cancel"} onPress={onCancel} isButtonDisabled={isButtonDisabled} backgroundColor='bg-gray-300' textColor='text-black' />
       </div>
     </div>
   </div>

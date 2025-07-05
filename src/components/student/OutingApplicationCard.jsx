@@ -102,8 +102,8 @@ const OutingApplicationCard = ({ application, token, fetchData }) => {
           <div className="bg-white backdrop-blur-lg border border-white/30 shadow-xl rounded-xl flex flex-col justify-center items-center p-6 md:w-full w-[90%] max-w-md gap-[2rem]" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'}}>
             <p className="text-lg text-black text-center font-semibold">Are you sure you want to delete this Outing Application?</p>
             <div className="flex justify-between gap-4">
-              <MainButton text={"Yes"} onPress={handleConfirmDelete} disabled={isButtonDisabled} backgroundColor='bg-red-500' textColor='text-white' />
-              <MainButton text={"No"} onPress={() => setModalVisible(false)} disabled={isButtonDisabled} backgroundColor='bg-gray-300' textColor='text-black' />
+              <MainButton text={"Yes"} onPress={handleConfirmDelete} isButtonDisabled={isButtonDisabled} backgroundColor='bg-red-500' textColor='text-white' />
+              <MainButton text={"No"} onPress={() => setModalVisible(false)} isButtonDisabled={isButtonDisabled} backgroundColor='bg-gray-300' textColor='text-black' />
             </div>
           </div>
         </div>
@@ -115,8 +115,8 @@ const OutingApplicationCard = ({ application, token, fetchData }) => {
           <div className="bg-white backdrop-blur-lg border border-white/30 shadow-xl rounded-xl flex flex-col justify-center items-center p-6 md:w-full w-[90%] gap-[2rem] max-w-md" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'}}>
             <p className="text-lg text-black text-center font-semibold">Are you sure, you want to log return from vacation?</p>
             <div className="flex justify-between gap-4">
-              <MainButton text={"Yes"} onPress={handleMarkReturn} disabled={isButtonDisabled} backgroundColor='bg-green-500' textColor='text-white' />
-              <MainButton text={"No"} onPress={() => setMarkReturnModalOpen(false)} disabled={isButtonDisabled} backgroundColor='bg-gray-300' textColor='text-black' />
+              <MainButton text={"Yes"} onPress={handleMarkReturn} isButtonDisabled={isButtonDisabled} backgroundColor='bg-green-500' textColor='text-white' />
+              <MainButton text={"No"} onPress={() => setMarkReturnModalOpen(false)} isButtonDisabled={isButtonDisabled} backgroundColor='bg-gray-300' textColor='text-black' />
             </div>
           </div>
         </div>

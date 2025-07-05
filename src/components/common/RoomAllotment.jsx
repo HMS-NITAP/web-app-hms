@@ -220,8 +220,8 @@ const RoomAllotment = () => {
               <span className="font-semibold text-black">Cot No : <span className="font-normal">{submitDetails?.cotNo}</span></span>
             </div>
             <div className="flex flex-row gap-[2rem] w-full justify-center items-center">
-              <MainButton text={"Submit"} onPress={handleSubmit} disabled={isButtonDisabled} backgroundColor='bg-green-500' textColor='text-white' />
-              <MainButton text={"Cancel"} onPress={cancelHandler} disabled={isButtonDisabled} backgroundColor='bg-gray-300' textColor='text-black' />
+              <MainButton text={"Submit"} onPress={handleSubmit} isButtonDisabled={isButtonDisabled} backgroundColor='bg-green-500' textColor='text-white' />
+              <MainButton text={"Cancel"} onPress={cancelHandler} isButtonDisabled={isButtonDisabled} backgroundColor='bg-gray-300' textColor='text-black' />
             </div>
           </div>
         </div>
