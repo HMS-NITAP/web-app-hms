@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCotsForChangeCotOption, swapOrExchangeCot } from '../../services/operations/AdminAPI';
 import { useParams, useNavigate } from 'react-router-dom';

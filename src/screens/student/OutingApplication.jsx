@@ -235,7 +235,7 @@ const OutingApplicationWeb = () => {
             isButtonDisabled={isButtonDisabled}
             text={"Apply"}
             onPress={handleSubmit(submitHandler)}
-            backgroundColor="bg-green-500"
+            backgroundColor="bg-yellow-500"
             textColor="text-black"
             width="w-full"
           />

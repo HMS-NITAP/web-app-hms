@@ -11,8 +11,7 @@ import { FaMagnifyingGlass } from 'react-icons/fa6';
 import MainButton from '../../components/common/MainButton';
 import { FiEdit } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
-
-const MAX_IMAGE_SIZE = 250 * 1024;
+import { MAX_PROFILE_IMAGE_SIZE } from '../../config/config';
 
 const ManageStudentAccounts = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -32,16 +31,16 @@ const ManageStudentAccounts = () => {
   const { token } = useSelector((state) => state.Auth);
 
   // File picker for image
-  const pickUpImage = useCallback((e) => {
+  function pickUpImage(e) {
     const file = e.target.files[0];
     if (file) {
-      if (file.size > MAX_IMAGE_SIZE) {
-        toast('File size exceeds the limit of 250KB. Please select a smaller file.', { icon: '⚠️' });
-      } else {
-        setImageResponse(file);
-      }
+        if (file.size > MAX_PROFILE_IMAGE_SIZE) {
+            toast('File size exceeds the limit of 250KB. Please select a smaller file.', { icon: '⚠️' });
+        } else {
+            setImageResponse(file);
+        }
     }
-  }, []);
+  }
 
   const getRatingLabel = (rating) => {
     rating = parseFloat(rating);

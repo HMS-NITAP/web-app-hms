@@ -1,9 +1,10 @@
-import React, { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
 import { createHostelBlock } from '../../services/operations/AdminAPI';
 import MainButton from '../../components/common/MainButton';
+import { MAX_HOSTEL_IMAGE_SIZE } from '../../config/config';
 
 const CreateHostelBlock = () => {
   const seaterOptions = ['OneSeater', 'TwoSeater', 'FourSeater'];
@@ -29,9 +30,16 @@ const CreateHostelBlock = () => {
   const [year, setYear] = useState(1);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-  };
+  function handleFileChange(e) {
+      const file = e.target.files[0];
+      if (file) {
+          if (file.size > MAX_HOSTEL_IMAGE_SIZE) {
+              toast('File size exceeds the limit of 500KB. Please select a smaller file.', { icon: '⚠️' });
+          } else {
+              setFile(file);
+          }
+      }
+  }
 
   const submitHandler = async (data) => {
     if (!file) return toast.error("Please select an image");

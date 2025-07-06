@@ -3,6 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { createHostelComplaint } from '../../services/operations/StudentAPI';
 import toast from 'react-hot-toast';
+import { MAX_COMPLAINT_FILE_SIZE } from '../../config/config';
 
 const RegisterComplaint = () => {
   const dropdownOptions = [
@@ -46,12 +47,16 @@ const RegisterComplaint = () => {
     setIsButtonDisabled(false);
   };
 
-  const pickUpFile = useCallback(async (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setFileResponse(file);
-    }
-  }, []);
+  function pickUpFile(e) {
+        const file = e.target.files[0];
+        if (file) {
+            if (file.size > MAX_COMPLAINT_FILE_SIZE) {
+                toast('File size exceeds the limit of 1 MB. Please select a smaller file.', { icon: '⚠️' });
+            } else {
+                setFileResponse(file);
+            }
+        }
+  }
 
   return (
     <div className="w-full flex flex-col items-center py-10">

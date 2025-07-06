@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { createAnnouncement } from '../../services/operations/OfficialAPI';
 import toast from 'react-hot-toast';
+import { MAX_ANNOUNCEMENT_FILE_SIZE } from '../../config/config';
 
 const CreateAnnouncement = () => {
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
@@ -10,6 +11,17 @@ const CreateAnnouncement = () => {
   const { token } = useSelector((state) => state.Auth);
   const [file, setFile] = useState(null);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
+  function pickUpFile(e) {
+      const file = e.target.files[0];
+      if (file) {
+          if (file.size > MAX_ANNOUNCEMENT_FILE_SIZE) {
+              toast('File size exceeds the limit of 5 MB. Please select a smaller file.', { icon: '⚠️' });
+          } else {
+              setFile(file);
+          }
+      }
+  }
 
   const onSubmit = async (data) => {
     setIsButtonDisabled(true);
@@ -71,7 +83,7 @@ const CreateAnnouncement = () => {
           <input
             type="file"
             accept="*"
-            onChange={(e) => setFile(e.target.files[0])}
+            onChange={pickUpFile}
             className="max-w-[250px] px-[1rem] py-2 bg-blue-500 text-white font-semibold rounded-md cursor-pointer transition-transform duration-200 hover:scale-105"
           />
           {file && <p className="text-sm text-green-700 font-semibold">File name : {file.name}</p>}

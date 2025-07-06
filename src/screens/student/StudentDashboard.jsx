@@ -5,6 +5,7 @@ import { toast } from 'react-hot-toast';
 import Rating from 'react-rating';
 import MainButton from '../../components/common/MainButton';
 import { addEvenSemFeeReceipt, getStudentDashboardData } from '../../services/operations/StudentAPI';
+import { MAX_FEE_RECEIPT_FILE_SIZE } from '../../config/config';
 
 const quotes = [
   "Wishing you a day filled with immense love, joy, and countless beautiful moments! May all your dreams come true on this special day! 🎉",
@@ -13,8 +14,6 @@ const quotes = [
   "Here's to a fantastic year ahead, filled with new adventures, growth, and endless possibilities! Cheers to your bright future and all the happiness it holds! 🍰",
   "Celebrate your special day in a special way, making memories that will last a lifetime! May your birthday be filled with all the joy and love your heart can hold! 🎁"
 ];
-
-const MAX_FILE_SIZE = 250 * 1024;
 
 const getRandomQuote = () => {
   const randomIndex = Math.floor(Math.random() * quotes.length);
@@ -107,7 +106,7 @@ const StudentDashboardScreen = () => {
   const pickUpHostelFeeReceipt = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    if (file.size > MAX_FILE_SIZE) {
+    if (file.size > MAX_FEE_RECEIPT_FILE_SIZE) {
       toast.error('File size exceeds the limit of 250KB. Please select a smaller file.');
       return;
     }

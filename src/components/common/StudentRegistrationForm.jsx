@@ -1,13 +1,11 @@
-import React, { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
 import { setRegistrationData, setRegistrationStep } from '../../reducers/slices/AuthSlice';
 import { sendOtpToStudent } from '../../services/operations/AuthAPI';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
-
-const MAX_FILE_SIZE = 250 * 1024;
-const MAX_IMAGE_SIZE = 250 * 1024;
+import { MAX_FEE_RECEIPT_FILE_SIZE, MAX_PROFILE_IMAGE_SIZE } from '../../config/config';
 
 const StudentRegistrationForm = () => {
     const yearOptions = [
@@ -48,38 +46,38 @@ const StudentRegistrationForm = () => {
     const [secureText1, setSecureText1] = useState(true);
     const [secureText2, setSecureText2] = useState(true);
 
-    const pickUpImage = useCallback(async (e) => {
+    function pickUpImage(e) {
         const file = e.target.files[0];
         if (file) {
-            if (file.size > MAX_IMAGE_SIZE) {
+            if (file.size > MAX_PROFILE_IMAGE_SIZE) {
                 toast('File size exceeds the limit of 250KB. Please select a smaller file.', { icon: '⚠️' });
             } else {
                 setImageResponse(file);
             }
         }
-    }, [toast]);
+    }
 
-    const pickUpHostelFeeReceipt = useCallback(async (e) => {
+    function pickUpHostelFeeReceipt(e) {
         const file = e.target.files[0];
         if (file) {
-            if (file.size > MAX_FILE_SIZE) {
+            if (file.size > MAX_FEE_RECEIPT_FILE_SIZE) {
                 toast('File size exceeds the limit of 250KB. Please select a smaller file.', { icon: '⚠️' });
             } else {
                 setHostelFeeReceiptResponse(file);
             }
         }
-    }, [toast]);
+    }
 
-    const pickUpInstituteFeeReceipt = useCallback(async (e) => {
+    function pickUpInstituteFeeReceipt(e) {
         const file = e.target.files[0];
         if (file) {
-            if (file.size > MAX_FILE_SIZE) {
-                toast('File size exceeds the limit of 150KB. Please select a smaller file.', { icon: '⚠️' });
+            if (file.size > MAX_FEE_RECEIPT_FILE_SIZE) {
+                toast('File size exceeds the limit of 250KB. Please select a smaller file.', { icon: '⚠️' });
             } else {
                 setInstituteFeeReceiptResponse(file);
             }
         }
-    }, [toast]);
+    }
 
     const formatDate = (date) => {
         if (!date) return "NO DATE IS SELECTED";
@@ -94,7 +92,7 @@ const StudentRegistrationForm = () => {
 
     const submitHandler = async(data) => {
         if(!data?.email.endsWith("@student.nitandhra.ac.in") && selectedYear !== 1){
-            // For 1st year students
+            // Not for 1st year students
             toast("Please Use Your Institute Email ID",{icon:"⚠️"});
             return;
         }
@@ -164,9 +162,9 @@ const StudentRegistrationForm = () => {
                     <li>Click on the Link to Open Hostel Fee Payment Portal : <a href="https://payments.billdesk.com/bdcollect/pay?p1=5213&p2=15" className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">https://payments.billdesk.com/bdcollect/pay?p1=5213&p2=15</a></li>
                     <li>Ensure your Institute email address is correct.</li>
                     <li>Fill the details with atmost care, as once saved they can't be changed.</li>
-                    <li>Upload a recent proper passport size photo of yours not exceeding 250KB size.</li>
+                    <li>Upload a recent proper passport size photo of yours not exceeding 250 KB size.</li>
                     <li>Upload Image in JPG or JPEG format.</li>
-                    <li>Upload Your fee Receipts in PDF Format not exceeding 150KB size each</li>
+                    <li>Upload Your fee Receipts in PDF Format not exceeding 250 KB size each</li>
                     <li>Contact support under Development Team, if you encounter any issues</li>
                     <li>Do not share your OTP and credentials with anyone.</li>
                 </ul>

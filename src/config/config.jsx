@@ -18,7 +18,7 @@ import StudentDashboard from '../screens/student/StudentDashboard';
 import AttendanceHistory from '../screens/student/AttendanceHistory';
 import OutingApplication from '../screens/student/OutingApplication';
 import RegisterComplaint from '../screens/student/RegisterComplaint';
-import Gallery from '../screens/institute/Gallary';
+// import Gallery from '../screens/institute/Gallary';
 import Announcements from '../screens/common/Announcements';
 import OutingRequest from '../screens/official/OutingRequest';
 import ApplicationHistory from '../screens/student/ApplicationHistory';
@@ -61,7 +61,7 @@ export const authRoutes = [
   { path: "/mess-menu", element: <MessMenu />, label: "Mess Menu", icon: <FaBowlFood />, role: null },
   { path: "/contact-us", element: <ContactUs />, label: "Contact Us", icon: <FaAddressBook />, role: null },
   { path: "/development-team", element: <DevelopmentTeam />, label: "Development Team", icon: <FaUsers />, role: null },
-  { path: "/gallery", element: <Gallery />, label: "Gallery", icon: <FaImage />, role: null },
+  // { path: "/gallery", element: <Gallery />, label: "Gallery", icon: <FaImage />, role: null },
   { path: "/view-feedback", element: <ViewMessFeedBack />, label: "View Mess Feedback", icon: <FaStar />, role: null },
 
   { path: "/reset-password-email-sent", element: <ResetPasswordMailSent />, role: null, hidden: true },
@@ -91,7 +91,7 @@ export const adminRoutes = [
   { path: "/mess-menu", element: <MessMenu />, label: "Mess Menu", icon: <FaBowlFood />, role: null },
   { path: "/contact-us", element: <ContactUs />, label: "Contact Us", icon: <FaAddressBook />, role: null },
   { path: "/development-team", element: <DevelopmentTeam />, label: "Development Team", icon: <FaUsers />, role: null },
-  { path: "/gallery", element: <Gallery />, label: "Gallery", icon: <FaImage />, role: null },
+  // { path: "/gallery", element: <Gallery />, label: "Gallery", icon: <FaImage />, role: null },
   { path: "/detailed-mess-menu", element: <DetailedMessMenu />, role: null, hidden: true },
   // { path: "*", element: <AdminDashboard />, role: [USER_ROLES.ADMIN], hidden: true },
 ]
@@ -112,7 +112,7 @@ export const studentRoutes = [
   { path: "/mess-menu", element: <MessMenu />, label: "Mess Menu", icon: <FaBowlFood />, role: null },
   { path: "/contact-us", element: <ContactUs />, label: "Contact Us", icon: <FaAddressBook />, role: null },
   { path: "/development-team", element: <DevelopmentTeam />, label: "Development Team", icon: <FaUsers />, role: null },
-  { path: "/gallery", element: <Gallery />, label: "Gallery", icon: <FaImage />, role: null },
+  // { path: "/gallery", element: <Gallery />, label: "Gallery", icon: <FaImage />, role: null },
   { path: "/detailed-mess-menu", element: <DetailedMessMenu />, role: null, hidden: true },
   // { path: "*", element: <StudentDashboard />, role: [USER_ROLES.STUDENT], hidden: true },
 ]
@@ -129,6 +129,12 @@ export const officialRoutes = [
   { path: "/mess-menu", element: <MessMenu />, label: "Mess Menu", icon: <FaBowlFood />, role: null },
   { path: "/contact-us", element: <ContactUs />, label: "Contact Us", icon: <FaAddressBook />, role: null },
   { path: "/development-team", element: <DevelopmentTeam />, label: "Development Team", icon: <FaUsers />, role: null },
-  { path: "/gallery", element: <Gallery />, label: "Gallery", icon: <FaImage />, role: null },
+  // { path: "/gallery", element: <Gallery />, label: "Gallery", icon: <FaImage />, role: null },
   { path: "/detailed-mess-menu", element: <DetailedMessMenu />, role: null, hidden: true },
 ];
+
+export const MAX_PROFILE_IMAGE_SIZE = 250 * 1024; // 250 KB
+export const MAX_FEE_RECEIPT_FILE_SIZE = 250 * 1024; // 250 KB
+export const MAX_HOSTEL_IMAGE_SIZE = 500 * 1024; // 500 KB
+export const MAX_ANNOUNCEMENT_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+export const MAX_COMPLAINT_FILE_SIZE = 1 * 1024 * 1024; // 1 MB
