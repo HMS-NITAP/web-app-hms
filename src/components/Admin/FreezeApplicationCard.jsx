@@ -45,6 +45,7 @@ const FreezeApplicationCard = ({ application, toast, token, fetchData }) => {
             src={student?.image}
             alt="student"
             className="w-full h-full rounded-full object-cover"
+            loading='lazy'
           /> 
         </div> 
       </div>

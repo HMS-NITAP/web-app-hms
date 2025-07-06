@@ -58,6 +58,7 @@ const ApplicationCard = ({ application, toast, token, fetchData }) => {
             className="w-full h-full object-cover"
             onLoadStart={() => setImageLoading(true)}
             onLoad={() => setImageLoading(false)}
+            loading="lazy"
           />
         </div>
         
