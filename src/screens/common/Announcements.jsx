@@ -4,6 +4,7 @@ import { getAllAnnouncements } from '../../services/operations/CommonAPI';
 import { deleteAnnouncement } from '../../services/operations/AdminAPI';
 import toast from 'react-hot-toast';
 import { FaTrash } from 'react-icons/fa6';
+import MainButton from '../../components/common/MainButton';
 
 const Announcements = () => {
   const [announcementData, setAnnouncementData] = useState([]);
@@ -56,11 +57,11 @@ const Announcements = () => {
       {announcementData?.length === 0 ? (
         <p className="text-center text-lg font-bold text-black">No Announcements Found</p>
       ) : (
-        <div className="flex w-[90%] mx-auto md:flex-row flex-wrap flex-col gap-[1.5rem] justify-between items-start">
+        <div className="flex w-[95%] mx-auto md:flex-row flex-wrap flex-col gap-[1.5rem] justify-center items-stretch">
           {announcementData.map((announcement) => (
             <div
               key={announcement.id}
-              className="md:w-[48%] w-[90%] bg-white shadow-md rounded-xl p-4 flex flex-col gap-3 relative transition-all duration-300"
+              className="md:w-[48%] w-full bg-white shadow-md rounded-xl p-4 flex flex-col gap-3 relative transition-all duration-300"
             >
               {isNew(announcement.createdAt) && (
                 <div
@@ -103,15 +104,16 @@ const Announcements = () => {
               )}
 
               {user?.accountType === 'ADMIN' && (
-                <button
-                  onClick={() => {
+                <MainButton 
+                  onPress={() => {
                     setAnnouncementId(announcement.id);
                     setIsModalOpen(true);
-                  }}
-                  className="flex justify-center items-center bg-pink-200 hover:bg-pink-300 text-red-700 p-2 rounded-lg transition"
-                >
-                  <FaTrash size={18} />
-                </button>
+                  }} 
+                  width='w-full'
+                  textColor='text-red-800'
+                  backgroundColor='bg-red-300'
+                  text={<FaTrash size={18} />}
+                />
               )}
             </div>
           ))}
@@ -119,30 +121,14 @@ const Announcements = () => {
       )}
 
       {isModalOpen && (
-        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white w-[90%] max-w-md rounded-lg p-6 flex flex-col gap-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="bg-white backdrop-blur-lg border border-white/30 shadow-xl rounded-xl p-6 md:w-full w-[90%] max-w-md" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'}}>
             <p className="text-center text-lg font-semibold text-black">
               Are you sure? This announcement will be deleted.
             </p>
             <div className="flex justify-evenly mt-2">
-              <button
-                disabled={isButtonDisabled}
-                onClick={deleteAnnouncementHandler}
-                className={`px-4 py-2 rounded-md bg-red-500 text-white font-medium ${
-                  isButtonDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-600'
-                }`}
-              >
-                Delete
-              </button>
-              <button
-                disabled={isButtonDisabled}
-                onClick={() => setIsModalOpen(false)}
-                className={`px-4 py-2 rounded-md bg-gray-300 text-black font-medium ${
-                  isButtonDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-400'
-                }`}
-              >
-                Cancel
-              </button>
+              <MainButton text={"Delete"} onPress={deleteAnnouncementHandler} isButtonDisabled={isButtonDisabled} backgroundColor='bg-red-500' textColor='text-white' />
+              <MainButton text={"Cancel"} onPress={() => setIsModalOpen(false)} isButtonDisabled={isButtonDisabled} backgroundColor='bg-gray-300' textColor='text-black' />
             </div>
           </div>
         </div>
