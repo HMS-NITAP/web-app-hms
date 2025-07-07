@@ -7,15 +7,14 @@
 // PURCHASED SERVER 
 // const SERVER_BASE_URL = "https://backend-c938.onrender.com/api/v1"
 
-// const SERVER_BASE_URL = "http://192.168.207.208:4000/api/v1"
-// NOTE : USE YOUR LAPTOP IPv4 host Address - cmd : ipconfig
-
 // LOCALHOST SERVER
 // const SERVER_BASE_URL = "http://localhost:4000/api/v1"
 
-// AWS SERVER
-const SERVER_BASE_URL = "http://ec2-15-207-247-90.ap-south-1.compute.amazonaws.com:4000/api/v1"
+// PERSONAL AWS SERVER
+// const SERVER_BASE_URL = "http://ec2-15-207-247-90.ap-south-1.compute.amazonaws.com:4000/api/v1"
 
+// CLG AWS SERVER
+const SERVER_BASE_URL = "http://15.207.249.54:4000/api/v1"
 
 export const authEndPoints = {
     SENDOTP_API : SERVER_BASE_URL + "/auth/sendOTP",
