@@ -14,7 +14,7 @@
 // const SERVER_BASE_URL = "http://ec2-15-207-247-90.ap-south-1.compute.amazonaws.com:4000/api/v1"
 
 // CLG AWS SERVER
-const SERVER_BASE_URL = "https://hmsnitap.in/api/v1"
+const SERVER_BASE_URL = "https://server.hmsnitap.in/api/v1"
 
 export const authEndPoints = {
     SENDOTP_API : SERVER_BASE_URL + "/auth/sendOTP",
