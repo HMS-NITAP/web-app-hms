@@ -38,18 +38,16 @@ const Navbar = () => {
 
         <img src={ClgLogo} className='h-[90%]' />
 
-        <div>
-          {
-            token && user && (
-              <button
+        {
+          token && user && (
+            <button
                 className="cursor-pointer hover:scale-105 duration-200 flex items-center gap-2 text-lg font-medium tracking-wide hover:text-red-400 transition focus:outline-none"
                 onClick={() => setShowLogoutModal(true)}
               >
                 <FaRightToBracket size={22} />
-              </button>
-            )
-          }
-        </div>
+            </button>
+          )
+        }
       </div>
 
       <Drawer
