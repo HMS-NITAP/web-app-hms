@@ -162,7 +162,7 @@ const StudentRegistrationForm = () => {
                     {/* <li>Click on the Link to Open Hostel Fee Payment Portal : <a href="https://payments.billdesk.com/bdcollect/pay?p1=5213&p2=15" className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">https://payments.billdesk.com/bdcollect/pay?p1=5213&p2=15</a></li> */}
                     <li>Ensure your Institute email address is correct.</li>
                     <li>Fill the details with atmost care, as once saved they can't be changed.</li>
-                    <li>Upload a recent proper passport size photo of yours not exceeding 250 KB size.</li>
+                    <li>Upload a <strong>recent proper passport size photo</strong> of yours not exceeding 250 KB size.</li>
                     <li>Upload Image in JPG or JPEG format.</li>
                     <li>Upload Your fee Receipts in PDF Format not exceeding 250 KB size each</li>
                     <li>Contact support under Development Team, if you encounter any issues</li>
