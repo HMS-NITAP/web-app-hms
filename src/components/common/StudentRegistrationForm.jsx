@@ -159,7 +159,7 @@ const StudentRegistrationForm = () => {
                 <p className="text-center text-lg font-bold text-black mb-2">INSTRUCTIONS (ODD SEM REGISTRATION):</p>
                 <ul className="text-black text-base font-semibold list-disc pl-5 space-y-1">
                     <li>Please complete your Institute Registration before proceeding with the Hostel Registration.</li>
-                    <li>Click on the Link to Open Hostel Fee Payment Portal : <a href="https://payments.billdesk.com/bdcollect/pay?p1=5213&p2=15" className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">https://payments.billdesk.com/bdcollect/pay?p1=5213&p2=15</a></li>
+                    {/* <li>Click on the Link to Open Hostel Fee Payment Portal : <a href="https://payments.billdesk.com/bdcollect/pay?p1=5213&p2=15" className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">https://payments.billdesk.com/bdcollect/pay?p1=5213&p2=15</a></li> */}
                     <li>Ensure your Institute email address is correct.</li>
                     <li>Fill the details with atmost care, as once saved they can't be changed.</li>
                     <li>Upload a recent proper passport size photo of yours not exceeding 250 KB size.</li>
