@@ -91,12 +91,15 @@ const StudentRegistrationForm = () => {
     }
 
     const submitHandler = async(data) => {
-        if(!data?.email.endsWith("@student.nitandhra.ac.in") && selectedYear !== 1){
-            // Not for 1st year students
+        // if(!data?.email.endsWith("@student.nitandhra.ac.in") && selectedYear !== 1){
+        //     // Not for 1st year students
+        //     toast("Please Use Your Institute Email ID",{icon:"⚠️"});
+        //     return;
+        // }
+        if(!data?.email.endsWith("@student.nitandhra.ac.in")){
             toast("Please Use Your Institute Email ID",{icon:"⚠️"});
             return;
-        }
-        if(data?.password !== data?.confirmPassword){
+        }else if(data?.password !== data?.confirmPassword){
             toast("Passwords are not matching",{icon:"⚠️"});
             return;
         }else if(!selectedBranch){
