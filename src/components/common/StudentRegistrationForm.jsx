@@ -272,7 +272,7 @@ const StudentRegistrationForm = () => {
                             }
                         }}
                         render={({ field }) => (
-                            <input {...field} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter your roll number" type="number" />
+                            <input {...field} onWheel={(e) => e.target.blur()} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter your roll number" type="number" />
                         )}
                         name="rollNo"
                         defaultValue=""
@@ -292,7 +292,7 @@ const StudentRegistrationForm = () => {
                             }
                         }}
                         render={({ field }) => (
-                            <input {...field} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter your registration number" type="number" />
+                            <input {...field} onWheel={(e) => e.target.blur()} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter your registration number" type="number" />
                         )}
                         name="regNo"
                         defaultValue=""
@@ -378,7 +378,7 @@ const StudentRegistrationForm = () => {
                             }
                         }}
                         render={({ field }) => (
-                            <input {...field} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter your aadhaar number" type="number" />
+                            <input {...field} onWheel={(e) => e.target.blur()} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter your aadhaar number" type="number" />
                         )}
                         name="aadhaarNumber"
                         defaultValue=""
@@ -412,7 +412,7 @@ const StudentRegistrationForm = () => {
                             }
                         }}
                         render={({ field }) => (
-                            <input {...field} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter your mobile number" type="number" />
+                            <input {...field} onWheel={(e) => e.target.blur()} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter your mobile number" type="number" />
                         )}
                         name="phone"
                         defaultValue=""
@@ -460,7 +460,7 @@ const StudentRegistrationForm = () => {
                             }
                         }}
                         render={({ field }) => (
-                            <input {...field} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter your parent number" type="number" />
+                            <input {...field} onWheel={(e) => e.target.blur()} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter your parent number" type="number" />
                         )}
                         name="parentsPhone"
                         defaultValue=""
@@ -480,7 +480,7 @@ const StudentRegistrationForm = () => {
                             }
                         }}
                         render={({ field }) => (
-                            <input {...field} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter emergency contact number" type="number" />
+                            <input {...field} onWheel={(e) => e.target.blur()} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter emergency contact number" type="number" />
                         )}
                         name="emergencyPhone"
                         defaultValue=""
@@ -550,7 +550,7 @@ const StudentRegistrationForm = () => {
                         control={control}
                         rules={{ required: true }}
                         render={({ field }) => (
-                            <input {...field} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter amount paid" type="number" />
+                            <input {...field} onWheel={(e) => e.target.blur()} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter amount paid" type="number" />
                         )}
                         name="amountPaid"
                         defaultValue=""

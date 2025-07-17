@@ -206,6 +206,7 @@ const StudentDashboardScreen = () => {
                 render={({ field }) => (
                   <input
                     {...field}
+                    onWheel={(e) => e.target.blur()}
                     type="number"
                     className="border border-gray-300 rounded-lg px-3 py-2 text-black"
                     placeholder="Enter amount paid"
