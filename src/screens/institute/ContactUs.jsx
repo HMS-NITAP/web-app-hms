@@ -1,5 +1,5 @@
 import React from 'react';
-import { hostelCommiteeData, medicalAndSecurityOfficerData, securitySepervisorsData, hostelOfficeStaffData } from '../../static/ContactUsData';
+import { hostelCommiteeData, medicalAndSecurityOfficerData, hostelOfficeStaffData } from '../../static/ContactUsData';
 import AnimatedCardPerson from '../../components/common/AnimatedCardPerson';
 
 const ContactUs = () => {
@@ -43,14 +43,14 @@ const ContactUs = () => {
       <div className="w-full h-[2px] bg-gray-600 rounded-full"></div>
 
       {/* Security Supervisors */}
-      <div className="w-full flex flex-col items-center">
+      {/* <div className="w-full flex flex-col items-center">
         <h2 className="text-lg font-bold text-black text-center">Security Supervisors</h2>
         <div className="w-[95%] flex md:flex-row flex-col justify-center items-start flex-wrap md:gap-[2rem] gap-[1rem]">
           {securitySepervisorsData.map((data, index) => (
             <AnimatedCardPerson key={index} data={data} />
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/* Account Deletion Notice */}
       <div className="w-full my-4 mx-10">
