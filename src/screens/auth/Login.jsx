@@ -17,7 +17,7 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     setIsButtonDisabled(true);
-    await dispatch(login(data.email, data.password, toast, navigate));
+    await dispatch(login(data.email.trim(), data.password, toast, navigate));
     setIsButtonDisabled(false);
   };
 
