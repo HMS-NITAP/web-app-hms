@@ -85,9 +85,9 @@ const ApplicationCard = ({ application, toast, token, fetchData }) => {
           <p><strong>Payment Mode:</strong> {application?.instituteStudent?.paymentMode}</p>
           <p><strong>Paid On:</strong> {application?.instituteStudent?.paymentDate}</p>
           <p><strong>Amount:</strong> {application?.instituteStudent?.amountPaid}</p>
-          {/* {application?.instituteStudent?.instituteFeeReceipt && (
+          {application?.instituteStudent?.instituteFeeReceipt && (
             <p><strong>Institute Fee:</strong> <a href={application?.instituteStudent?.instituteFeeReceipt} className="text-blue-600" target="_blank" rel="noreferrer">Click Here</a></p>
-          )} */}
+          )}
           {application?.instituteStudent?.hostelFeeReceipt && (
             <p><strong>Hostel Fee:</strong> <a href={application?.instituteStudent?.hostelFeeReceipt} className="text-blue-600" target="_blank" rel="noreferrer">Odd Sem Receipt</a></p>
           )}
