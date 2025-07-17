@@ -1,7 +1,7 @@
 // import Veeresh from '../assets/contactUs/veeresh.jpg'
 import Himabindu from '../assets/contactUs/Himabindu.webp'
 // import Srilatha from '../assets/contactUs/srilatha.jpg'
-import Kiran from '../assets/contactUs/kiran.webp'
+import Kiran from '../assets/contactUs/Kiran.webp'
 // import JKM from '../assets/contactUs/JKM.jpg'
 import Subhani from '../assets/contactUs/subhani.webp'
 import Reshma from '../assets/contactUs/reshma.webp'
