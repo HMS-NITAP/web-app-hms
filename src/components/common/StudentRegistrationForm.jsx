@@ -68,16 +68,16 @@ const StudentRegistrationForm = () => {
         }
     }
 
-    function pickUpInstituteFeeReceipt(e) {
-        const file = e.target.files[0];
-        if (file) {
-            if (file.size > MAX_FEE_RECEIPT_FILE_SIZE) {
-                toast('File size exceeds the limit of 250KB. Please select a smaller file.', { icon: '⚠️' });
-            } else {
-                setInstituteFeeReceiptResponse(file);
-            }
-        }
-    }
+    // function pickUpInstituteFeeReceipt(e) {
+    //     const file = e.target.files[0];
+    //     if (file) {
+    //         if (file.size > MAX_FEE_RECEIPT_FILE_SIZE) {
+    //             toast('File size exceeds the limit of 250KB. Please select a smaller file.', { icon: '⚠️' });
+    //         } else {
+    //             setInstituteFeeReceiptResponse(file);
+    //         }
+    //     }
+    // }
 
     const formatDate = (date) => {
         if (!date) return "NO DATE IS SELECTED";
@@ -92,7 +92,7 @@ const StudentRegistrationForm = () => {
 
     const submitHandler = async(data) => {
         // if(!data?.email.endsWith("@student.nitandhra.ac.in") && selectedYear !== 1){
-        //     // Not for 1st year students
+        //     // When 1st Years Join
         //     toast("Please Use Your Institute Email ID",{icon:"⚠️"});
         //     return;
         // }
@@ -125,9 +125,6 @@ const StudentRegistrationForm = () => {
             return;
         }else if(!paymentDate){
             toast("Select Hostel Fee Payment Date",{icon:"⚠️"});
-            return;
-        }else if(!instituteFeeReceiptResponse){
-            toast("Upload institute Fee Receipt",{icon:"⚠️"});
             return;
         }else if(!hostelfeeReceiptResponse){
             toast("Upload hostel Fee Receipt",{icon:"⚠️"});
@@ -502,7 +499,7 @@ const StudentRegistrationForm = () => {
                     {errors.address && <span className="text-red-600 text-sm">Address is required.</span>}
                 </div>
                 {/* Institute Fee Receipt */}
-                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
+                {/* <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
                     <label className="font-medium text-black">Institute Fee Receipt <span className="text-xs text-red-600">*</span> :</label>
                     <div className="flex w-full items-center justify-between gap-[1rem]">
                         <input type="file" accept="application/pdf" onChange={pickUpInstituteFeeReceipt} className="max-w-[250px] px-[1rem] py-2 bg-blue-500 text-white font-semibold rounded-md cursor-pointer transition-transform duration-200 hover:scale-105" />
@@ -512,7 +509,7 @@ const StudentRegistrationForm = () => {
                             <span className="font-bold text-black text-wrap">No File Selected</span>
                         )}
                     </div>
-                </div>
+                </div> */}
                 {/* Hostel Fee Receipt */}
                 <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
                     <label className="font-medium text-black">Hostel Fee Receipt <span className="text-xs text-red-600">*</span> :</label>
