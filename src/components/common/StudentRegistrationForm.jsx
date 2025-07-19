@@ -149,7 +149,6 @@ const StudentRegistrationForm = () => {
             paymentDate:covertToLocalDate(paymentDate)
         }
         await dispatch(setRegistrationData(registrationData));
-        console.log("IN FORM,", registrationData);
         const response = await dispatch(sendOtpToStudent(data.email,toast));
         if(response){
             await dispatch(setRegistrationStep(2));
@@ -397,6 +396,62 @@ const StudentRegistrationForm = () => {
                     />
                     {errors.bloodGroup && <span className="text-red-600 text-sm">Blood group is required.</span>}
                 </div>
+                {/* Institute Fee Receipt */}
+                {/* <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
+                    <label className="font-medium text-black">Institute Fee Receipt <span className="text-xs text-red-600">*</span> :</label>
+                    <div className="flex w-full items-center justify-between gap-[1rem]">
+                        <input type="file" accept="application/pdf" onChange={pickUpInstituteFeeReceipt} className="max-w-[250px] px-[1rem] py-2 bg-blue-500 text-white font-semibold rounded-md cursor-pointer transition-transform duration-200 hover:scale-105" />
+                        {instituteFeeReceiptResponse ? (
+                            <span className="font-bold text-black text-wrap text-[0.75rem]">{instituteFeeReceiptResponse.name}</span>
+                        ) : (
+                            <span className="font-bold text-black text-wrap">No File Selected</span>
+                        )}
+                    </div>
+                </div> */}
+                {/* Hostel Fee Receipt */}
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
+                    <label className="font-medium text-black">Hostel Fee Receipt <span className="text-xs text-red-600">*</span> :</label>
+                    <div className="flex w-full items-center justify-between gap-[1rem]">
+                        <input type="file" accept="application/pdf" onChange={pickUpHostelFeeReceipt} className="max-w-[250px] px-[1rem] py-2 bg-blue-500 text-white font-semibold rounded-md cursor-pointer transition-transform duration-200 hover:scale-105" />
+                        {hostelfeeReceiptResponse ? (
+                            <span className="font-bold text-black text-wrap text-[0.75rem]">{hostelfeeReceiptResponse.name}</span>
+                        ) : (
+                            <span className="font-bold text-black text-wrap">No File Selected</span>
+                        )}
+                    </div>
+                </div>
+                {/* Hostel Fee Payment Mode */}
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
+                    <label className="font-medium text-black">Hostel Fee Payment Mode <span className="text-xs text-red-600">*</span> :</label>
+                    <select className="max-w-full p-2 border border-gray-400 rounded-lg text-black" value={paymentMode || ''} onChange={e => setPaymentMode(e.target.value)}>
+                        <option value="">Select Your Payment Mode</option>
+                        {paymentOption.map((mode, idx) => (
+                            <option key={idx} value={mode.value}>{mode.label}</option>
+                        ))}
+                    </select>
+                </div>
+                {/* Hostel Fee Payment Date */}
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
+                    <label className="font-medium text-black">Hostel Fee Payment Date <span className="text-xs text-red-600">*</span> :</label>
+                    <div className="flex flex-row justify-start items-center gap-[2rem] ml-[6rem]">
+                        <input type="date" className="p-2 border border-gray-400 rounded-lg text-black" value={paymentDate || ''} onChange={e => setPaymentDate(e.target.value)} />
+                        {/* <span className="font-bold text-center text-black">{formatDate(paymentDate)}</span> */}
+                    </div>
+                </div>
+                {/* Hostel Fee Payment Amount */}
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
+                    <label className="font-medium text-black">Hostel Fee Payment Amount <span className="text-xs text-red-600">*</span> :</label>
+                    <Controller
+                        control={control}
+                        rules={{ required: true }}
+                        render={({ field }) => (
+                            <input {...field} onWheel={(e) => e.target.blur()} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter amount paid" type="number" />
+                        )}
+                        name="amountPaid"
+                        defaultValue=""
+                    />
+                    {errors.amountPaid && <span className="text-red-600 text-sm">Amount Paid is required.</span>}
+                </div>
                 {/* Student Mobile Number */}
                 <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
                     <label className="font-medium text-black">Student Mobile Number <span className="text-xs text-red-600">*</span> :</label>
@@ -499,62 +554,7 @@ const StudentRegistrationForm = () => {
                     />
                     {errors.address && <span className="text-red-600 text-sm">Address is required.</span>}
                 </div>
-                {/* Institute Fee Receipt */}
-                {/* <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
-                    <label className="font-medium text-black">Institute Fee Receipt <span className="text-xs text-red-600">*</span> :</label>
-                    <div className="flex w-full items-center justify-between gap-[1rem]">
-                        <input type="file" accept="application/pdf" onChange={pickUpInstituteFeeReceipt} className="max-w-[250px] px-[1rem] py-2 bg-blue-500 text-white font-semibold rounded-md cursor-pointer transition-transform duration-200 hover:scale-105" />
-                        {instituteFeeReceiptResponse ? (
-                            <span className="font-bold text-black text-wrap text-[0.75rem]">{instituteFeeReceiptResponse.name}</span>
-                        ) : (
-                            <span className="font-bold text-black text-wrap">No File Selected</span>
-                        )}
-                    </div>
-                </div> */}
-                {/* Hostel Fee Receipt */}
-                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
-                    <label className="font-medium text-black">Hostel Fee Receipt <span className="text-xs text-red-600">*</span> :</label>
-                    <div className="flex w-full items-center justify-between gap-[1rem]">
-                        <input type="file" accept="application/pdf" onChange={pickUpHostelFeeReceipt} className="max-w-[250px] px-[1rem] py-2 bg-blue-500 text-white font-semibold rounded-md cursor-pointer transition-transform duration-200 hover:scale-105" />
-                        {hostelfeeReceiptResponse ? (
-                            <span className="font-bold text-black text-wrap text-[0.75rem]">{hostelfeeReceiptResponse.name}</span>
-                        ) : (
-                            <span className="font-bold text-black text-wrap">No File Selected</span>
-                        )}
-                    </div>
-                </div>
-                {/* Hostel Fee Payment Mode */}
-                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
-                    <label className="font-medium text-black">Hostel Fee Payment Mode <span className="text-xs text-red-600">*</span> :</label>
-                    <select className="max-w-full p-2 border border-gray-400 rounded-lg text-black" value={paymentMode || ''} onChange={e => setPaymentMode(e.target.value)}>
-                        <option value="">Select Your Payment Mode</option>
-                        {paymentOption.map((mode, idx) => (
-                            <option key={idx} value={mode.value}>{mode.label}</option>
-                        ))}
-                    </select>
-                </div>
-                {/* Hostel Fee Payment Date */}
-                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
-                    <label className="font-medium text-black">Hostel Fee Payment Date <span className="text-xs text-red-600">*</span> :</label>
-                    <div className="flex flex-row justify-start items-center gap-[2rem] ml-[6rem]">
-                        <input type="date" className="p-2 border border-gray-400 rounded-lg text-black" value={paymentDate || ''} onChange={e => setPaymentDate(e.target.value)} />
-                        {/* <span className="font-bold text-center text-black">{formatDate(paymentDate)}</span> */}
-                    </div>
-                </div>
-                {/* Hostel Fee Payment Amount */}
-                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
-                    <label className="font-medium text-black">Hostel Fee Payment Amount <span className="text-xs text-red-600">*</span> :</label>
-                    <Controller
-                        control={control}
-                        rules={{ required: true }}
-                        render={({ field }) => (
-                            <input {...field} onWheel={(e) => e.target.blur()} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter amount paid" type="number" />
-                        )}
-                        name="amountPaid"
-                        defaultValue=""
-                    />
-                    {errors.amountPaid && <span className="text-red-600 text-sm">Amount Paid is required.</span>}
-                </div>
+                
                 <div className='w-full overflow-hidden flex justify-center items-center'>
                     <button type="submit" className="cursor-pointer hover:scale-105 transition-all duration-200 px-[1.5rem] py-[0.5rem] rounded-xl font-bold text-lg text-black bg-yellow-400 mt-2 disabled:opacity-60" disabled={isButtonDisabled}>Submit Data</button>
                 </div>

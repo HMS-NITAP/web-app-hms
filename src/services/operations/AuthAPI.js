@@ -159,9 +159,7 @@ export const createStudentAccount = (formData,toast) => {
     return async() => {
         let id = toast("Please Wait...");
         try{ 
-            console.log("Creating student");
             const response = await APIconnector("POST",CREATE_STUDENT_ACCOUNT_API,formData,{"Content-Type": "multipart/form-data"});
-            console.log("CREATED STUDENT respnse", response);
             if(!response.data.success){
                 toast.dismiss(id);
                 toast.error(response?.data?.message);

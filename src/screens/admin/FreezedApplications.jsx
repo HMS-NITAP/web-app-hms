@@ -25,7 +25,6 @@ const FreezedApplications = () => {
   }, [fetchData]);
 
   const searchRollNumber = () => {
-    console.log("FDDF");
     if (!searchQuery) {
       fetchData();
       return;

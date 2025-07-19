@@ -702,7 +702,6 @@ export const deleteFreezedRegistrationApplication = (formData,token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
         try{    
-            console.log("FORMDATA", formData);
             const response = await APIconnector("PUT",DELETE_FREEZED_REGISTRATION_APPLICATION_API,formData,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);

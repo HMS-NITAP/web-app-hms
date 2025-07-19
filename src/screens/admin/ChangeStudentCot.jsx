@@ -8,7 +8,6 @@ import MainButton from '../../components/common/MainButton';
 
 const ChangeStudentCot = () => {
   const { cotId, userId } = useParams();
-  console.log(cotId, userId);
   const navigate = useNavigate();
 
   const [completeData, setCompleteData] = useState(null);
