@@ -149,6 +149,7 @@ const StudentRegistrationForm = () => {
             paymentDate:covertToLocalDate(paymentDate)
         }
         await dispatch(setRegistrationData(registrationData));
+        console.log("IN FORM,", registrationData);
         const response = await dispatch(sendOtpToStudent(data.email,toast));
         if(response){
             await dispatch(setRegistrationStep(2));

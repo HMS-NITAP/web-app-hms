@@ -87,6 +87,7 @@ const RoomAllotment = () => {
 
   const handleSubmit = async () => {
     if (!registrationData) return;
+    console.log("IN ROOM ALLOTMENT", registrationData);
     setIsButtonDisabled(true);
     const formdata = new FormData();
     Object.entries(registrationData).forEach(([key, value]) => {
@@ -94,6 +95,11 @@ const RoomAllotment = () => {
     });
     formdata.append('hostelBlockId', selectedBlock);
     formdata.append('cotId', selectedCot);
+    
+    formdata.forEach((value, key) => {
+      console.log(`${key}: ${value}`);
+    });
+
     const response = await dispatch(createStudentAccount(formdata, toast));
     if (response) {
       setModalVisible(false);

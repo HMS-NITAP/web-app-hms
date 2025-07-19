@@ -159,7 +159,9 @@ export const createStudentAccount = (formData,toast) => {
     return async() => {
         let id = toast("Please Wait...");
         try{ 
+            console.log("Creating student");
             const response = await APIconnector("POST",CREATE_STUDENT_ACCOUNT_API,formData,{"Content-Type": "multipart/form-data"});
+            console.log("CREATED STUDENT respnse", response);
             if(!response.data.success){
                 toast.dismiss(id);
                 toast.error(response?.data?.message);
@@ -170,6 +172,7 @@ export const createStudentAccount = (formData,toast) => {
             toast.success(response?.data?.message);
             return true;
         }catch(e){
+            console.log("Error", e);
             const errorMessage = e?.response?.data?.message || "Unable to Complete Registration";
             toast.dismiss(id);
             toast.error(errorMessage);
