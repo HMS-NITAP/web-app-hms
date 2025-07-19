@@ -161,7 +161,7 @@ const StudentRegistrationForm = () => {
             <div className="w-full bg-[#e9edc9] rounded-2xl px-4 py-4 gap-2">
                 <p className="text-center text-lg font-bold text-black mb-2">INSTRUCTIONS (ODD SEM REGISTRATION):</p>
                 <ul className="text-black text-base font-semibold list-disc pl-5 space-y-1">
-                    <li>Please complete your Institute Registration before proceeding with the Hostel Registration.</li>
+                    {/* <li>Please complete your Institute Registration before proceeding with the Hostel Registration.</li> */}
                     {/* <li>Click on the Link to Open Hostel Fee Payment Portal : <a href="https://payments.billdesk.com/bdcollect/pay?p1=5213&p2=15" className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">https://payments.billdesk.com/bdcollect/pay?p1=5213&p2=15</a></li> */}
                     <li>Ensure your Institute email address is correct.</li>
                     <li>Fill the details with atmost care, as once saved they can't be changed.</li>
@@ -410,7 +410,7 @@ const StudentRegistrationForm = () => {
                 </div> */}
                 {/* Hostel Fee Receipt */}
                 <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
-                    <label className="font-medium text-black">Hostel Fee Receipt <span className="text-xs text-red-600">*</span> :</label>
+                    <label className="font-medium text-black">Fee Receipt <span className="text-xs text-red-600">*</span> :</label>
                     <div className="flex w-full items-center justify-between gap-[1rem]">
                         <input type="file" accept="application/pdf" onChange={pickUpHostelFeeReceipt} className="max-w-[250px] px-[1rem] py-2 bg-blue-500 text-white font-semibold rounded-md cursor-pointer transition-transform duration-200 hover:scale-105" />
                         {hostelfeeReceiptResponse ? (
