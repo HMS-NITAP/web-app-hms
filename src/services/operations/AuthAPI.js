@@ -171,10 +171,9 @@ export const createStudentAccount = (formData,toast) => {
             return true;
         }catch(e){
             console.log("Error", e);
-            const errorMessage = e?.response?.data?.message || "Unable to Complete Registration";
+            const errorMessage = e?.response?.data?.message || "Something went wrong, kindly refresh the website and try again, if the problem persists, try using a different device";
             toast.dismiss(id);
             toast.error(errorMessage);
-            console.log("Error",e);
             return false;
         }
     }

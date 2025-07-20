@@ -100,7 +100,6 @@ const RoomAllotment = () => {
       setModalVisible(false);
       await dispatch(setRegistrationStep(4));
     } else {
-      toast('Refresh the page from the above icon to check if the room is already booked by someone else.', { icon: '⚠️' });
       setModalVisible(false);
     }
     setIsButtonDisabled(false);
