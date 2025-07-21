@@ -410,7 +410,7 @@ const StudentRegistrationForm = () => {
                 </div> */}
                 {/* Hostel Fee Receipt */}
                 <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
-                    <label className="font-medium text-black">Fee Receipt <span className="text-xs text-red-600">*</span> :</label>
+                    <label className="font-medium text-black">Fee Receipt (containing Hostel fee payment details) <span className="text-xs text-red-600">*</span> :</label>
                     <div className="flex w-full items-center justify-between gap-[1rem]">
                         <input type="file" accept="application/pdf" onChange={pickUpHostelFeeReceipt} className="max-w-[250px] px-[1rem] py-2 bg-blue-500 text-white font-semibold rounded-md cursor-pointer transition-transform duration-200 hover:scale-105" />
                         {hostelfeeReceiptResponse ? (
