@@ -547,7 +547,7 @@ const StudentRegistrationForm = () => {
                         control={control}
                         rules={{ required: true }}
                         render={({ field }) => (
-                            <input {...field} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter your personal address" />
+                            <input {...field} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter your address" />
                         )}
                         name="address"
                         defaultValue=""
