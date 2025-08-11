@@ -91,12 +91,8 @@ const StudentRegistrationForm = () => {
     }
 
     const submitHandler = async(data) => {
-        // if(!data?.email.endsWith("@student.nitandhra.ac.in") && selectedYear !== 1){
-        //     // When 1st Years Join
-        //     toast("Please Use Your Institute Email ID",{icon:"⚠️"});
-        //     return;
-        // }
-        if(!data?.email.endsWith("@student.nitandhra.ac.in")){
+        if(!data?.email.endsWith("@student.nitandhra.ac.in") && selectedYear !== 1){
+            // When 1st Years Join
             toast("Please Use Your Institute Email ID",{icon:"⚠️"});
             return;
         }else if(data?.password !== data?.confirmPassword){
@@ -163,7 +159,8 @@ const StudentRegistrationForm = () => {
                 <ul className="text-black text-base font-semibold list-disc pl-5 space-y-1">
                     {/* <li>Please complete your Institute Registration before proceeding with the Hostel Registration.</li> */}
                     {/* <li>Click on the Link to Open Hostel Fee Payment Portal : <a href="https://payments.billdesk.com/bdcollect/pay?p1=5213&p2=15" className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">https://payments.billdesk.com/bdcollect/pay?p1=5213&p2=15</a></li> */}
-                    <li>Ensure your Institute email address is correct.</li>
+                    {/* <li>Ensure your Institute email address is correct.</li> */}
+                    {/* <li>Ensure your email address is correct.</li> */}
                     <li>Fill the details with atmost care, as once saved they can't be changed.</li>
                     <li>Upload a <strong>recent proper passport size photo</strong> of yours not exceeding 250 KB size.</li>
                     <li>Upload Image in JPG or JPEG format.</li>
@@ -189,7 +186,8 @@ const StudentRegistrationForm = () => {
                 </div>
                 {/* Institute Email ID */}
                 <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
-                    <label className="font-medium text-black">Institute Email ID <span className="text-xs text-red-600">*</span> :</label>
+                    {/* <label className="font-medium text-black">Institute Email ID <span className="text-xs text-red-600">*</span> :</label> */}
+                    <label className="font-medium text-black">Email ID <span className="text-xs text-red-600">*</span> :</label>
                     <Controller
                         control={control}
                         rules={{ required: true }}
@@ -199,7 +197,8 @@ const StudentRegistrationForm = () => {
                         name="email"
                         defaultValue=""
                     />
-                    {errors.email && <span className="text-red-600 text-sm">Institute Email is required.</span>}
+                    {/* {errors.email && <span className="text-red-600 text-sm">Institute Email is required.</span>} */}
+                    {errors.email && <span className="text-red-600 text-sm">Email is required.</span>}
                 </div>
                 {/* Password */}
                 <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem] relative">
