@@ -68,16 +68,16 @@ const StudentRegistrationForm = () => {
         }
     }
 
-    // function pickUpInstituteFeeReceipt(e) {
-    //     const file = e.target.files[0];
-    //     if (file) {
-    //         if (file.size > MAX_FEE_RECEIPT_FILE_SIZE) {
-    //             toast('File size exceeds the limit of 250KB. Please select a smaller file.', { icon: '⚠️' });
-    //         } else {
-    //             setInstituteFeeReceiptResponse(file);
-    //         }
-    //     }
-    // }
+    function pickUpInstituteFeeReceipt(e) {
+        const file = e.target.files[0];
+        if (file) {
+            if (file.size > MAX_FEE_RECEIPT_FILE_SIZE) {
+                toast('File size exceeds the limit of 250KB. Please select a smaller file.', { icon: '⚠️' });
+            } else {
+                setInstituteFeeReceiptResponse(file);
+            }
+        }
+    }
 
     const formatDate = (date) => {
         if (!date) return "NO DATE IS SELECTED";
@@ -125,6 +125,9 @@ const StudentRegistrationForm = () => {
         }else if(!hostelfeeReceiptResponse){
             toast("Upload hostel Fee Receipt",{icon:"⚠️"});
             return;
+        }else if(!instituteFeeReceiptResponse){
+            toast("Upload institute Fee Receipt",{icon:"⚠️"});
+            return;
         }else if(!imageResponse){
             toast("Upload your Profile Image",{icon:"⚠️"});
             return;
@@ -157,10 +160,10 @@ const StudentRegistrationForm = () => {
             <div className="w-full bg-[#e9edc9] rounded-2xl px-4 py-4 gap-2">
                 <p className="text-center text-lg font-bold text-black mb-2">INSTRUCTIONS (ODD SEM REGISTRATION):</p>
                 <ul className="text-black text-base font-semibold list-disc pl-5 space-y-1">
-                    {/* <li>Please complete your Institute Registration before proceeding with the Hostel Registration.</li> */}
-                    {/* <li>Click on the Link to Open Hostel Fee Payment Portal : <a href="https://payments.billdesk.com/bdcollect/pay?p1=5213&p2=15" className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">https://payments.billdesk.com/bdcollect/pay?p1=5213&p2=15</a></li> */}
+                    <li>Please complete your Institute Registration before proceeding with the Hostel Registration.</li>
+                    <li>Click on the Link to Open Fee Payment Portal : <a href="https://payments.billdesk.com/bdcollect/pay?p1=5213&p2=15" className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">https://payments.billdesk.com/bdcollect/pay?p1=5213&p2=15</a></li>
                     {/* <li>Ensure your Institute email address is correct.</li> */}
-                    {/* <li>Ensure your email address is correct.</li> */}
+                    <li>Ensure your email address is correct.</li>
                     <li>Fill the details with atmost care, as once saved they can't be changed.</li>
                     <li>Upload a <strong>recent proper passport size photo</strong> of yours not exceeding 250 KB size.</li>
                     <li>Upload Image in JPG or JPEG format.</li>

@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import {
   changeStudentProfilePhoto,
   deleteStudentAccount,
+  editStudentAccount,
   fetchStudentByRollNoAndRegNo,
   sendAcknowledgementLetter,
 } from '../../services/operations/AdminAPI';
@@ -12,6 +13,7 @@ import MainButton from '../../components/common/MainButton';
 import { FiEdit } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import { MAX_PROFILE_IMAGE_SIZE } from '../../config/config';
+import { useForm } from 'react-hook-form';
 
 const ManageStudentAccounts = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -22,9 +24,12 @@ const ManageStudentAccounts = () => {
   const [sendAcknowledgementLetterModalVisible, setSendAcknowledgementLetterModalVisible] = useState(false);
   const [deleteStudentAccountModalVisible, setDeleteStudentAccountModalVisible] = useState(false);
   const [changeProfilePicModalVisible, setChangeProfilePicModalVisible] = useState(false);
+  const [editDetailsModalVisible, setEditDetailsModalVisible] = useState(false);
 
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [imageResponse, setImageResponse] = useState(null);
+
+   const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -117,6 +122,41 @@ const ManageStudentAccounts = () => {
 
   const changeStudentCotHandler = () => {
     navigate(`/admin/change-student-cot/${studentData?.cot?.id}/${studentData?.user?.id}`);
+  };
+
+  useEffect(() => {
+    if (studentData && editDetailsModalVisible) {
+      reset({
+        rollNo: studentData.rollNo,
+        regNo: studentData.regNo,
+        name: studentData.name,
+        aadhaarNumber: studentData.aadhaarNumber,
+        fatherName: studentData.fatherName,
+        motherName: studentData.motherName,
+        phone: studentData.phone,
+        parentsPhone: studentData.parentsPhone,
+        emergencyPhone: studentData.emergencyPhone,
+        address: studentData.address,
+      });
+    }
+  }, [studentData, editDetailsModalVisible, reset]);
+
+  const handleEditDetailsSubmit = async (data) => {
+      setIsButtonDisabled(true);
+
+      const payload = {
+        ...data,
+        studentId: studentData.id,
+      };
+
+      const result = await dispatch(editStudentAccount(payload, token, toast));
+
+      if (result) {
+        setEditDetailsModalVisible(false); 
+        await searchStudentWithId(); 
+      }
+      
+      setIsButtonDisabled(false);
   };
 
   return (
@@ -241,6 +281,13 @@ const ManageStudentAccounts = () => {
               <span className="font-semibold text-black">Emergency Contact: {studentData?.emergencyPhone}</span>
               <span className="font-semibold text-black">Address: {studentData?.address}</span>
             </div>
+          </div>
+          <div className="w-full flex justify-center max-w-xl mb-4">
+             <MainButton 
+                text="Edit Student Details" 
+                onPress={() => setEditDetailsModalVisible(true)}
+                textColor='text-white'
+             />
           </div>
           {/* Section: Hostel, Room, Mess, Payment */}
           <div className="w-full md:justify-center md:flex overflow-x-auto mb-4">
@@ -499,6 +546,134 @@ const ManageStudentAccounts = () => {
               <MainButton text="Update" isButtonDisabled={isButtonDisabled} onPress={changeStudentProfilePhotoHandler} backgroundColor='bg-green-500' textColor='text-white' />
               <MainButton text="Cancel" isButtonDisabled={isButtonDisabled} onPress={() => setChangeProfilePicModalVisible(false)} backgroundColor='bg-gray-300' textColor='text-black' />
             </div>
+          </div>
+        </div>
+      )}
+      {editDetailsModalVisible && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="bg-white flex justify-center flex-col gap-4 backdrop-blur-lg border border-white/30 shadow-xl rounded-xl p-6 md:w-full w-[95%] max-w-2xl">
+            <h2 className="text-xl font-bold text-center text-gray-800">Edit Student Details</h2>
+            <form onSubmit={handleSubmit(handleEditDetailsSubmit)} className="flex flex-col gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="rollNo" className="block text-sm font-medium text-gray-700">Roll No</label>
+                  <input
+                    id="rollNo"
+                    {...register('rollNo', { required: 'Roll number is required' })}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  />
+                  {errors.rollNo && <span className="text-xs text-red-600">{errors.rollNo.message}</span>}
+                </div>
+
+                <div>
+                  <label htmlFor="regNo" className="block text-sm font-medium text-gray-700">Registration No</label>
+                  <input
+                    id="regNo"
+                    {...register('regNo', { required: 'Registration number is required' })}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  />
+                  {errors.regNo && <span className="text-xs text-red-600">{errors.regNo.message}</span>}
+                </div>
+
+                <div className="md:col-span-2">
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name</label>
+                  <input
+                    id="name"
+                    {...register('name', { required: 'Name is required' })}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  />
+                  {errors.name && <span className="text-xs text-red-600">{errors.name.message}</span>}
+                </div>
+                
+                <div>
+                  <label htmlFor="aadhaarNumber" className="block text-sm font-medium text-gray-700">Aadhaar Number</label>
+                  <input
+                    id="aadhaarNumber"
+                    {...register('aadhaarNumber', { required: 'Aadhaar number is required' })}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  />
+                  {errors.aadhaarNumber && <span className="text-xs text-red-600">{errors.aadhaarNumber.message}</span>}
+                </div>
+                
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Student Phone</label>
+                  <input
+                    id="phone"
+                    {...register('phone', { required: 'Phone number is required' })}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  />
+                  {errors.phone && <span className="text-xs text-red-600">{errors.phone.message}</span>}
+                </div>
+
+                <div>
+                  <label htmlFor="fatherName" className="block text-sm font-medium text-gray-700">Father's Name</label>
+                  <input
+                    id="fatherName"
+                    {...register('fatherName', { required: "Father's name is required" })}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  />
+                  {errors.fatherName && <span className="text-xs text-red-600">{errors.fatherName.message}</span>}
+                </div>
+
+                <div>
+                  <label htmlFor="motherName" className="block text-sm font-medium text-gray-700">Mother's Name</label>
+                  <input
+                    id="motherName"
+                    {...register('motherName', { required: "Mother's name is required" })}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  />
+                  {errors.motherName && <span className="text-xs text-red-600">{errors.motherName.message}</span>}
+                </div>
+
+                <div>
+                  <label htmlFor="parentsPhone" className="block text-sm font-medium text-gray-700">Parents' Phone</label>
+                  <input
+                    id="parentsPhone"
+                    {...register('parentsPhone', { required: 'Parents phone is required' })}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  />
+                  {errors.parentsPhone && <span className="text-xs text-red-600">{errors.parentsPhone.message}</span>}
+                </div>
+
+                <div>
+                  <label htmlFor="emergencyPhone" className="block text-sm font-medium text-gray-700">Emergency Phone</label>
+                  <input
+                    id="emergencyPhone"
+                    {...register('emergencyPhone', { required: 'Emergency phone is required' })}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  />
+                  {errors.emergencyPhone && <span className="text-xs text-red-600">{errors.emergencyPhone.message}</span>}
+                </div>
+
+                <div className="md:col-span-2">
+                  <label htmlFor="address" className="block text-sm font-medium text-gray-700">Address</label>
+                  <textarea
+                    id="address"
+                    rows={3}
+                    {...register('address', { required: 'Address is required' })}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  ></textarea>
+                  {errors.address && <span className="text-xs text-red-600">{errors.address.message}</span>}
+                </div>
+              </div>
+
+              <div className="flex flex-row gap-4 w-full justify-end mt-4">
+                <MainButton
+                  text="Cancel"
+                  isButtonDisabled={isButtonDisabled}
+                  onPress={() => setEditDetailsModalVisible(false)}
+                  backgroundColor="bg-gray-300"
+                  textColor="text-black"
+                />
+                <MainButton
+                  type="submit" 
+                  text="Save Changes"
+                  isButtonDisabled={isButtonDisabled}
+                  backgroundColor="bg-green-500"
+                  textColor="text-white"
+                />
+              </div>
+            </form>
           </div>
         </div>
       )}

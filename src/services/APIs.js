@@ -8,13 +8,13 @@
 // const SERVER_BASE_URL = "https://backend-c938.onrender.com/api/v1"
 
 // LOCALHOST SERVER
-// const SERVER_BASE_URL = "http://localhost:4000/api/v1"
+const SERVER_BASE_URL = "http://localhost:4000/api/v1"
 
 // PERSONAL AWS SERVER
 // const SERVER_BASE_URL = "http://ec2-15-207-247-90.ap-south-1.compute.amazonaws.com:4000/api/v1"
 
 // CLG AWS SERVER
-const SERVER_BASE_URL = "https://server.hmsnitap.in/api/v1"
+// const SERVER_BASE_URL = "https://server.hmsnitap.in/api/v1"
 
 export const authEndPoints = {
     SENDOTP_API : SERVER_BASE_URL + "/auth/sendOTP",
@@ -113,6 +113,7 @@ export const adminEndPoints = {
     FETCH_STUDENT_BY_ROLL_OR_REG_NO_API : SERVER_BASE_URL + '/admin/fetchStudentByRollNoAndRegNo',
     DELETE_STUDENT_ACCOUNT : SERVER_BASE_URL + '/admin/deleteStudentAccount',
     CHANGE_STUDENT_PROFILE_PHOTO_API : SERVER_BASE_URL + '/admin/changeStudentProfilePhoto',
+    EDIT_STUDENT_ACCOUNT_API : SERVER_BASE_URL + '/admin/editStudentAccount',
 
     // REGISTRATION APPLICATION APIs
     FETCH_REGISTRATION_APPLICATIONS_API : SERVER_BASE_URL + '/admin/fetchRegistrationApplications',
