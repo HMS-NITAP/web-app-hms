@@ -399,7 +399,7 @@ const StudentRegistrationForm = () => {
                     {errors.bloodGroup && <span className="text-red-600 text-sm">Blood group is required.</span>}
                 </div>
                 {/* Institute Fee Receipt */}
-                {/* <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
                     <label className="font-medium text-black">Institute Fee Receipt <span className="text-xs text-red-600">*</span> :</label>
                     <div className="flex w-full items-center justify-between gap-[1rem]">
                         <input type="file" accept="application/pdf" onChange={pickUpInstituteFeeReceipt} className="max-w-[250px] px-[1rem] py-2 bg-blue-500 text-white font-semibold rounded-md cursor-pointer transition-transform duration-200 hover:scale-105" />
@@ -409,10 +409,10 @@ const StudentRegistrationForm = () => {
                             <span className="font-bold text-black text-wrap">No File Selected</span>
                         )}
                     </div>
-                </div> */}
+                </div>
                 {/* Hostel Fee Receipt */}
                 <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
-                    <label className="font-medium text-black">Fee Receipt (containing Hostel fee payment details) <span className="text-xs text-red-600">*</span> :</label>
+                    <label className="font-medium text-black">Hostel Fee Receipt <span className="text-xs text-red-600">*</span> :</label>
                     <div className="flex w-full items-center justify-between gap-[1rem]">
                         <input type="file" accept="application/pdf" onChange={pickUpHostelFeeReceipt} className="max-w-[250px] px-[1rem] py-2 bg-blue-500 text-white font-semibold rounded-md cursor-pointer transition-transform duration-200 hover:scale-105" />
                         {hostelfeeReceiptResponse ? (
