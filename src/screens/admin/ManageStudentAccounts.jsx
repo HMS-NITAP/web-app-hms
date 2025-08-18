@@ -273,6 +273,7 @@ const ManageStudentAccounts = () => {
               <span className="font-semibold text-black">Year: {studentData?.year}</span>
               <span className="font-semibold text-black">Branch: {studentData?.branch}</span>
               <span className="font-semibold text-black">Blood Group: {studentData?.bloodGroup}</span>
+              <span className="font-semibold text-black">PWD status: {studentData?.pwd ? "Yes" : "No"}</span>
               <span className="font-semibold text-black">Aadhaar Number: {studentData?.aadhaarNumber}</span>
               <span className="font-semibold text-black">Contact No: {studentData?.phone}</span>
               <span className="font-semibold text-black">Father's Name: {studentData?.fatherName}</span>
@@ -280,6 +281,8 @@ const ManageStudentAccounts = () => {
               <span className="font-semibold text-black">Parents' Contact: {studentData?.parentsPhone}</span>
               <span className="font-semibold text-black">Emergency Contact: {studentData?.emergencyPhone}</span>
               <span className="font-semibold text-black">Address: {studentData?.address}</span>
+              <span className="font-semibold text-black">Community: {studentData?.community}</span>
+              <span className="font-semibold text-black">Blood Group: {studentData?.bloodGroup}</span>
             </div>
           </div>
           <div className="w-full flex justify-center max-w-xl mb-4">
@@ -329,6 +332,9 @@ const ManageStudentAccounts = () => {
               {/* Payment Details */}
               <div className="min-w-[220px] p-4 border flex flex-col gap-[1rem] border-gray-300 rounded-lg bg-white">
                 <span className="font-bold text-green-700 block mb-2">Payment Details</span>
+                {studentData?.instituteFeeReceipt && (
+                  <a href={studentData?.instituteFeeReceipt} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline font-semibold">Odd Sem Institute Fee Receipt</a>
+                )}
                 {studentData?.hostelFeeReceipt && (
                   <a href={studentData?.hostelFeeReceipt} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline font-semibold">Odd Sem Hostel Fee Receipt</a>
                 )}
@@ -549,6 +555,7 @@ const ManageStudentAccounts = () => {
           </div>
         </div>
       )}
+
       {editDetailsModalVisible && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
           <div className="bg-white flex justify-center flex-col gap-4 backdrop-blur-lg border border-white/30 shadow-xl rounded-xl p-6 md:w-full w-[95%] max-w-2xl">

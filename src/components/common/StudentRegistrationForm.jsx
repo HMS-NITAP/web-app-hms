@@ -160,7 +160,7 @@ const StudentRegistrationForm = () => {
             <div className="w-full bg-[#e9edc9] rounded-2xl px-4 py-4 gap-2">
                 <p className="text-center text-lg font-bold text-black mb-2">INSTRUCTIONS (ODD SEM REGISTRATION):</p>
                 <ul className="text-black text-base font-semibold list-disc pl-5 space-y-1">
-                    <li>Please complete your Institute Registration before proceeding with the Hostel Registration.</li>
+                    <li><strong>Please complete your Institute Registration before proceeding with the Hostel Registration.</strong></li>
                     <li>Click on the Link to Open Fee Payment Portal : <a href="https://payments.billdesk.com/bdcollect/pay?p1=5213&p2=15" className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">https://payments.billdesk.com/bdcollect/pay?p1=5213&p2=15</a></li>
                     {/* <li>Ensure your Institute email address is correct.</li> */}
                     <li>Ensure your email address is correct.</li>
@@ -260,7 +260,7 @@ const StudentRegistrationForm = () => {
                 </div>
                 {/* Roll Number */}
                 <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
-                    <label className="font-medium text-black">Roll Number <span className="text-xs text-red-600">*</span> :</label>
+                    <label className="font-medium text-black">Institute Roll Number <span className="text-xs text-red-600">*</span> :</label>
                     <Controller
                         control={control}
                         rules={{ 
@@ -280,7 +280,7 @@ const StudentRegistrationForm = () => {
                 </div>
                 {/* Registration Number */}
                 <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
-                    <label className="font-medium text-black">Registration Number <span className="text-xs text-red-600">*</span> :</label>
+                    <label className="font-medium text-black">Institute Registration Number <span className="text-xs text-red-600">*</span> :</label>
                     <Controller
                         control={control}
                         rules={{ 
