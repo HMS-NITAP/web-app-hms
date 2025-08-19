@@ -190,7 +190,7 @@ const ManageStudentAccounts = () => {
           </button>
           <button
             className="bg-blue-900 hover:bg-blue-800  cursor-pointer p-2 rounded-md border border-black"
-            onClick={() => navigate("/admin/firstyear-student-applications")}
+            onClick={() => navigate("/admin/first-year-student-applications")}
           >
             <FaList size={20} color='white'/>          
           </button>

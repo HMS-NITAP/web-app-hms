@@ -33,6 +33,9 @@ const CreateNewStudent = () => {
         if (value !== undefined && value !== null) formdata.append(key, value);
         });
         await dispatch(createNewStudentFirstYear(formdata,toast,token));
+        reset();
+        setSelectedBranch(null);
+        setSelectedGender(null);
         setIsButtonDisabled(false);
     }
 

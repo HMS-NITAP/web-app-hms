@@ -75,8 +75,8 @@ export const authRoutes = [
 
 export const adminRoutes = [
   { path: "/", element: <AdminDashboard />, label: "Dashboard", icon: <FaIdBadge />, role: [USER_ROLES.ADMIN] },
-  { path: "/admin/odd-sem-applications", element: <StudentRegistrationApplications />, label: "Odd Sem Reg. Apps", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
-  { path: "/admin/even-sem-applications", element: <EvenSemRegistrationApplications />, label: "Even Sem Reg. Apps", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
+  // { path: "/admin/odd-sem-applications", element: <StudentRegistrationApplications />, label: "Odd Sem Reg. Apps", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
+  // { path: "/admin/even-sem-applications", element: <EvenSemRegistrationApplications />, label: "Even Sem Reg. Apps", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/manage-students", element: <ManageStudentAccounts />, label: "Manage Students", icon: <FaChild />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/view-all-unresolved-complaints", element: <ViewAllPendingComplaints />, label: "Unresolved Complaints", icon: <FaBookBookmark />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/manage-officials", element: <ManageOfficialAccounts />, label: "Manage Officials", icon: <FaUserShield />, role: [USER_ROLES.ADMIN] },
@@ -97,7 +97,7 @@ export const adminRoutes = [
   { path: "/detailed-mess-menu", element: <DetailedMessMenu />, role: null, hidden: true },
   // { path: "*", element: <AdminDashboard />, role: [USER_ROLES.ADMIN], hidden: true },
   {path:"/admin/create-students",element:<CreateNewStudent/>, role: [USER_ROLES.ADMIN], hidden: true},
-  {path:"/admin/firstyear-student-applications",element:<FirstYearRegistrationApplications/>, role: [USER_ROLES.ADMIN], hidden: true},
+  {path:"/admin/first-year-student-applications",element:<FirstYearRegistrationApplications/>, role: [USER_ROLES.ADMIN], hidden: true},
 ]
 
 export const studentRoutes = [
