@@ -33,7 +33,10 @@ const {
     REJECT_EVEN_SEM_REGISTRATION_APPLICATIONS_API,
     DELETE_FREEZED_REGISTRATION_APPLICATION_API,
     FETCH_ALL_PENDING_HOSTEL_COMPLAINTS_API,
-    EDIT_STUDENT_ACCOUNT_API
+    EDIT_STUDENT_ACCOUNT_API,
+    CREATE_NEW_STUDENT_FIRST_YEAR_API,
+    FETCH_FIRST_YEAR_STUDENTS_APPLICATIONS_API,
+    ALLOT_ROOM_FIRST_YEAR_STUDENT_API,
 } = adminEndPoints;
 
 const {
@@ -763,6 +766,78 @@ export const editStudentAccount = (formData,token,toast) => {
             return true;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to edit student details";
+            console.log(e);
+            toast.dismiss(id);
+            toast.error(errorMessage);
+            return false;
+        }
+    }
+}
+
+export const createNewStudentFirstYear = (formData,toast) => {
+    return async() => {
+        let id = toast("Please Wait...");
+        try{ 
+            const response = await APIconnector("POST",CREATE_NEW_STUDENT_FIRST_YEAR_API,formData,{"Content-Type": "multipart/form-data"});
+            if(!response.data.success){
+                toast.dismiss(id);
+                toast.error(response?.data?.message);
+                throw new Error(response.data.message);
+            }
+
+            toast.dismiss(id);
+            toast.success(response?.data?.message);
+            return true;
+        }catch(e){
+            console.log("Error", e);
+            const errorMessage = e?.response?.data?.message || "Something went wrong, kindly refresh the website and try again, if the problem persists, try using a different device";
+            toast.dismiss(id);
+            toast.error(errorMessage);
+            return false;
+        }
+    }
+}
+
+export const fetchFirstYearStudentApplications = (token,toast) => {
+    return async() => {
+        let id = toast("Please Wait...");
+        try{    
+            const response = await APIconnector("GET",FETCH_FIRST_YEAR_STUDENTS_APPLICATIONS_API,null,{Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                toast.dismiss(id);
+                toast.success(response?.data?.message);
+                throw new Error(response?.data?.message);
+            }
+
+            toast.dismiss(id);
+            // toast.success(response?.data?.message);
+            return response?.data?.data;
+        }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to fetch data";
+            console.log(e);
+            toast.dismiss(id);
+            toast.error(errorMessage);
+            return null;
+        }
+    }
+}
+
+export const allotRoomForStudentFirstYear = (formData,token,toast) => {
+    return async() => {
+        let id = toast("Please Wait...");
+        try{    
+            const response = await APIconnector("PUT",ALLOT_ROOM_FIRST_YEAR_STUDENT_API,formData,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                toast.dismiss(id);
+                toast.success(response?.data?.message);
+                throw new Error(response?.data?.message);
+            }
+
+            toast.dismiss(id);
+            toast.success(response?.data?.message);
+            return response?.data?.data;
+        }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to Accept Application";
             console.log(e);
             toast.dismiss(id);
             toast.error(errorMessage);

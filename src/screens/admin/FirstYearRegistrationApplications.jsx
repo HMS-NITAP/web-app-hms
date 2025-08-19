@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchStudentRegistrationApplications } from '../../services/operations/AdminAPI';
+import { fetchFirstYearStudentApplications, fetchStudentRegistrationApplications } from '../../services/operations/AdminAPI';
 import { useNavigate } from 'react-router-dom';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
 import toast from 'react-hot-toast';
@@ -17,8 +17,8 @@ const FirstYearRegistrationApplications = () => {
 
   const fetchData = useCallback(async () => {
     setLoading(true);
-    // const response = await dispatch(fetchStudentRegistrationApplications(token, toast));
-    // setApplications(response || []);
+    const response = await dispatch(fetchFirstYearStudentApplications(token, toast));
+    setApplications(response || []);
     setLoading(false);
   }, [dispatch, token]);
 

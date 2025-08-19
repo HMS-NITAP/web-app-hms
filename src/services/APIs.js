@@ -114,6 +114,9 @@ export const adminEndPoints = {
     DELETE_STUDENT_ACCOUNT : SERVER_BASE_URL + '/admin/deleteStudentAccount',
     CHANGE_STUDENT_PROFILE_PHOTO_API : SERVER_BASE_URL + '/admin/changeStudentProfilePhoto',
     EDIT_STUDENT_ACCOUNT_API : SERVER_BASE_URL + '/admin/editStudentAccount',
+    CREATE_NEW_STUDENT_FIRST_YEAR_API : SERVER_BASE_URL + '/admin/createNewStudentFirstYear',
+    FETCH_FIRST_YEAR_STUDENTS_APPLICATIONS_API : SERVER_BASE_URL + '/admin/fetchFirstYearStudentApplications',
+    ALLOT_ROOM_FIRST_YEAR_STUDENT_API : SERVER_BASE_URL + '/admin/allotRoomForStudentFirstYear',
 
     // REGISTRATION APPLICATION APIs
     FETCH_REGISTRATION_APPLICATIONS_API : SERVER_BASE_URL + '/admin/fetchRegistrationApplications',

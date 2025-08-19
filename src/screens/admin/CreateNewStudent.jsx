@@ -1,12 +1,8 @@
-import React from 'react'
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
-import { setRegistrationData, setRegistrationStep } from '../../reducers/slices/AuthSlice';
-import { sendOtpToStudent } from '../../services/operations/AuthAPI';
-import { FiEye, FiEyeOff } from 'react-icons/fi';
-import { MAX_FEE_RECEIPT_FILE_SIZE, MAX_PROFILE_IMAGE_SIZE } from '../../config/config';
+import { createStudentAccount } from '../../services/operations/AuthAPI';
 
 const CreateNewStudent = () => {
 
@@ -22,19 +18,17 @@ const CreateNewStudent = () => {
             return;
         }
 
-        console.log(data)
-
-        // setIsButtonDisabled(true);
-        // const registrationData = {
-        //     ...data,
-        //     branch:selectedBranch,
-        // }
-        // await dispatch(setRegistrationData(registrationData));
-        // const response = await dispatch(sendOtpToStudent(data.email,toast));
-        // if(response){
-        //     await dispatch(setRegistrationStep(2));
-        // }
-        // setIsButtonDisabled(false);
+        setIsButtonDisabled(true);
+        const registrationData = {
+            ...data,
+            branch:selectedBranch,
+        }
+        const formdata = new FormData();
+        Object.entries(registrationData).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) formdata.append(key, value);
+        });
+        await dispatch(createStudentAccount(formdata,toast));
+        setIsButtonDisabled(false);
     }
 
     return (
