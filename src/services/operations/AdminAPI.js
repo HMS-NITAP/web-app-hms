@@ -778,7 +778,7 @@ export const createNewStudentFirstYear = (formData,toast) => {
     return async() => {
         let id = toast("Please Wait...");
         try{ 
-            const response = await APIconnector("POST",CREATE_NEW_STUDENT_FIRST_YEAR_API,formData,{"Content-Type": "multipart/form-data"});
+            const response = await APIconnector("POST",CREATE_NEW_STUDENT_FIRST_YEAR_API,formData,{"Content-Type": "multipart/form-data", Authorization: `Bearer ${token}`});
             if(!response.data.success){
                 toast.dismiss(id);
                 toast.error(response?.data?.message);
