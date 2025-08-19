@@ -23,7 +23,7 @@ const CreateNewStudent = () => {
         }
 
         console.log(data)
-
+        
         // setIsButtonDisabled(true);
         // const registrationData = {
         //     ...data,
