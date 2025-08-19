@@ -774,7 +774,7 @@ export const editStudentAccount = (formData,token,toast) => {
     }
 }
 
-export const createNewStudentFirstYear = (formData,toast) => {
+export const createNewStudentFirstYear = (formData,toast,token) => {
     return async() => {
         let id = toast("Please Wait...");
         try{ 

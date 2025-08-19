@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import { createStudentAccount } from '../../services/operations/AuthAPI';
+import { createNewStudentFirstYear } from '../../services/operations/AdminAPI';
 
 const CreateNewStudent = () => {
 
@@ -10,7 +11,10 @@ const CreateNewStudent = () => {
     const { control, handleSubmit, formState: { errors }, reset } = useForm();
     const dispatch = useDispatch();
     const [selectedBranch, setSelectedBranch] = useState(null);
+    const [selectedGender, setSelectedGender] = useState(null);
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+    const { token } = useSelector((state) => state.Auth);
+
 
     const submitHandler = async(data) => {
         if(!selectedBranch){
@@ -22,12 +26,13 @@ const CreateNewStudent = () => {
         const registrationData = {
             ...data,
             branch:selectedBranch,
+            gender:selectedGender,
         }
         const formdata = new FormData();
         Object.entries(registrationData).forEach(([key, value]) => {
         if (value !== undefined && value !== null) formdata.append(key, value);
         });
-        await dispatch(createStudentAccount(formdata,toast));
+        await dispatch(createNewStudentFirstYear(formdata,toast,token));
         setIsButtonDisabled(false);
     }
 
@@ -89,6 +94,20 @@ const CreateNewStudent = () => {
                         defaultValue=""
                     />
                     {errors.regNo && <span className="text-red-600 text-sm">{errors.regNo.message}</span>}
+                </div>
+
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
+                    <label className="font-medium text-black">Gender <span className="text-xs text-red-600">*</span> :</label>
+                    <div className="w-full flex flex-row ml-[6rem] gap-[3rem]">
+                        <label className="flex items-center gap-1">
+                            <input type="radio" name="gender" value="M" checked={selectedGender === 'M'} onChange={() => setSelectedGender('M')} />
+                            <span className="font-bold text-black">Male</span>
+                        </label>
+                        <label className="flex items-center gap-1">
+                            <input type="radio" name="gender" value="F" checked={selectedGender === 'F'} onChange={() => setSelectedGender('F')} />
+                            <span className="font-bold text-black">Female</span>
+                        </label>
+                    </div>
                 </div>
 
                 {/* Branch */}
