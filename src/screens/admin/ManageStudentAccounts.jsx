@@ -184,13 +184,13 @@ const ManageStudentAccounts = () => {
         <div className="flex items-center gap-5">
           <button
             className="bg-blue-900 hover:bg-blue-800 cursor-pointer p-2 rounded-md border border-black"
-            onClick={() => navigate("/admin/createstudents")}
+            onClick={() => navigate("/admin/create-students")}
           >
             <FaUserPlus size={20} color="white" />
           </button>
           <button
             className="bg-blue-900 hover:bg-blue-800  cursor-pointer p-2 rounded-md border border-black"
-            onClick={() => navigate("/admin/firstyearstudentapplications")}
+            onClick={() => navigate("/admin/firstyear-student-applications")}
           >
             <FaList size={20} color='white'/>          
           </button>
