@@ -96,8 +96,8 @@ export const adminRoutes = [
   // { path: "/gallery", element: <Gallery />, label: "Gallery", icon: <FaImage />, role: null },
   { path: "/detailed-mess-menu", element: <DetailedMessMenu />, role: null, hidden: true },
   // { path: "*", element: <AdminDashboard />, role: [USER_ROLES.ADMIN], hidden: true },
-  {path:"/admin/create-students",element:<CreateNewStudent/>, role: [USER_ROLES.ADMIN]},
-  {path:"/admin/firstyear-student-applications",element:<FirstYearRegistrationApplications/>, role: [USER_ROLES.ADMIN]},
+  {path:"/admin/create-students",element:<CreateNewStudent/>, role: [USER_ROLES.ADMIN], hidden: true},
+  {path:"/admin/firstyear-student-applications",element:<FirstYearRegistrationApplications/>, role: [USER_ROLES.ADMIN], hidden: true},
 ]
 
 export const studentRoutes = [
