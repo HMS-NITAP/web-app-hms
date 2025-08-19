@@ -14,6 +14,8 @@ import { FiEdit } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import { MAX_PROFILE_IMAGE_SIZE } from '../../config/config';
 import { useForm } from 'react-hook-form';
+import { FaUserPlus } from 'react-icons/fa6';
+import { FaList  } from 'react-icons/fa6';
 
 const ManageStudentAccounts = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -161,20 +163,40 @@ const ManageStudentAccounts = () => {
 
   return (
     <div className="w-full flex flex-col items-center px-4 py-6">
-      <div className="w-full flex items-center md:justify-center justify-between gap-4">
-        <input
-          className="w-full max-w-md border border-gray-400 rounded-lg p-2 text-black"
-          placeholder="Search Student with Roll Number"
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <button
+      <div className="w-full flex items-center justify-between gap-4">
+        {/* Left / Center Group (Search input + Search button) */}
+        <div className="flex items-center gap-4 w-full md:justify-center">
+          <input
+            className="w-full max-w-md border border-gray-400 rounded-lg p-2 text-black"
+            placeholder="Search Student with Roll Number"
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <button
             disabled={isButtonDisabled}
             onClick={searchStudentWithId}
             className="p-3 border hover:bg-[#caf0f8] transition-all duration-200 cursor-pointer border-black border-dotted rounded-full"
           >
             <FaMagnifyingGlass className="text-gray-500 text-lg" />
-        </button>
+          </button>
+        </div>
+
+        {/* Right Group (User Plus buttons) */}
+        <div className="flex items-center gap-5">
+          <button
+            className="bg-blue-900 hover:bg-blue-800 cursor-pointer p-2 rounded-md border border-black"
+            onClick={() => navigate("/admin/create-students")}
+          >
+            <FaUserPlus size={20} color="white" />
+          </button>
+          <button
+            className="bg-blue-900 hover:bg-blue-800  cursor-pointer p-2 rounded-md border border-black"
+            onClick={() => navigate("/admin/firstyear-student-applications")}
+          >
+            <FaList size={20} color='white'/>          
+          </button>
+        </div>
       </div>
+
 
       {!studentData && (
         <div className="text-gray-500 my-4 text-lg font-bold text-center">
