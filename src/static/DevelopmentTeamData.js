@@ -48,6 +48,13 @@ export const developmentTeamData = [
         linkedIn : "https://www.linkedin.com/in/lithin-adari-b42297287/"
     },
     {
+        image : PlaceholderUser,
+        name : "S Somanath Reddy",
+        designation : "Frontend Developer",
+        email : "422256@student.nitandhra.ac.in",
+        linkedIn : "https://www.linkedin.com/in/somanathreddys/"
+    },
+    {
         image : Sreeram,
         name : "Sreeram Vasisht",
         designation : "UI/UX Designer",
