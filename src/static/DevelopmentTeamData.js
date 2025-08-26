@@ -41,19 +41,19 @@ export const developmentTeamData = [
         linkedIn : "https://www.linkedin.com/in/mohith-m-0b2b74288/"
     },
     {
-        image : Lithin,
-        name : "Lithin Adari",
-        designation : "Backend Developer",
-        email : "422102@student.nitandhra.ac.in",
-        linkedIn : "https://www.linkedin.com/in/lithin-adari-b42297287/"
-    },    
-    {
         image : PlaceholderUser,
         name : "S Somanath Reddy",
         designation : "Frontend Developer",
         email : "422256@student.nitandhra.ac.in",
         linkedIn : "https://www.linkedin.com/in/somanathreddys/"
     },
+    {
+        image : Lithin,
+        name : "Lithin Adari",
+        designation : "Backend Developer",
+        email : "422102@student.nitandhra.ac.in",
+        linkedIn : "https://www.linkedin.com/in/lithin-adari-b42297287/"
+    },    
     {
         image : Sreeram,
         name : "Sreeram Vasisht",
