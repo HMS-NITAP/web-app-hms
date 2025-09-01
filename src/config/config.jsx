@@ -75,7 +75,7 @@ export const authRoutes = [
 
 export const adminRoutes = [
   { path: "/", element: <AdminDashboard />, label: "Dashboard", icon: <FaIdBadge />, role: [USER_ROLES.ADMIN] },
-  // { path: "/admin/odd-sem-applications", element: <StudentRegistrationApplications />, label: "Odd Sem Reg. Apps", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
+  { path: "/admin/odd-sem-applications", element: <StudentRegistrationApplications />, label: "Odd Sem Reg. Apps", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
   // { path: "/admin/even-sem-applications", element: <EvenSemRegistrationApplications />, label: "Even Sem Reg. Apps", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/manage-students", element: <ManageStudentAccounts />, label: "Manage Students", icon: <FaChild />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/view-all-unresolved-complaints", element: <ViewAllPendingComplaints />, label: "Unresolved Complaints", icon: <FaBookBookmark />, role: [USER_ROLES.ADMIN] },

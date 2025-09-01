@@ -27,7 +27,8 @@ const ResetPassword = () => {
       data.token,
       data.newPassword,
       data.confirmNewPassword,
-      navigate
+      navigate,
+      toast
     ));
     setIsButtonDisabled(false);
   };
