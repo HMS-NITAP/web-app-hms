@@ -1,7 +1,21 @@
 import {createSlice} from '@reduxjs/toolkit'
 
+const getStoredToken = () => {
+    const storedToken = localStorage.getItem("token");
+
+    if(!storedToken){
+        return null;
+    }
+
+    try{
+        return JSON.parse(storedToken);
+    }catch{
+        return storedToken;
+    }
+}
+
 const initialState = {
-    token:localStorage.getItem("token") ? (JSON.parse(localStorage.getItem("token"))) : (null),
+    token:getStoredToken(),
     signUpData : null,
     registrationData : null,
     registrationStep : 1,

@@ -1,7 +1,21 @@
 import {createSlice} from '@reduxjs/toolkit'
 
+const getStoredUser = () => {
+    const storedUser = localStorage.getItem("user");
+
+    if(!storedUser){
+        return null;
+    }
+
+    try{
+        return JSON.parse(storedUser);
+    }catch{
+        return null;
+    }
+}
+
 const initialState = {
-    user:localStorage.getItem("user") ? (JSON.parse(localStorage.getItem("user"))) : (null),
+    user:getStoredUser(),
 }
 
 const ProfileSlice = createSlice({

@@ -98,10 +98,10 @@ export const logout = (toast, navigate) => {
             await dispatch(setUser(null));
             localStorage.removeItem("token");
             localStorage.removeItem("user");
-            toast.success("Successfully Logged Out from Account");
-            navigate("/");
+            toast?.success("Successfully Logged Out from Account");
+            navigate?.("/");
         }catch(e){
-            toast.error("Logout Unsuccessful");
+            toast?.error("Logout Unsuccessful");
             console.log("Logout modal Error",e);
         }
     }
