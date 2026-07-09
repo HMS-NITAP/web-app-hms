@@ -43,6 +43,7 @@ const StudentRegistrationForm = () => {
     const [paymentDate, setPaymentDate] = useState("");
 
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+    const [agreedToConditions, setAgreedToConditions] = useState(false);
     const [secureText1, setSecureText1] = useState(true);
     const [secureText2, setSecureText2] = useState(true);
 
@@ -172,6 +173,24 @@ const StudentRegistrationForm = () => {
                     <li>Do not share your OTP and credentials with anyone.</li>
                 </ul>
             </div>
+            <div className="w-full bg-[#fef3c7] border border-yellow-500 rounded-2xl px-4 py-4 gap-2">
+                <p className="text-center text-lg font-bold text-black mb-2">IMPORTANT NOTES:</p>
+                <ul className="text-black text-base font-semibold list-disc pl-5 space-y-2">
+                    <li>Hostel room will be handed over to the students who are reported to the respective hostel block and submitted the institute registration payment receipt, hostel payment receipt, hostel registration acknowledgement, Mess id card and 1 passport size photograph.</li>
+                    <li>Students should fill their details in the hostel block blue register at the time of room occupation without fail. If any student refuses to fill their details in the blue register their hostel room allotment will be cancelled automatically.</li>
+                    <li>Students who upload any old fee receipts/fabricated fee receipts in the web portal during hostel registration, Hostel management will take serious disciplinary action as per the SoP.</li>
+                    <li>No student is allowed to do hostel registration through web portal without making payment of hostel fee at any circumstances.</li>
+                </ul>
+                <label className="mt-4 flex items-start gap-2 cursor-pointer select-none">
+                    <input
+                        type="checkbox"
+                        checked={agreedToConditions}
+                        onChange={(e) => setAgreedToConditions(e.target.checked)}
+                        className="mt-1 w-4 h-4 cursor-pointer"
+                    />
+                    <span className="font-bold text-black">I agree to these conditions.</span>
+                </label>
+            </div>
             <form className="w-full flex md:flex-row justify-between items-center flex-wrap flex-col gap-[1rem]" onSubmit={handleSubmit(submitHandler)}>
                 {/* Student Name */}
                 <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
@@ -263,7 +282,7 @@ const StudentRegistrationForm = () => {
                     <label className="font-medium text-black">Institute Roll Number <span className="text-xs text-red-600">*</span> :</label>
                     <Controller
                         control={control}
-                        rules={{ 
+                        rules={{
                             required: true,
                             pattern: {
                                 value: /^[0-9]{6}$/,
@@ -283,7 +302,7 @@ const StudentRegistrationForm = () => {
                     <label className="font-medium text-black">Institute Registration Number <span className="text-xs text-red-600">*</span> :</label>
                     <Controller
                         control={control}
-                        rules={{ 
+                        rules={{
                             required: true,
                             pattern: {
                                 value: /^[0-9]{6,7}$/,
@@ -369,7 +388,7 @@ const StudentRegistrationForm = () => {
                     <label className="font-medium text-black">Aadhaar Number <span className="text-xs text-red-600">*</span> :</label>
                     <Controller
                         control={control}
-                        rules={{ 
+                        rules={{
                             required: true,
                             pattern: {
                                 value: /^[0-9]{12}$/,
@@ -459,7 +478,7 @@ const StudentRegistrationForm = () => {
                     <label className="font-medium text-black">Student Mobile Number <span className="text-xs text-red-600">*</span> :</label>
                     <Controller
                         control={control}
-                        rules={{ 
+                        rules={{
                             required: true,
                             pattern: {
                                 value: /^[0-9]{10}$/,
@@ -507,7 +526,7 @@ const StudentRegistrationForm = () => {
                     <label className="font-medium text-black">Parent Mobile Number <span className="text-xs text-red-600">*</span> :</label>
                     <Controller
                         control={control}
-                        rules={{ 
+                        rules={{
                             required: true,
                             pattern: {
                                 value: /^[0-9]{10}$/,
@@ -527,7 +546,7 @@ const StudentRegistrationForm = () => {
                     <label className="font-medium text-black">Emergency Contact Number <span className="text-xs text-red-600">*</span> :</label>
                     <Controller
                         control={control}
-                        rules={{ 
+                        rules={{
                             required: true,
                             pattern: {
                                 value: /^[0-9]{10}$/,
@@ -556,9 +575,16 @@ const StudentRegistrationForm = () => {
                     />
                     {errors.address && <span className="text-red-600 text-sm">Address is required.</span>}
                 </div>
-                
+
                 <div className='w-full overflow-hidden flex justify-center items-center'>
-                    <button type="submit" className="cursor-pointer hover:scale-105 transition-all duration-200 px-[1.5rem] py-[0.5rem] rounded-xl font-bold text-lg text-black bg-yellow-400 mt-2 disabled:opacity-60" disabled={isButtonDisabled}>Submit Data</button>
+                  <button
+                    type="submit"
+                    title={agreedToConditions ? "Submit Data" : "Agree to above conditions to Submit"}
+                    className="cursor-pointer hover:scale-105 transition-all duration-200 px-[1.5rem] py-[0.5rem] rounded-xl font-bold text-lg text-black bg-yellow-400 mt-2 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+                    disabled={isButtonDisabled || !agreedToConditions}
+                  >
+                    Submit Data
+                  </button>
                 </div>
             </form>
         </div>
