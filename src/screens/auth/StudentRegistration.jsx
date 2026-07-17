@@ -5,9 +5,14 @@ import OtpVerification from '../../components/common/OtpVerification';
 import RoomAllotment from '../../components/common/RoomAllotment';
 import AwaitingConfirmation from '../../components/common/AwaitingConfirmation';
 import RegistrationComingSoon from './RegistrationComingSoon';
+import Maintenance from '../common/Maintenance';
 
 const StudentRegistration = () => {
   const { registrationStep } = useSelector((state) => state.Auth);
+
+  if (import.meta.env.VITE_IS_MAINTENANCE_ON === 'true') {
+    return <Maintenance />;
+  }
 
   if (import.meta.env.VITE_IS_REGISTRATION_ON === 'false') {
     return <RegistrationComingSoon />;
