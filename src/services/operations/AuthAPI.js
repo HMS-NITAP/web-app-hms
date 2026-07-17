@@ -107,11 +107,11 @@ export const logout = (toast, navigate) => {
     }
 }
 
-export const sendOtpToStudent = (email,toast) => {
+export const sendOtpToStudent = (email,rollNo,year,toast) => {
     return async() => {
         let id = toast("Please Wait...");
         try{ 
-            const response = await APIconnector("POST",SENDOTP_API,{email});
+            const response = await APIconnector("POST",SENDOTP_API,{email,rollNo,year});
             if(!response.data.success){
                 toast.dismiss(id);
                 toast.error(response?.data?.message);

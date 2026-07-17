@@ -149,7 +149,7 @@ const StudentRegistrationForm = () => {
             paymentDate:covertToLocalDate(paymentDate)
         }
         await dispatch(setRegistrationData(registrationData));
-        const response = await dispatch(sendOtpToStudent(data.email,toast));
+        const response = await dispatch(sendOtpToStudent(data.email,data.rollNo,selectedYear,toast));
         if(response){
             await dispatch(setRegistrationStep(2));
         }
