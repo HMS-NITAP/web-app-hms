@@ -1,20 +1,8 @@
-// OLD SERVER (Backend)
-// const SERVER_BASE_URL = "https://backend-lxur.onrender.com/api/v1"
+const SERVER_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/+$/, "");
 
-// NEW SERVER (Backend1)
-// const SERVER_BASE_URL = "https://backend1-itzt.onrender.com/api/v1"
-
-// PURCHASED SERVER 
-// const SERVER_BASE_URL = "https://backend-c938.onrender.com/api/v1"
-
-// LOCALHOST SERVER
-// const SERVER_BASE_URL = "http://localhost:4000/api/v1"
-
-// PERSONAL AWS SERVER
-// const SERVER_BASE_URL = "http://ec2-15-207-247-90.ap-south-1.compute.amazonaws.com:4000/api/v1"
-
-// CLG AWS SERVER
-const SERVER_BASE_URL = "https://server.hmsnitap.in/api/v1"
+if (!SERVER_BASE_URL) {
+    throw new Error("Missing required environment variable: VITE_API_BASE_URL");
+}
 
 export const authEndPoints = {
     SENDOTP_API : SERVER_BASE_URL + "/auth/sendOTP",
