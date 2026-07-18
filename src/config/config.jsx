@@ -48,6 +48,7 @@ import EvenSemRegistrationApplications from '../screens/admin/EvenSemRegistratio
 import ViewAllPendingComplaints from "../screens/admin/ViewAllPendingComplaints";
 import CreateNewStudent from "../screens/admin/CreateNewStudent";
 import FirstYearRegistrationApplications from "../screens/admin/FirstYearRegistrationApplications";
+import FixCorruptDocs from "../screens/auth/FixCorruptDocs";
 
 export const USER_ROLES = {
   ADMIN: 'ADMIN',
@@ -71,6 +72,7 @@ export const authRoutes = [
   { path: "/reset-password-success", element: <ResetPasswordSuccess />, role: null, hidden: true },
   { path: "/forgot-password", element: <ForgotPassword />, role: null, hidden: true },
   { path: "/detailed-mess-menu", element: <DetailedMessMenu />, role: null, hidden: true },
+  { path: "/fix-corrupt-docs", element: <FixCorruptDocs />, role: null, hidden: true },
 ]
 
 export const adminRoutes = [

@@ -14,6 +14,11 @@ export const authEndPoints = {
     CREATE_STUDENT_ACCOUNT_API : SERVER_BASE_URL + "/auth/createStudentAccount",
 }
 
+export const fixCorruptDocsEndPoints = {
+    FIX_DOC_LOGIN_API : SERVER_BASE_URL + "/fix-corrupt-docs/login",
+    FIX_DOC_UPLOAD_API : SERVER_BASE_URL + "/fix-corrupt-docs/upload",
+}
+
 export const studentEndPoints = {
     // OUTING APPILICATION APIs
     CREATE_OUTING_APPLICATION_API : SERVER_BASE_URL + '/student/createOutingApplication',
