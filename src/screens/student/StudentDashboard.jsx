@@ -348,7 +348,7 @@ const StudentDashboardScreen = () => {
 
             {/* Account Deletion Info */}
             <div className="my-4 mx-auto max-w-2xl text-center">
-              <span className="text-gray-700">If you want to delete your account, please contact us on <a href="mailto:hmsnitap@gmail.com" className="text-blue-600 underline">hmsnitap@gmail.com</a> from your registered mail ID and reason for account deletion.</span>
+              <span className="text-gray-700">If you want to delete your account, please contact us on <a href="mailto:nitandhrahms@gmail.com" className="text-blue-600 underline">nitandhrahms@gmail.com</a> from your registered mail ID and reason for account deletion.</span>
             </div>
           </>
         )}
