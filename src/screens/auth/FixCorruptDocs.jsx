@@ -6,7 +6,7 @@ import { MAX_FEE_RECEIPT_FILE_SIZE } from '../../config/config';
 import { fixDocLogin, fixDocUpload } from '../../services/operations/FixCorruptDocsAPI';
 
 const FixCorruptDocs = () => {
-  const [step, setStep] = useState('login'); // 'login' | 'upload' | 'done'
+  const [step, setStep] = useState('login'); // 'login' | 'upload' | 'done' | 'info'
   const [secureText, setSecureText] = useState(true);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
@@ -16,6 +16,7 @@ const FixCorruptDocs = () => {
   const [token, setToken] = useState(null);
   const [student, setStudent] = useState(null);
   const [file, setFile] = useState(null);
+  const [infoMessage, setInfoMessage] = useState('');
 
   const onLogin = async (e) => {
     e.preventDefault();
@@ -31,6 +32,10 @@ const FixCorruptDocs = () => {
       setStudent(result.student);
       setPassword('');
       setStep('upload');
+    } else if (result?.info) {
+      setPassword('');
+      setInfoMessage(result.message);
+      setStep('info');
     }
   };
 
@@ -77,12 +82,13 @@ const FixCorruptDocs = () => {
     <div className="w-full h-full flex items-center justify-center bg-gray-100 p-4 overflow-y-auto">
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md space-y-6">
         <div className="text-center space-y-1">
-          <h1 className="text-xl font-bold text-gray-800">Fix Corrupted Document</h1>
-          <p className="text-sm text-gray-600">
-            Some of the documents you uploaded during registration was found to be corrupt or
-            unreadable during automated verification. Please log in to review and re-upload the affected
-            document. This can be done only once.
-          </p>
+          <h1 className="text-xl font-bold text-gray-800">Re-upload Institute Fee Receipt</h1>
+          {(step === 'login' || step === 'upload') && (
+            <p className="text-sm text-gray-600">
+              Please log in to re-upload your Institute Fee Receipt.{' '}
+              <span className="font-bold">This can be done only once.</span>
+            </p>
+          )}
         </div>
 
         {step === 'login' && (
@@ -154,6 +160,13 @@ const FixCorruptDocs = () => {
               <MainButton text="Upload" type="submit" isButtonDisabled={isButtonDisabled} width="w-full" />
             </div>
           </form>
+        )}
+
+        {step === 'info' && (
+          <div className="text-center space-y-2">
+            <p className="text-green-600 font-semibold">{infoMessage}</p>
+            <p className="text-sm text-gray-600">You may now close this page.</p>
+          </div>
         )}
 
         {step === 'done' && (

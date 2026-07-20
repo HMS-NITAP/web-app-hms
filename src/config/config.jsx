@@ -72,7 +72,7 @@ export const authRoutes = [
   { path: "/reset-password-success", element: <ResetPasswordSuccess />, role: null, hidden: true },
   { path: "/forgot-password", element: <ForgotPassword />, role: null, hidden: true },
   { path: "/detailed-mess-menu", element: <DetailedMessMenu />, role: null, hidden: true },
-  { path: "/fix-corrupt-docs", element: <FixCorruptDocs />, role: null, hidden: true },
+  { path: "/reupload-fee-receipt", element: <FixCorruptDocs />, role: null, hidden: true },
 ]
 
 export const adminRoutes = [

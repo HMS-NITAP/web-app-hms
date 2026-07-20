@@ -15,8 +15,8 @@ export const authEndPoints = {
 }
 
 export const fixCorruptDocsEndPoints = {
-    FIX_DOC_LOGIN_API : SERVER_BASE_URL + "/fix-corrupt-docs/login",
-    FIX_DOC_UPLOAD_API : SERVER_BASE_URL + "/fix-corrupt-docs/upload",
+    FIX_DOC_LOGIN_API : SERVER_BASE_URL + "/reupload-fee-receipt/login",
+    FIX_DOC_UPLOAD_API : SERVER_BASE_URL + "/reupload-fee-receipt/upload",
 }
 
 export const studentEndPoints = {

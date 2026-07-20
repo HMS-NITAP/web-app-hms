@@ -9,6 +9,10 @@ export const fixDocLogin = async (email, password, toast) => {
         const response = await APIconnector("POST", FIX_DOC_LOGIN_API, { email, password });
         if (!response?.data?.success) {
             toast.dismiss(id);
+            const code = response?.data?.code;
+            if (code === "NO_ACTION_NEEDED" || code === "ALREADY_UPDATED") {
+                return { info: true, message: response?.data?.message };
+            }
             toast.error(response?.data?.message);
             return null;
         }
@@ -16,8 +20,12 @@ export const fixDocLogin = async (email, password, toast) => {
         toast.success(response?.data?.message);
         return { token: response?.data?.token, student: response?.data?.student };
     } catch (e) {
-        const errorMessage = e?.response?.data?.message || "Verification Failed";
         toast.dismiss(id);
+        const code = e?.response?.data?.code;
+        if (code === "NO_ACTION_NEEDED" || code === "ALREADY_UPDATED") {
+            return { info: true, message: e?.response?.data?.message };
+        }
+        const errorMessage = e?.response?.data?.message || "Verification Failed";
         toast.error(errorMessage);
         return null;
     }
