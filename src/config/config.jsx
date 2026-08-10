@@ -2,7 +2,8 @@ import {
   FaRightToBracket, FaAddressCard, FaBullhorn, FaBuilding, FaBowlFood, FaAddressBook,
   FaUsers, FaImage, FaStar, FaIdBadge, FaUserShield, FaChild, FaTableList,
   FaWpforms, FaClockRotateLeft, FaBookBookmark, FaPersonCircleExclamation,
-  FaCashRegister, FaReceipt, FaCommentDots, FaCircleExclamation, FaPeopleRoof
+  FaCashRegister, FaReceipt, FaCommentDots, FaCircleExclamation, FaPeopleRoof,
+  FaMagnifyingGlass
 } from "react-icons/fa6";
 
 import Login from '../screens/auth/Login';
@@ -43,6 +44,7 @@ import AdminDashboard from '../screens/admin/AdminDashboard';
 import BlockRooms from '../screens/admin/BlockRooms';
 import CotDetails from '../screens/admin/CotDetails';
 import ManageStudentAccounts from '../screens/admin/ManageStudentAccounts';
+import ManageStudents from '../screens/admin/ManageStudents';
 import ChangeStudentCot from '../screens/admin/ChangeStudentCot';
 import EvenSemRegistrationApplications from '../screens/admin/EvenSemRegistrationApplications';
 import ViewAllPendingComplaints from "../screens/admin/ViewAllPendingComplaints";
@@ -79,7 +81,8 @@ export const adminRoutes = [
   { path: "/", element: <AdminDashboard />, label: "Dashboard", icon: <FaIdBadge />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/odd-sem-applications", element: <StudentRegistrationApplications />, label: "Odd Sem Reg. Apps", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
   // { path: "/admin/even-sem-applications", element: <EvenSemRegistrationApplications />, label: "Even Sem Reg. Apps", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
-  { path: "/admin/manage-students", element: <ManageStudentAccounts />, label: "Manage Students", icon: <FaChild />, role: [USER_ROLES.ADMIN] },
+  { path: "/admin/search-student", element: <ManageStudentAccounts />, label: "Search Student", icon: <FaMagnifyingGlass />, role: [USER_ROLES.ADMIN] },
+  { path: "/admin/manage-students", element: <ManageStudents />, label: "Manage Students", icon: <FaChild />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/view-all-unresolved-complaints", element: <ViewAllPendingComplaints />, label: "Unresolved Complaints", icon: <FaBookBookmark />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/manage-officials", element: <ManageOfficialAccounts />, label: "Manage Officials", icon: <FaUserShield />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/create-official-account", element: <CreateOfficialAccount />, role: [USER_ROLES.ADMIN], hidden: true },

@@ -11,14 +11,16 @@ import {
 import { FaMagnifyingGlass } from 'react-icons/fa6';
 import MainButton from '../../components/common/MainButton';
 import { FiEdit } from 'react-icons/fi';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { MAX_PROFILE_IMAGE_SIZE } from '../../config/config';
 import { useForm } from 'react-hook-form';
 import { FaUserPlus } from 'react-icons/fa6';
 import { FaList  } from 'react-icons/fa6';
 
 const ManageStudentAccounts = () => {
-  const [searchQuery, setSearchQuery] = useState('');
+  // "Manage Students" links here with ?id=<rollNo|regNo> to open a specific student straight away.
+  const [searchParams] = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('id') || '');
   const [studentData, setStudentData] = useState(null);
   const [tabChoice, setTabChoice] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -163,13 +165,16 @@ const ManageStudentAccounts = () => {
 
   return (
     <div className="w-full flex flex-col items-center px-4 py-6">
+      <h1 className="text-lg font-bold text-black text-center pb-5">Search Student</h1>
       <div className="w-full flex items-center justify-between gap-4">
         {/* Left / Center Group (Search input + Search button) */}
         <div className="flex items-center gap-4 w-full md:justify-center">
           <input
             className="w-full max-w-md border border-gray-400 rounded-lg p-2 text-black"
             placeholder="Search Student with Roll Number"
+            value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && searchStudentWithId()}
           />
           <button
             disabled={isButtonDisabled}
