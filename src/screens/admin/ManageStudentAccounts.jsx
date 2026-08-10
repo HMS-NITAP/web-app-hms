@@ -292,6 +292,7 @@ const ManageStudentAccounts = () => {
               <span className="font-semibold text-black">Email: {studentData?.user?.email}</span>
               <span className="font-semibold text-black">Gender: {studentData?.gender === 'M' ? 'Male' : 'Female'}</span>
               <span className="font-semibold text-black">DOB: {new Date(studentData?.dob).toLocaleDateString()}</span>
+              <span className="font-semibold text-black">Date of Joining: {studentData?.dateOfJoining ? new Date(studentData.dateOfJoining).toLocaleDateString() : 'N/A'}</span>
               <span className="font-semibold text-black">Year: {studentData?.year}</span>
               <span className="font-semibold text-black">Branch: {studentData?.branch}</span>
               <span className="font-semibold text-black">Blood Group: {studentData?.bloodGroup}</span>

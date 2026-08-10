@@ -140,7 +140,22 @@ const CreateNewStudent = () => {
                     {errors.amountPaid && <span className="text-red-600 text-sm">Amount Paid is required.</span>}
                 </div>
 
-                
+                {/* Date of Joining */}
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
+                    <label className="font-medium text-black">Date of Joining <span className="text-xs text-red-600">*</span> :</label>
+                    <Controller
+                        control={control}
+                        rules={{ required: true }}
+                        render={({ field }) => (
+                            <input {...field} className="w-full p-2 border border-gray-400 rounded-lg text-black" type="date" />
+                        )}
+                        name="dateOfJoining"
+                        defaultValue={new Date().toISOString().split('T')[0]}
+                    />
+                    {errors.dateOfJoining && <span className="text-red-600 text-sm">Date of Joining is required.</span>}
+                </div>
+
+
                 <div className='w-full overflow-hidden flex justify-center items-center'>
                     <button type="submit" className="cursor-pointer hover:scale-105 transition-all duration-200 px-[1.5rem] py-[0.5rem] rounded-xl font-bold text-lg text-black bg-yellow-400 mt-2 disabled:opacity-60" disabled={isButtonDisabled}>Submit Data</button>
                 </div>

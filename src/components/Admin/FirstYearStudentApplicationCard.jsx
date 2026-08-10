@@ -116,6 +116,7 @@ const FirstYearStudentApplicationCard = ({ application, toast, token, fetchData 
         <p><strong>Year: </strong> {application?.instituteStudent?.year}</p>
         <p><strong>Gender: </strong> {application?.instituteStudent?.gender === "M" ? "Male" : "Female"}</p>
         <p><strong>Hostel Fee Amount Paid: </strong> {application?.instituteStudent?.amountPaid}</p>
+        <p><strong>Date of Joining: </strong> {application?.instituteStudent?.dateOfJoining ? new Date(application.instituteStudent.dateOfJoining).toLocaleDateString() : 'N/A'}</p>
       </div>
       <div className="flex justify-evenly mt-2">
         <MainButton text="ALLOT ROOM" backgroundColor="bg-green-500" textColor='text-white' onPress={() => setAcceptModalVisible(true)} />
