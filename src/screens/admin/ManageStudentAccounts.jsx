@@ -14,7 +14,7 @@ import { FiEdit } from 'react-icons/fi';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { MAX_PROFILE_IMAGE_SIZE } from '../../config/config';
 import { useForm } from 'react-hook-form';
-import { FaUserPlus } from 'react-icons/fa6';
+// import { FaUserPlus } from 'react-icons/fa6';
 import { FaList  } from 'react-icons/fa6';
 
 const ManageStudentAccounts = () => {
@@ -187,12 +187,13 @@ const ManageStudentAccounts = () => {
 
         {/* Right Group (User Plus buttons) */}
         <div className="flex items-center gap-5">
-          <button
+          {/* Moved to its own "Add New Student" entry in the sidebar */}
+          {/* <button
             className="bg-blue-900 hover:bg-blue-800 cursor-pointer p-2 rounded-md border border-black"
             onClick={() => navigate("/admin/create-students")}
           >
             <FaUserPlus size={20} color="white" />
-          </button>
+          </button> */}
           <button
             className="bg-blue-900 hover:bg-blue-800  cursor-pointer p-2 rounded-md border border-black"
             onClick={() => navigate("/admin/first-year-student-applications")}
