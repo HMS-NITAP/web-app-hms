@@ -3,7 +3,7 @@ import {
   FaUsers, FaImage, FaStar, FaIdBadge, FaUserShield, FaChild, FaTableList,
   FaWpforms, FaClockRotateLeft, FaBookBookmark, FaPersonCircleExclamation,
   FaCashRegister, FaReceipt, FaCommentDots, FaCircleExclamation, FaPeopleRoof,
-  FaMagnifyingGlass, FaUserPlus
+  FaMagnifyingGlass, FaUserPlus, FaBed
 } from "react-icons/fa6";
 
 import Login from '../screens/auth/Login';
@@ -84,6 +84,7 @@ export const adminRoutes = [
   { path: "/admin/search-student", element: <ManageStudentAccounts />, label: "Search Student", icon: <FaMagnifyingGlass />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/manage-students", element: <ManageStudents />, label: "Manage Students", icon: <FaChild />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/create-students", element: <CreateNewStudent />, label: "Add New Student", icon: <FaUserPlus />, role: [USER_ROLES.ADMIN] },
+  { path: "/admin/first-year-student-applications", element: <FirstYearRegistrationApplications />, label: "First Year Room Allotment", icon: <FaBed />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/view-all-unresolved-complaints", element: <ViewAllPendingComplaints />, label: "Unresolved Complaints", icon: <FaBookBookmark />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/manage-officials", element: <ManageOfficialAccounts />, label: "Manage Officials", icon: <FaUserShield />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/create-official-account", element: <CreateOfficialAccount />, role: [USER_ROLES.ADMIN], hidden: true },
@@ -102,7 +103,6 @@ export const adminRoutes = [
   // { path: "/gallery", element: <Gallery />, label: "Gallery", icon: <FaImage />, role: null },
   { path: "/detailed-mess-menu", element: <DetailedMessMenu />, role: null, hidden: true },
   // { path: "*", element: <AdminDashboard />, role: [USER_ROLES.ADMIN], hidden: true },
-  {path:"/admin/first-year-student-applications",element:<FirstYearRegistrationApplications/>, role: [USER_ROLES.ADMIN], hidden: true},
 ]
 
 export const studentRoutes = [

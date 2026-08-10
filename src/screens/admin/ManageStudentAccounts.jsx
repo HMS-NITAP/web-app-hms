@@ -15,7 +15,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { MAX_PROFILE_IMAGE_SIZE } from '../../config/config';
 import { useForm } from 'react-hook-form';
 // import { FaUserPlus } from 'react-icons/fa6';
-import { FaList  } from 'react-icons/fa6';
+// import { FaList  } from 'react-icons/fa6';
 
 const ManageStudentAccounts = () => {
   // "Manage Students" links here with ?id=<rollNo|regNo> to open a specific student straight away.
@@ -194,12 +194,13 @@ const ManageStudentAccounts = () => {
           >
             <FaUserPlus size={20} color="white" />
           </button> */}
-          <button
+          {/* Moved to its own "First Year Room Allotment" entry in the sidebar */}
+          {/* <button
             className="bg-blue-900 hover:bg-blue-800  cursor-pointer p-2 rounded-md border border-black"
             onClick={() => navigate("/admin/first-year-student-applications")}
           >
-            <FaList size={20} color='white'/>          
-          </button>
+            <FaList size={20} color='white'/>
+          </button> */}
         </div>
       </div>
 
