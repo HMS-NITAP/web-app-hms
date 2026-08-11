@@ -1,5 +1,6 @@
 import {  useDispatch, useSelector } from 'react-redux';
 import Navbar from './components/common/Navbar';
+import Sidebar from './components/common/Sidebar';
 import PrivateRoute from './components/common/PrivateRoute';
 import {USER_ROLES} from './config/config'
 import { Route, Routes } from 'react-router-dom';
@@ -30,10 +31,12 @@ const App = () => {
   }, [token, dispatch]);
 
   return (
-    <div className='w-[100vw] h-[100vh] overflow-hidden flex flex-col items-center'>
-      <Navbar />
-      
-      <div className="w-full full-minus-header">
+    <div className='w-screen h-screen overflow-hidden flex flex-row'>
+      <Sidebar />
+
+      <div className="flex-1 min-w-0 flex flex-col">
+        <Navbar />
+        <div className="flex-1 min-h-0 overflow-y-auto">
         {
           (!token || !user) && (
             <Routes>
@@ -119,8 +122,9 @@ const App = () => {
             </Routes>
           )
         }
+        </div>
       </div>
-      
+
     </div>
   );
 };

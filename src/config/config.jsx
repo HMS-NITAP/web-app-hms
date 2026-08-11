@@ -142,6 +142,16 @@ export const officialRoutes = [
   { path: "/detailed-mess-menu", element: <DetailedMessMenu />, role: null, hidden: true },
 ];
 
+export const getRoutesForUser = (token, user) => {
+  if (!token || !user) return authRoutes;
+  if (user.accountType === USER_ROLES.ADMIN) return adminRoutes;
+  if (user.accountType === USER_ROLES.STUDENT) return studentRoutes;
+  if (user.accountType === USER_ROLES.OFFICIAL) return officialRoutes;
+  return [];
+};
+
+export const SIDEBAR_COLLAPSED_KEY = 'sidebar_collapsed';
+
 export const MAX_PROFILE_IMAGE_SIZE = 250 * 1024; // 250 KB
 export const MAX_FEE_RECEIPT_FILE_SIZE = 250 * 1024; // 250 KB
 export const MAX_HOSTEL_IMAGE_SIZE = 500 * 1024; // 500 KB

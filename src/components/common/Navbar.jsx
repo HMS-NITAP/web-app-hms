@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Drawer from 'react-modern-drawer';
 import 'react-modern-drawer/dist/index.css';
 import { AiOutlineMenu } from 'react-icons/ai';
 import { FaRightToBracket } from 'react-icons/fa6';
-import { adminRoutes, authRoutes, officialRoutes, studentRoutes, USER_ROLES } from '../../config/config';
+import { getRoutesForUser } from '../../config/config';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import LogoutModal from './LogoutModal';
+import NavItems from './NavItems';
 import ClgLogo from '../../assets/logo/logo.png';
 
 const Navbar = () => {
@@ -20,6 +21,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const pathname = location.pathname;
+  const isSidebarVisible = Boolean(token && user);
 
   const toggleDrawer = () => setIsOpen((prev) => !prev);
 
@@ -31,17 +33,17 @@ const Navbar = () => {
 
   return (
     <>
-      <div style={{ height: 'var(--header-height)' }} className="w-full px-4 flex justify-between items-center backdrop-blur-md bg-black/40 border-b border-white/10 text-white shadow-md">
-        <div className="cursor-pointer" onClick={toggleDrawer}>
+      <div style={{ height: 'var(--header-height)' }} className="relative w-full shrink-0 px-4 flex items-center bg-[var(--chrome-bg)] border-b border-white/10 text-white shadow-md">
+        <div className={`cursor-pointer ${isSidebarVisible ? 'lg:hidden' : ''}`} onClick={toggleDrawer}>
           <AiOutlineMenu size={24} />
         </div>
 
-        <img src={ClgLogo} className='h-[90%]' />
+        <img src={ClgLogo} className='absolute left-1/2 -translate-x-1/2 h-[90%]' />
 
         {
           token && user && (
             <button
-                className="cursor-pointer hover:scale-105 duration-200 flex items-center gap-2 text-lg font-medium tracking-wide hover:text-red-400 transition focus:outline-none"
+                className="ml-auto cursor-pointer hover:scale-105 duration-200 flex items-center gap-2 text-lg font-medium tracking-wide hover:text-red-400 transition focus:outline-none"
                 onClick={() => setShowLogoutModal(true)}
               >
                 <FaRightToBracket size={22} />
@@ -54,86 +56,17 @@ const Navbar = () => {
         open={isOpen}
         onClose={toggleDrawer}
         direction="left"
-        className="bg-zinc-900 text-white overflow-y-auto"
+        className="text-white overflow-y-auto"
+        style={{ backgroundColor: 'var(--chrome-bg)' }}
       >
-        <div className="py-[0.5rem]">
-          <h2 className="text-xl mb-2 text-blue-600 font-bold text-center">HMS NIT AP</h2>
+        <div className="py-2">
+          <h2 className="text-xl mb-2 pb-2 text-yellow-400 font-bold text-center border-b border-white/10">HMS NIT AP</h2>
           <div>
-            {
-              !token && (
-                authRoutes.map((route) => {
-                  if(route.hidden){
-                    return null;
-                  }else{
-                    return (
-                      <div onClick={() => routeHandler(route)} className='text-black text-[16px] flex gap-[1rem] px-[1.5rem] items-center py-[0.5rem] hover:cursor-pointer' style={{ backgroundColor: pathname === route.path ? "rgba(59, 130, 246, 0.1)" : "white"}}>
-                        <div className='text-blue-600'>{route.icon}</div>
-                        <div className='font-semibold'>{route.label}</div>
-                      </div>
-                    )
-                  }
-                }
-                )
-              )
-            }
-
-            {/* ADMIN ROUTES */}
-            {
-              token && user && user.accountType == USER_ROLES.ADMIN && (
-                adminRoutes.map((route) => {
-                  if(route.hidden){
-                    return null;
-                  }else{
-                    return (
-                      <div onClick={() => routeHandler(route)} className='text-black text-[16px] flex gap-[1rem] px-[1.5rem] items-center py-[0.5rem] hover:cursor-pointer' style={{ backgroundColor: pathname === route.path ? "rgba(59, 130, 246, 0.1)" : "white"}}>
-                        <div className='text-blue-600'>{route.icon}</div>
-                        <div className='font-semibold'>{route.label}</div>
-                      </div>
-                    )
-                  }
-                }
-                )
-              )
-            }
-
-            {/* STUDENT ROUTES */}
-            {
-              token && user && user.accountType == USER_ROLES.STUDENT && (
-                studentRoutes.map((route) => {
-                  if(route.hidden){
-                    return null;
-                  }else{
-                    return (
-                      <div onClick={() => routeHandler(route)} className='text-black text-[16px] flex gap-[1rem] px-[1.5rem] items-center py-[0.5rem] hover:cursor-pointer' style={{ backgroundColor: pathname === route.path ? "rgba(59, 130, 246, 0.1)" : "white"}}>
-                        <div className='text-blue-600'>{route.icon}</div>
-                        <div className='font-semibold'>{route.label}</div>
-                      </div>
-                    )
-                  }
-                }
-                )
-              )
-            }
-
-            {/* OFFICIAL ROUTES */}
-            {
-              token && user && user.accountType == USER_ROLES.OFFICIAL && (
-                officialRoutes.map((route) => {
-                  if(route.hidden){
-                    return null;
-                  }else{
-                    return (
-                      <div onClick={() => routeHandler(route)} className='text-black text-[16px] flex gap-[1rem] px-[1.5rem] items-center py-[0.5rem] hover:cursor-pointer' style={{ backgroundColor: pathname === route.path ? "rgba(59, 130, 246, 0.1)" : "white"}}>
-                        <div className='text-blue-600'>{route.icon}</div>
-                        <div className='font-semibold'>{route.label}</div>
-                      </div>
-                    )
-                  }
-                }
-                )
-              )
-            }
-            
+            <NavItems
+              routes={getRoutesForUser(token, user)}
+              pathname={pathname}
+              onSelect={routeHandler}
+            />
           </div>
         </div>
       </Drawer>
