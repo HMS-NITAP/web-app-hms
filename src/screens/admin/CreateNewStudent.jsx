@@ -12,6 +12,7 @@ const CreateNewStudent = () => {
     const dispatch = useDispatch();
     const [selectedBranch, setSelectedBranch] = useState(null);
     const [selectedGender, setSelectedGender] = useState(null);
+    const [pwdStatus, setPwdStatus] = useState(null);
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
     const { token } = useSelector((state) => state.Auth);
 
@@ -21,12 +22,17 @@ const CreateNewStudent = () => {
             toast("Select your Branch",{icon:"⚠️"});
             return;
         }
+        if(!pwdStatus){
+            toast("Select the student's PWD status",{icon:"⚠️"});
+            return;
+        }
 
         setIsButtonDisabled(true);
         const registrationData = {
             ...data,
             branch:selectedBranch,
             gender:selectedGender,
+            pwd:pwdStatus === 'Yes' ? 'true' : 'false',
         }
         const formdata = new FormData();
         Object.entries(registrationData).forEach(([key, value]) => {
@@ -36,6 +42,7 @@ const CreateNewStudent = () => {
         reset();
         setSelectedBranch(null);
         setSelectedGender(null);
+        setPwdStatus(null);
         setIsButtonDisabled(false);
     }
 
@@ -123,6 +130,20 @@ const CreateNewStudent = () => {
                     </select>
                 </div>
 
+                {/* PWD Status */}
+                <div className="md:w-[48%] w-full flex flex-col gap-1">
+                    <label className="font-medium text-black">PWD Status <span className="text-xs text-red-600">*</span> :</label>
+                    <div className="w-full flex flex-row ml-24 gap-12">
+                        <label className="flex items-center gap-1">
+                            <input type="radio" name="pwdStatus" value="Yes" checked={pwdStatus === 'Yes'} onChange={() => setPwdStatus('Yes')} />
+                            <span className="font-bold text-black">Yes</span>
+                        </label>
+                        <label className="flex items-center gap-1">
+                            <input type="radio" name="pwdStatus" value="No" checked={pwdStatus === 'No'} onChange={() => setPwdStatus('No')} />
+                            <span className="font-bold text-black">No</span>
+                        </label>
+                    </div>
+                </div>
 
                 {/* Hostel Fee Payment Amount */}
                 <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
