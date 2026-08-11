@@ -7,6 +7,7 @@ import {
   editStudentAccount,
   fetchStudentAllotmentLetter,
   fetchStudentByRollNoAndRegNo,
+  fetchStudentMessIdCard,
   sendAcknowledgementLetter,
 } from '../../services/operations/AdminAPI';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
@@ -89,15 +90,15 @@ const ManageStudentAccounts = () => {
     // eslint-disable-next-line
   }, [token]);
 
-  const viewAllotmentLetterHandler = async () => {
+  const viewStudentDocument = async (fetchDocument) => {
     setIsButtonDisabled(true);
 
-    const letterTab = window.open('', '_blank');
-    const letterUrl = await dispatch(fetchStudentAllotmentLetter(studentData?.id, token, toast));
-    if (letterUrl) {
-      letterTab.location.href = letterUrl;
+    const documentTab = window.open('', '_blank');
+    const documentUrl = await dispatch(fetchDocument(studentData?.id, token, toast));
+    if (documentUrl) {
+      documentTab.location.href = documentUrl;
     } else {
-      letterTab?.close();
+      documentTab?.close();
     }
     setIsButtonDisabled(false);
   };
@@ -542,7 +543,8 @@ const ManageStudentAccounts = () => {
       {/* Action Buttons */}
       {studentData && (studentData?.user?.status === 'ACTIVE' || studentData?.user?.status === 'ACTIVE1') && (
         <div className="mt-6 flex md:flex-row flex-col justify-center items-stretch w-[80%] gap-3">
-          <MainButton text="View Allotment Letter" isButtonDisabled={isButtonDisabled} onPress={viewAllotmentLetterHandler} backgroundColor='bg-green-500' textColor='text-white' />
+          <MainButton text="View Allotment Letter" isButtonDisabled={isButtonDisabled} onPress={() => viewStudentDocument(fetchStudentAllotmentLetter)} backgroundColor='bg-green-500' textColor='text-white' />
+          <MainButton text="View Mess ID Card" isButtonDisabled={isButtonDisabled} onPress={() => viewStudentDocument(fetchStudentMessIdCard)} backgroundColor='bg-blue-500' textColor='text-white' />
           <MainButton text="Re-send Acknowledgement Letter" isButtonDisabled={isButtonDisabled} onPress={() => setSendAcknowledgementLetterModalVisible(true)} backgroundColor='bg-yellow-500' textColor='text-black' />
           <MainButton text="Delete Student Account" isButtonDisabled={isButtonDisabled} onPress={() => setDeleteStudentAccountModalVisible(true)} backgroundColor='bg-red-500' textColor='text-black' />
           <MainButton text="Exchange Student Cot" isButtonDisabled={isButtonDisabled} onPress={changeStudentCotHandler} backgroundColor='bg-gray-300' textColor='text-black' />

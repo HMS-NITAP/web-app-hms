@@ -40,6 +40,7 @@ const {
     FETCH_ALL_STUDENTS_API,
     EXPORT_STUDENTS_XLSX_API,
     FETCH_STUDENT_ALLOTMENT_LETTER_API,
+    FETCH_STUDENT_MESS_ID_CARD_API,
 } = adminEndPoints;
 
 const {
@@ -825,11 +826,11 @@ export const fetchFirstYearStudentApplications = (token,toast) => {
     }
 }
 
-export const fetchStudentAllotmentLetter = (studentId,token,toast) => {
+const fetchStudentDocument = (url,fallbackErrorMessage) => (studentId,token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
         try{
-            const response = await APIconnector("POST",FETCH_STUDENT_ALLOTMENT_LETTER_API,{studentId},{Authorization: `Bearer ${token}`});
+            const response = await APIconnector("POST",url,{studentId},{Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 throw new Error(response?.data?.message);
             }
@@ -837,7 +838,7 @@ export const fetchStudentAllotmentLetter = (studentId,token,toast) => {
             toast.dismiss(id);
             return response?.data?.data;
         }catch(e){
-            const errorMessage = e?.response?.data?.message || "Unable to fetch the allotment letter";
+            const errorMessage = e?.response?.data?.message || fallbackErrorMessage;
             console.log(e);
             toast.dismiss(id);
             toast.error(errorMessage);
@@ -845,6 +846,10 @@ export const fetchStudentAllotmentLetter = (studentId,token,toast) => {
         }
     }
 }
+
+export const fetchStudentAllotmentLetter = fetchStudentDocument(FETCH_STUDENT_ALLOTMENT_LETTER_API,"Unable to fetch the allotment letter");
+
+export const fetchStudentMessIdCard = fetchStudentDocument(FETCH_STUDENT_MESS_ID_CARD_API,"Unable to fetch the mess ID card");
 
 export const fetchAllStudents = (query,token,toast) => {
     return async() => {
