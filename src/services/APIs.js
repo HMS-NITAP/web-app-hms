@@ -105,6 +105,7 @@ export const adminEndPoints = {
     DELETE_OFFICIAL_ACCOUNT : SERVER_BASE_URL + '/admin/deleteOfficialAccount',
     FETCH_STUDENT_BY_ROLL_OR_REG_NO_API : SERVER_BASE_URL + '/admin/fetchStudentByRollNoAndRegNo',
     FETCH_ALL_STUDENTS_API : SERVER_BASE_URL + '/admin/fetchAllStudents',
+    FETCH_STUDENT_ALLOTMENT_LETTER_API : SERVER_BASE_URL + '/admin/fetchStudentAllotmentLetter',
     EXPORT_STUDENTS_XLSX_API : SERVER_BASE_URL + '/admin/exportStudentsXlsxFile',
     DELETE_STUDENT_ACCOUNT : SERVER_BASE_URL + '/admin/deleteStudentAccount',
     CHANGE_STUDENT_PROFILE_PHOTO_API : SERVER_BASE_URL + '/admin/changeStudentProfilePhoto',

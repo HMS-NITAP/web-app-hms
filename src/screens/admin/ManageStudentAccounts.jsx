@@ -5,6 +5,7 @@ import {
   changeStudentProfilePhoto,
   deleteStudentAccount,
   editStudentAccount,
+  fetchStudentAllotmentLetter,
   fetchStudentByRollNoAndRegNo,
   sendAcknowledgementLetter,
 } from '../../services/operations/AdminAPI';
@@ -85,6 +86,19 @@ const ManageStudentAccounts = () => {
     // eslint-disable-next-line
   }, [token]);
 
+  const viewAllotmentLetterHandler = async () => {
+    setIsButtonDisabled(true);
+
+    const letterTab = window.open('', '_blank');
+    const letterUrl = await dispatch(fetchStudentAllotmentLetter(studentData?.id, token, toast));
+    if (letterUrl) {
+      letterTab.location.href = letterUrl;
+    } else {
+      letterTab?.close();
+    }
+    setIsButtonDisabled(false);
+  };
+
   const sendAcknowledgementLetterHandler = async () => {
     setIsButtonDisabled(true);
     await dispatch(sendAcknowledgementLetter(studentData?.user?.id, token, toast));
@@ -156,10 +170,10 @@ const ManageStudentAccounts = () => {
       const result = await dispatch(editStudentAccount(payload, token, toast));
 
       if (result) {
-        setEditDetailsModalVisible(false); 
-        await searchStudentWithId(); 
+        setEditDetailsModalVisible(false);
+        await searchStudentWithId();
       }
-      
+
       setIsButtonDisabled(false);
   };
 
@@ -316,8 +330,8 @@ const ManageStudentAccounts = () => {
             </div>
           </div>
           <div className="w-full flex justify-center max-w-xl mb-4">
-             <MainButton 
-                text="Edit Student Details" 
+             <MainButton
+                text="Edit Student Details"
                 onPress={() => setEditDetailsModalVisible(true)}
                 textColor='text-white'
              />
@@ -525,6 +539,7 @@ const ManageStudentAccounts = () => {
       {/* Action Buttons */}
       {studentData && (studentData?.user?.status === 'ACTIVE' || studentData?.user?.status === 'ACTIVE1') && (
         <div className="mt-6 flex md:flex-row flex-col justify-center items-stretch w-[80%] gap-3">
+          <MainButton text="View Allotment Letter" isButtonDisabled={isButtonDisabled} onPress={viewAllotmentLetterHandler} backgroundColor='bg-green-500' textColor='text-white' />
           <MainButton text="Re-send Acknowledgement Letter" isButtonDisabled={isButtonDisabled} onPress={() => setSendAcknowledgementLetterModalVisible(true)} backgroundColor='bg-yellow-500' textColor='text-black' />
           <MainButton text="Delete Student Account" isButtonDisabled={isButtonDisabled} onPress={() => setDeleteStudentAccountModalVisible(true)} backgroundColor='bg-red-500' textColor='text-black' />
           <MainButton text="Exchange Student Cot" isButtonDisabled={isButtonDisabled} onPress={changeStudentCotHandler} backgroundColor='bg-gray-300' textColor='text-black' />
@@ -621,7 +636,7 @@ const ManageStudentAccounts = () => {
                   />
                   {errors.name && <span className="text-xs text-red-600">{errors.name.message}</span>}
                 </div>
-                
+
                 <div>
                   <label htmlFor="aadhaarNumber" className="block text-sm font-medium text-gray-700">Aadhaar Number</label>
                   <input
@@ -631,7 +646,7 @@ const ManageStudentAccounts = () => {
                   />
                   {errors.aadhaarNumber && <span className="text-xs text-red-600">{errors.aadhaarNumber.message}</span>}
                 </div>
-                
+
                 <div>
                   <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Student Phone</label>
                   <input
@@ -703,7 +718,7 @@ const ManageStudentAccounts = () => {
                   textColor="text-black"
                 />
                 <MainButton
-                  type="submit" 
+                  type="submit"
                   text="Save Changes"
                   isButtonDisabled={isButtonDisabled}
                   backgroundColor="bg-green-500"

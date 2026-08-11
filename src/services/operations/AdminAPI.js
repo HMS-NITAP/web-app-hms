@@ -39,6 +39,7 @@ const {
     ALLOT_ROOM_FIRST_YEAR_STUDENT_API,
     FETCH_ALL_STUDENTS_API,
     EXPORT_STUDENTS_XLSX_API,
+    FETCH_STUDENT_ALLOTMENT_LETTER_API,
 } = adminEndPoints;
 
 const {
@@ -816,6 +817,27 @@ export const fetchFirstYearStudentApplications = (token,toast) => {
             return response?.data?.data;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to fetch data";
+            console.log(e);
+            toast.dismiss(id);
+            toast.error(errorMessage);
+            return null;
+        }
+    }
+}
+
+export const fetchStudentAllotmentLetter = (studentId,token,toast) => {
+    return async() => {
+        let id = toast("Please Wait...");
+        try{
+            const response = await APIconnector("POST",FETCH_STUDENT_ALLOTMENT_LETTER_API,{studentId},{Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                throw new Error(response?.data?.message);
+            }
+
+            toast.dismiss(id);
+            return response?.data?.data;
+        }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to fetch the allotment letter";
             console.log(e);
             toast.dismiss(id);
             toast.error(errorMessage);
