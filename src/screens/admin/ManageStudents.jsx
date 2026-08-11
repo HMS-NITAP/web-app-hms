@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -30,6 +30,7 @@ const ManageStudents = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [exportMenuVisible, setExportMenuVisible] = useState(false);
+  const exportMenuRef = useRef(null);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -75,6 +76,26 @@ const ManageStudents = () => {
     loadStudents();
     // eslint-disable-next-line
   }, [appliedFilters, page, limit, token]);
+
+  useEffect(() => {
+    if (!exportMenuVisible) return;
+
+    const closeOnOutsideClick = (event) => {
+      if (exportMenuRef.current && !exportMenuRef.current.contains(event.target)) {
+        setExportMenuVisible(false);
+      }
+    };
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') setExportMenuVisible(false);
+    };
+
+    document.addEventListener('mousedown', closeOnOutsideClick);
+    document.addEventListener('keydown', closeOnEscape);
+    return () => {
+      document.removeEventListener('mousedown', closeOnOutsideClick);
+      document.removeEventListener('keydown', closeOnEscape);
+    };
+  }, [exportMenuVisible]);
 
   const updateFilter = (key, value) => {
     // Floor numbers only mean something within a block, so switching blocks clears the floor.
@@ -195,7 +216,7 @@ const ManageStudents = () => {
           </button>
 
           {/* Export with a choice of scope */}
-          <div className="relative">
+          <div className="relative" ref={exportMenuRef}>
             <button
               className="cursor-pointer px-4 py-2 rounded font-bold bg-green-600 hover:bg-green-700 text-white flex flex-row items-center gap-2 transition-all duration-200 disabled:opacity-60"
               onClick={() => setExportMenuVisible((visible) => !visible)}
