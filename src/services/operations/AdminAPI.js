@@ -826,11 +826,12 @@ export const fetchFirstYearStudentApplications = (token,toast) => {
     }
 }
 
-const fetchStudentDocument = (url,fallbackErrorMessage) => (studentId,token,toast) => {
+// regenerate = true rebuilds the PDF
+const fetchStudentDocument = (url,fallbackErrorMessage) => (studentId,token,toast,regenerate = false) => {
     return async() => {
         let id = toast("Please Wait...");
         try{
-            const response = await APIconnector("POST",url,{studentId},{Authorization: `Bearer ${token}`});
+            const response = await APIconnector("POST",url,{studentId,regenerate},{Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 throw new Error(response?.data?.message);
             }

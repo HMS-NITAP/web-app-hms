@@ -29,6 +29,7 @@ const ManageStudentAccounts = () => {
 
   const [sendAcknowledgementLetterModalVisible, setSendAcknowledgementLetterModalVisible] = useState(false);
   const [deleteStudentAccountModalVisible, setDeleteStudentAccountModalVisible] = useState(false);
+  const [regenerateMessIdCardModalVisible, setRegenerateMessIdCardModalVisible] = useState(false);
   const [changeProfilePicModalVisible, setChangeProfilePicModalVisible] = useState(false);
   const [editDetailsModalVisible, setEditDetailsModalVisible] = useState(false);
 
@@ -90,17 +91,22 @@ const ManageStudentAccounts = () => {
     // eslint-disable-next-line
   }, [token]);
 
-  const viewStudentDocument = async (fetchDocument) => {
+  const viewStudentDocument = async (fetchDocument, regenerate = false) => {
     setIsButtonDisabled(true);
 
     const documentTab = window.open('', '_blank');
-    const documentUrl = await dispatch(fetchDocument(studentData?.id, token, toast));
+    const documentUrl = await dispatch(fetchDocument(studentData?.id, token, toast, regenerate));
     if (documentUrl) {
       documentTab.location.href = documentUrl;
     } else {
       documentTab?.close();
     }
     setIsButtonDisabled(false);
+  };
+
+  const regenerateMessIdCardHandler = async () => {
+    setRegenerateMessIdCardModalVisible(false);
+    await viewStudentDocument(fetchStudentMessIdCard, true);
   };
 
   const sendAcknowledgementLetterHandler = async () => {
@@ -545,6 +551,7 @@ const ManageStudentAccounts = () => {
         <div className="mt-6 flex md:flex-row flex-col justify-center items-stretch w-[80%] gap-3">
           <MainButton text="View Allotment Letter" isButtonDisabled={isButtonDisabled} onPress={() => viewStudentDocument(fetchStudentAllotmentLetter)} backgroundColor='bg-green-500' textColor='text-white' />
           <MainButton text="View Mess ID Card" isButtonDisabled={isButtonDisabled} onPress={() => viewStudentDocument(fetchStudentMessIdCard)} backgroundColor='bg-blue-500' textColor='text-white' />
+          <MainButton text="Regenerate Mess ID Card" isButtonDisabled={isButtonDisabled} onPress={() => setRegenerateMessIdCardModalVisible(true)} backgroundColor='bg-orange-500' textColor='text-white' />
           <MainButton text="Re-send Acknowledgement Letter" isButtonDisabled={isButtonDisabled} onPress={() => setSendAcknowledgementLetterModalVisible(true)} backgroundColor='bg-yellow-500' textColor='text-black' />
           <MainButton text="Delete Student Account" isButtonDisabled={isButtonDisabled} onPress={() => setDeleteStudentAccountModalVisible(true)} backgroundColor='bg-red-500' textColor='text-black' />
           <MainButton text="Exchange Student Cot" isButtonDisabled={isButtonDisabled} onPress={changeStudentCotHandler} backgroundColor='bg-gray-300' textColor='text-black' />
@@ -560,6 +567,20 @@ const ManageStudentAccounts = () => {
             <div className="flex flex-row gap-4 w-full justify-center">
               <MainButton text="Continue" isButtonDisabled={isButtonDisabled} onPress={sendAcknowledgementLetterHandler} backgroundColor='bg-green-500' textColor='text-white' />
               <MainButton text="Cancel" isButtonDisabled={isButtonDisabled} onPress={() => setSendAcknowledgementLetterModalVisible(false)} backgroundColor='bg-gray-300' textColor='text-black' />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {regenerateMessIdCardModalVisible && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="bg-white flex justify-center flex-col gap-[1rem] backdrop-blur-lg border border-white/30 shadow-xl rounded-xl p-6 md:w-full w-[90%] max-w-md" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'}}>
+            <span className="text-lg font-semibold text-center">
+              This will build a fresh Mess ID Card with the student's current details and replace the existing one.
+            </span>
+            <div className="flex flex-row gap-4 w-full justify-center">
+              <MainButton text="Regenerate" isButtonDisabled={isButtonDisabled} onPress={regenerateMessIdCardHandler} backgroundColor='bg-orange-500' textColor='text-white' />
+              <MainButton text="Cancel" isButtonDisabled={isButtonDisabled} onPress={() => setRegenerateMessIdCardModalVisible(false)} backgroundColor='bg-gray-300' textColor='text-black' />
             </div>
           </div>
         </div>
