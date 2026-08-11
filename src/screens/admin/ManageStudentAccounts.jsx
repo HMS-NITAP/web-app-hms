@@ -69,7 +69,10 @@ const ManageStudentAccounts = () => {
 
   const searchStudentWithId = async () => {
     setIsButtonDisabled(true);
-    if (searchQuery.length === 6 || searchQuery.length === 7) {
+
+    // Registration numbers are no longer a fixed width, so only digits are required here.
+    // As suggested by hostel office. (First year students can have larger registration numbers)
+    if (/^[0-9]+$/.test(searchQuery.trim())) {
       setStudentData(null);
       const response = await dispatch(fetchStudentByRollNoAndRegNo(searchQuery, token, toast));
       setStudentData(response);
@@ -611,7 +614,9 @@ const ManageStudentAccounts = () => {
                   <label htmlFor="rollNo" className="block text-sm font-medium text-gray-700">Roll No</label>
                   <input
                     id="rollNo"
-                    {...register('rollNo', { required: 'Roll number is required' })}
+                    {...register('rollNo', {
+                      pattern: { value: /^([0-9]{6})?$/, message: 'Roll number must be exactly 6 digits.' },
+                    })}
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   />
                   {errors.rollNo && <span className="text-xs text-red-600">{errors.rollNo.message}</span>}

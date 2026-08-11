@@ -60,18 +60,17 @@ const CreateNewStudent = () => {
 
                 {/* Roll Number */}
                 <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
-                    <label className="font-medium text-black">Institute Roll Number <span className="text-xs text-red-600">*</span> :</label>
+                    <label className="font-medium text-black">Institute Roll Number <span className="text-xs text-gray-500">(optional)</span> :</label>
                     <Controller
                         control={control}
-                        rules={{ 
-                            required: true,
+                        rules={{
                             pattern: {
-                                value: /^[0-9]{6}$/,
-                                message: 'Roll number must be exactly 6 digits and only numbers.'
+                                value: /^([0-9]{6})?$/,
+                                message: 'Roll number must be exactly 6 digits.'
                             }
                         }}
                         render={({ field }) => (
-                            <input {...field} onWheel={(e) => e.target.blur()} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter your roll number" type="number" />
+                            <input {...field} onWheel={(e) => e.target.blur()} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Leave blank if not yet allotted" type="number" />
                         )}
                         name="rollNo"
                         defaultValue=""
@@ -83,11 +82,11 @@ const CreateNewStudent = () => {
                     <label className="font-medium text-black">Institute Registration Number <span className="text-xs text-red-600">*</span> :</label>
                     <Controller
                         control={control}
-                        rules={{ 
-                            required: true,
+                        rules={{
+                            required: 'Registration Number is required.',
                             pattern: {
-                                value: /^[0-9]{6,7}$/,
-                                message: 'Roll number must be exactly 6 or 7 digits.'
+                                value: /^[0-9]+$/,
+                                message: 'Registration number must contain only numbers.'
                             }
                         }}
                         render={({ field }) => (
