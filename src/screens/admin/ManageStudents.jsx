@@ -92,10 +92,10 @@ const ManageStudents = () => {
     setAppliedFilters(EMPTY_FILTERS);
   };
 
-  const exportHandler = async (scope) => {
+  const exportHandler = async (scope, detail) => {
     setExportMenuVisible(false);
     setIsExporting(true);
-    await dispatch(exportStudentsXlsxFile(buildQuery({ scope }), token, toast));
+    await dispatch(exportStudentsXlsxFile(buildQuery({ scope, detail }), token, toast));
     setIsExporting(false);
   };
 
@@ -204,19 +204,37 @@ const ManageStudents = () => {
               <FaFileExcel /> Export
             </button>
             {exportMenuVisible && (
-              <div className="absolute right-0 z-20 mt-2 w-64 bg-white border border-gray-300 rounded-lg shadow-lg overflow-hidden">
+              <div className="absolute right-0 z-20 mt-2 w-80 bg-white border border-gray-300 rounded-lg shadow-lg overflow-hidden">
+                <div className="px-4 py-2 bg-gray-100 text-xs font-bold text-gray-700 uppercase">Basic details</div>
+                <div className="px-4 pt-1 text-xs text-gray-500">Name, roll/reg no, branch, room allotment</div>
                 <button
                   className="w-full text-left px-4 py-3 hover:bg-gray-100 cursor-pointer text-black"
-                  onClick={() => exportHandler('all')}
+                  onClick={() => exportHandler('all', 'basic')}
                 >
                   All filtered results ({result.total})
                 </button>
                 <button
                   className="w-full text-left px-4 py-3 hover:bg-gray-100 cursor-pointer text-black border-t border-gray-200"
-                  onClick={() => exportHandler('page')}
+                  onClick={() => exportHandler('page', 'basic')}
                 >
                   Current page only ({result.students.length})
                 </button>
+
+                <div className="px-4 py-2 bg-red-50 text-xs font-bold text-red-700 uppercase border-t border-gray-200">Full details</div>
+                <div className="px-4 pt-1 text-xs text-red-600">Adds Aadhaar, DOB, address, phone numbers</div>
+                <button
+                  className="w-full text-left px-4 py-3 hover:bg-red-50 cursor-pointer text-black"
+                  onClick={() => exportHandler('all', 'full')}
+                >
+                  All filtered results ({result.total})
+                </button>
+                <button
+                  className="w-full text-left px-4 py-3 hover:bg-red-50 cursor-pointer text-black border-t border-gray-200"
+                  onClick={() => exportHandler('page', 'full')}
+                >
+                  Current page only ({result.students.length})
+                </button>
+
                 <button
                   className="w-full flex flex-row items-center gap-2 px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-600 border-t border-gray-200 text-sm"
                   onClick={() => setExportMenuVisible(false)}
