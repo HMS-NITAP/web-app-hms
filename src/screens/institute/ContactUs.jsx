@@ -53,14 +53,14 @@ const ContactUs = () => {
       </div> */}
 
       {/* Account Deletion Notice */}
-      <div className="w-full my-4 mx-10">
+      <div className="w-full my-4">
         <p className="text-center text-[#4a4e69]">
           If you want to delete your account, please contact us at{" "}
           <a
-            href="mailto:hmsnitap@gmail.com"
+            href="mailto:nitandhrahms@gmail.com"
             className="text-blue-600 underline"
           >
-            hmsnitap@gmail.com
+            nitandhrahms@gmail.com
           </a>{" "}
           from your registered mail ID along with the reason for account deletion.
         </p>

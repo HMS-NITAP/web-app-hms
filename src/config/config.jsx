@@ -2,7 +2,8 @@ import {
   FaRightToBracket, FaAddressCard, FaBullhorn, FaBuilding, FaBowlFood, FaAddressBook,
   FaUsers, FaImage, FaStar, FaIdBadge, FaUserShield, FaChild, FaTableList,
   FaWpforms, FaClockRotateLeft, FaBookBookmark, FaPersonCircleExclamation,
-  FaCashRegister, FaReceipt, FaCommentDots, FaCircleExclamation, FaPeopleRoof
+  FaCashRegister, FaReceipt, FaCommentDots, FaCircleExclamation, FaPeopleRoof,
+  FaMagnifyingGlass, FaUserPlus, FaBed
 } from "react-icons/fa6";
 
 import Login from '../screens/auth/Login';
@@ -43,11 +44,13 @@ import AdminDashboard from '../screens/admin/AdminDashboard';
 import BlockRooms from '../screens/admin/BlockRooms';
 import CotDetails from '../screens/admin/CotDetails';
 import ManageStudentAccounts from '../screens/admin/ManageStudentAccounts';
+import ManageStudents from '../screens/admin/ManageStudents';
 import ChangeStudentCot from '../screens/admin/ChangeStudentCot';
 import EvenSemRegistrationApplications from '../screens/admin/EvenSemRegistrationApplications';
 import ViewAllPendingComplaints from "../screens/admin/ViewAllPendingComplaints";
 import CreateNewStudent from "../screens/admin/CreateNewStudent";
 import FirstYearRegistrationApplications from "../screens/admin/FirstYearRegistrationApplications";
+import FixCorruptDocs from "../screens/auth/FixCorruptDocs";
 
 export const USER_ROLES = {
   ADMIN: 'ADMIN',
@@ -71,13 +74,17 @@ export const authRoutes = [
   { path: "/reset-password-success", element: <ResetPasswordSuccess />, role: null, hidden: true },
   { path: "/forgot-password", element: <ForgotPassword />, role: null, hidden: true },
   { path: "/detailed-mess-menu", element: <DetailedMessMenu />, role: null, hidden: true },
+  { path: "/reupload-fee-receipt", element: <FixCorruptDocs />, role: null, hidden: true },
 ]
 
 export const adminRoutes = [
   { path: "/", element: <AdminDashboard />, label: "Dashboard", icon: <FaIdBadge />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/odd-sem-applications", element: <StudentRegistrationApplications />, label: "Odd Sem Reg. Apps", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
   // { path: "/admin/even-sem-applications", element: <EvenSemRegistrationApplications />, label: "Even Sem Reg. Apps", icon: <FaAddressCard />, role: [USER_ROLES.ADMIN] },
-  { path: "/admin/manage-students", element: <ManageStudentAccounts />, label: "Manage Students", icon: <FaChild />, role: [USER_ROLES.ADMIN] },
+  { path: "/admin/search-student", element: <ManageStudentAccounts />, label: "Search Student", icon: <FaMagnifyingGlass />, role: [USER_ROLES.ADMIN] },
+  { path: "/admin/manage-students", element: <ManageStudents />, label: "Manage Students", icon: <FaChild />, role: [USER_ROLES.ADMIN] },
+  { path: "/admin/create-students", element: <CreateNewStudent />, label: "Add New Student", icon: <FaUserPlus />, role: [USER_ROLES.ADMIN] },
+  { path: "/admin/first-year-student-applications", element: <FirstYearRegistrationApplications />, label: "First Year Room Allotment", icon: <FaBed />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/view-all-unresolved-complaints", element: <ViewAllPendingComplaints />, label: "Unresolved Complaints", icon: <FaBookBookmark />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/manage-officials", element: <ManageOfficialAccounts />, label: "Manage Officials", icon: <FaUserShield />, role: [USER_ROLES.ADMIN] },
   { path: "/admin/create-official-account", element: <CreateOfficialAccount />, role: [USER_ROLES.ADMIN], hidden: true },
@@ -96,8 +103,6 @@ export const adminRoutes = [
   // { path: "/gallery", element: <Gallery />, label: "Gallery", icon: <FaImage />, role: null },
   { path: "/detailed-mess-menu", element: <DetailedMessMenu />, role: null, hidden: true },
   // { path: "*", element: <AdminDashboard />, role: [USER_ROLES.ADMIN], hidden: true },
-  {path:"/admin/create-students",element:<CreateNewStudent/>, role: [USER_ROLES.ADMIN], hidden: true},
-  {path:"/admin/first-year-student-applications",element:<FirstYearRegistrationApplications/>, role: [USER_ROLES.ADMIN], hidden: true},
 ]
 
 export const studentRoutes = [
@@ -136,6 +141,16 @@ export const officialRoutes = [
   // { path: "/gallery", element: <Gallery />, label: "Gallery", icon: <FaImage />, role: null },
   { path: "/detailed-mess-menu", element: <DetailedMessMenu />, role: null, hidden: true },
 ];
+
+export const getRoutesForUser = (token, user) => {
+  if (!token || !user) return authRoutes;
+  if (user.accountType === USER_ROLES.ADMIN) return adminRoutes;
+  if (user.accountType === USER_ROLES.STUDENT) return studentRoutes;
+  if (user.accountType === USER_ROLES.OFFICIAL) return officialRoutes;
+  return [];
+};
+
+export const SIDEBAR_COLLAPSED_KEY = 'sidebar_collapsed';
 
 export const MAX_PROFILE_IMAGE_SIZE = 250 * 1024; // 250 KB
 export const MAX_FEE_RECEIPT_FILE_SIZE = 250 * 1024; // 250 KB

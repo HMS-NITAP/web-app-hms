@@ -12,6 +12,7 @@ const CreateNewStudent = () => {
     const dispatch = useDispatch();
     const [selectedBranch, setSelectedBranch] = useState(null);
     const [selectedGender, setSelectedGender] = useState(null);
+    const [pwdStatus, setPwdStatus] = useState(null);
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
     const { token } = useSelector((state) => state.Auth);
 
@@ -21,12 +22,17 @@ const CreateNewStudent = () => {
             toast("Select your Branch",{icon:"⚠️"});
             return;
         }
+        if(!pwdStatus){
+            toast("Select the student's PWD status",{icon:"⚠️"});
+            return;
+        }
 
         setIsButtonDisabled(true);
         const registrationData = {
             ...data,
             branch:selectedBranch,
             gender:selectedGender,
+            pwd:pwdStatus === 'Yes' ? 'true' : 'false',
         }
         const formdata = new FormData();
         Object.entries(registrationData).forEach(([key, value]) => {
@@ -36,6 +42,7 @@ const CreateNewStudent = () => {
         reset();
         setSelectedBranch(null);
         setSelectedGender(null);
+        setPwdStatus(null);
         setIsButtonDisabled(false);
     }
 
@@ -60,18 +67,17 @@ const CreateNewStudent = () => {
 
                 {/* Roll Number */}
                 <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
-                    <label className="font-medium text-black">Institute Roll Number <span className="text-xs text-red-600">*</span> :</label>
+                    <label className="font-medium text-black">Institute Roll Number <span className="text-xs text-gray-500">(optional)</span> :</label>
                     <Controller
                         control={control}
-                        rules={{ 
-                            required: true,
+                        rules={{
                             pattern: {
-                                value: /^[0-9]{6}$/,
-                                message: 'Roll number must be exactly 6 digits and only numbers.'
+                                value: /^([0-9]{6})?$/,
+                                message: 'Roll number must be exactly 6 digits.'
                             }
                         }}
                         render={({ field }) => (
-                            <input {...field} onWheel={(e) => e.target.blur()} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Enter your roll number" type="number" />
+                            <input {...field} onWheel={(e) => e.target.blur()} className="w-full p-2 border border-gray-400 rounded-lg text-black" placeholder="Leave blank if not yet allotted" type="number" />
                         )}
                         name="rollNo"
                         defaultValue=""
@@ -83,11 +89,11 @@ const CreateNewStudent = () => {
                     <label className="font-medium text-black">Institute Registration Number <span className="text-xs text-red-600">*</span> :</label>
                     <Controller
                         control={control}
-                        rules={{ 
-                            required: true,
+                        rules={{
+                            required: 'Registration Number is required.',
                             pattern: {
-                                value: /^[0-9]{6,7}$/,
-                                message: 'Roll number must be exactly 6 or 7 digits.'
+                                value: /^[0-9]+$/,
+                                message: 'Registration number must contain only numbers.'
                             }
                         }}
                         render={({ field }) => (
@@ -124,6 +130,20 @@ const CreateNewStudent = () => {
                     </select>
                 </div>
 
+                {/* PWD Status */}
+                <div className="md:w-[48%] w-full flex flex-col gap-1">
+                    <label className="font-medium text-black">PWD Status <span className="text-xs text-red-600">*</span> :</label>
+                    <div className="w-full flex flex-row ml-24 gap-12">
+                        <label className="flex items-center gap-1">
+                            <input type="radio" name="pwdStatus" value="Yes" checked={pwdStatus === 'Yes'} onChange={() => setPwdStatus('Yes')} />
+                            <span className="font-bold text-black">Yes</span>
+                        </label>
+                        <label className="flex items-center gap-1">
+                            <input type="radio" name="pwdStatus" value="No" checked={pwdStatus === 'No'} onChange={() => setPwdStatus('No')} />
+                            <span className="font-bold text-black">No</span>
+                        </label>
+                    </div>
+                </div>
 
                 {/* Hostel Fee Payment Amount */}
                 <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
@@ -140,7 +160,22 @@ const CreateNewStudent = () => {
                     {errors.amountPaid && <span className="text-red-600 text-sm">Amount Paid is required.</span>}
                 </div>
 
-                
+                {/* Date of Joining */}
+                <div className="md:w-[48%] w-full flex flex-col gap-[0.25rem]">
+                    <label className="font-medium text-black">Date of Joining <span className="text-xs text-red-600">*</span> :</label>
+                    <Controller
+                        control={control}
+                        rules={{ required: true }}
+                        render={({ field }) => (
+                            <input {...field} className="w-full p-2 border border-gray-400 rounded-lg text-black" type="date" />
+                        )}
+                        name="dateOfJoining"
+                        defaultValue={new Date().toISOString().split('T')[0]}
+                    />
+                    {errors.dateOfJoining && <span className="text-red-600 text-sm">Date of Joining is required.</span>}
+                </div>
+
+
                 <div className='w-full overflow-hidden flex justify-center items-center'>
                     <button type="submit" className="cursor-pointer hover:scale-105 transition-all duration-200 px-[1.5rem] py-[0.5rem] rounded-xl font-bold text-lg text-black bg-yellow-400 mt-2 disabled:opacity-60" disabled={isButtonDisabled}>Submit Data</button>
                 </div>

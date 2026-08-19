@@ -2,9 +2,5 @@
 
 :root {
   --header-height: 4rem;
-}
-
-.full-minus-header {
-  min-height: calc(100vh - var(--header-height));
-  overflow-y: auto;
+  --chrome-bg: #1b263b;
 }

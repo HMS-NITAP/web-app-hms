@@ -37,6 +37,10 @@ const {
     CREATE_NEW_STUDENT_FIRST_YEAR_API,
     FETCH_FIRST_YEAR_STUDENTS_APPLICATIONS_API,
     ALLOT_ROOM_FIRST_YEAR_STUDENT_API,
+    FETCH_ALL_STUDENTS_API,
+    EXPORT_STUDENTS_XLSX_API,
+    FETCH_STUDENT_ALLOTMENT_LETTER_API,
+    FETCH_STUDENT_MESS_ID_CARD_API,
 } = adminEndPoints;
 
 const {
@@ -46,7 +50,7 @@ const {
 export const fetchAllHostelBlocksData = (token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("GET",FETCH_ALL_HOSTEL_DATA_API,null,{Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -70,7 +74,7 @@ export const fetchAllHostelBlocksData = (token,toast) => {
 export const createHostelBlock = (formData,token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("POST",CREATE_HOSTEL_BLOCK_API,formData,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -92,7 +96,7 @@ export const createHostelBlock = (formData,token,toast) => {
 export const deleteHostelBlock = (hostelBlockId,token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("DELETE",DELETE_HOSTEL_BLOCK_API,{hostelBlockId},{Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -114,7 +118,7 @@ export const deleteHostelBlock = (hostelBlockId,token,toast) => {
 export const fetchOfficialAccounts = (token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("GET",FETCH_OFFICIAL_ACCOUNTS,null,{Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -138,7 +142,7 @@ export const fetchOfficialAccounts = (token,toast) => {
 export const createOfficialAccount = (formData,token,toast) => {
     return async() =>{
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("POST",CREATE_OFFICIAL_ACCOUNT,formData,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -160,7 +164,7 @@ export const createOfficialAccount = (formData,token,toast) => {
 export const deleteOfficialAccount = (officialId,token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("DELETE",DELETE_OFFICIAL_ACCOUNT,{officialId},{Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -182,7 +186,7 @@ export const deleteOfficialAccount = (officialId,token,toast) => {
 export const addWardenToHostelBlock = (formData,token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("PUT",ADD_WARDEN_TO_HOSTEL_BLOCK_API,formData,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -204,7 +208,7 @@ export const addWardenToHostelBlock = (formData,token,toast) => {
 export const removeWardenFromHostelBlock = (formData,token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("PUT",REMOVE_WARDEN_FROM_HOSTEL_BLOCK_API,formData,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -226,7 +230,7 @@ export const removeWardenFromHostelBlock = (formData,token,toast) => {
 export const fetchStudentRegistrationApplications = (token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("GET",FETCH_REGISTRATION_APPLICATIONS_API,null,{Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -250,7 +254,7 @@ export const fetchStudentRegistrationApplications = (token,toast) => {
 export const acceptRegistrationApplication = (formData,token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("PUT",ACCEPT_REGISTRATION_APPLICATION_API,formData,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -274,7 +278,7 @@ export const acceptRegistrationApplication = (formData,token,toast) => {
 export const rejectRegistrationApplication = (formData,token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("PUT",REJECT_REGISTRATION_APPLICATION_API,formData,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -298,7 +302,7 @@ export const rejectRegistrationApplication = (formData,token,toast) => {
 export const fetchFreezedStudentRegistrationApplications = (token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("GET",FETCH_FREEZED_REGISTRATION_APPLICATIONS_API,null,{Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -322,7 +326,7 @@ export const fetchFreezedStudentRegistrationApplications = (token,toast) => {
 export const freezeRegistrationApplication = (formData,token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("PUT",FREEZE_REGISTRATION_APPILICATION_API,formData,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -345,7 +349,7 @@ export const freezeRegistrationApplication = (formData,token,toast) => {
 export const confirmFreezeRegistrationApplication = (formData,token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("PUT",CONFIRM_FREEZED_REGISTRATION_APPLICATION_API,formData,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -369,7 +373,7 @@ export const confirmFreezeRegistrationApplication = (formData,token,toast) => {
 export const deleteAnnouncement = (announcementId,token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("DELETE",DELETE_ANNOUNCEMENT_API,{announcementId},{Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -393,7 +397,7 @@ export const deleteAnnouncement = (announcementId,token,toast) => {
 export const fetchDashboardData = (token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("GET",FETCH_DASHBOARD_DATA_API,null,{Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -417,7 +421,7 @@ export const fetchDashboardData = (token,toast) => {
 export const fetchRoomsInHostelBlock = (hostelBlockId,token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("POST",FETCH_ROOMS_IN_HOSTEL_BLOCK_API,{hostelBlockId},{Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -441,7 +445,7 @@ export const fetchRoomsInHostelBlock = (hostelBlockId,token,toast) => {
 export const fetchCotsInRooms = (roomId,token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("POST",FETCH_COTS_IN_ROOM_API,{roomId},{Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -465,7 +469,7 @@ export const fetchCotsInRooms = (roomId,token,toast) => {
 export const fetchStudentByRollNoAndRegNo = (idNumber,token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("POST",FETCH_STUDENT_BY_ROLL_OR_REG_NO_API,{idNumber},{Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -489,7 +493,7 @@ export const fetchStudentByRollNoAndRegNo = (idNumber,token,toast) => {
 export const downloadStudentDetailsInHostelBlockXlsxFile = (hostelBlockId,token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("POST",DOWNLOAD_STUDENT_DATA_BY_HOSTEL_BLOCK_API,{hostelBlockId},{Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -513,7 +517,7 @@ export const downloadStudentDetailsInHostelBlockXlsxFile = (hostelBlockId,token,
 export const sendAcknowledgementLetter = (userId,token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("PUT",SEND_ACKNOWLEDGEMENT_LETTER_API,{userId},{Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -537,7 +541,7 @@ export const sendAcknowledgementLetter = (userId,token,toast) => {
 export const deleteStudentAccount = (userId,token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("DELETE",DELETE_STUDENT_ACCOUNT,{userId},{Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -561,7 +565,7 @@ export const deleteStudentAccount = (userId,token,toast) => {
 export const changeStudentProfilePhoto = (formData,token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("PUT",CHANGE_STUDENT_PROFILE_PHOTO_API,formData,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -585,7 +589,7 @@ export const changeStudentProfilePhoto = (formData,token,toast) => {
 export const fetchCotsForChangeCotOption = (userId,token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("POST",FETCH_COTS_FOR_COT_CHANGE_API,{userId},{Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -609,7 +613,7 @@ export const fetchCotsForChangeCotOption = (userId,token,toast) => {
 export const swapOrExchangeCot = (currentCotId,changeToCotId,token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("PUT",SWAP_OR_EXCHANGE_STUDENT_COT_API,{currentCotId,changeToCotId},{Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -633,7 +637,7 @@ export const swapOrExchangeCot = (currentCotId,changeToCotId,token,toast) => {
 export const fetchEvenSemStudentRegistrationApplications = (token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("GET",FETCH_EVEN_SEM_REGISTRATION_APPLICATIONS_API,null,{Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -657,7 +661,7 @@ export const fetchEvenSemStudentRegistrationApplications = (token,toast) => {
 export const acceptEvenSemRegistrationApplication = (formData,token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("PUT",ACCEPT_EVEN_SEM_REGISTRATION_APPLICATIONS_API,formData,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -681,7 +685,7 @@ export const acceptEvenSemRegistrationApplication = (formData,token,toast) => {
 export const rejectEvenSemRegistrationApplication = (formData,token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("PUT",REJECT_EVEN_SEM_REGISTRATION_APPLICATIONS_API,formData,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -705,7 +709,7 @@ export const rejectEvenSemRegistrationApplication = (formData,token,toast) => {
 export const deleteFreezedRegistrationApplication = (formData,token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("PUT",DELETE_FREEZED_REGISTRATION_APPLICATION_API,formData,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -729,7 +733,7 @@ export const deleteFreezedRegistrationApplication = (formData,token,toast) => {
 export const fetchAllPendingComplaints = (token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("GET",FETCH_ALL_PENDING_HOSTEL_COMPLAINTS_API,null,{Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -753,7 +757,7 @@ export const fetchAllPendingComplaints = (token,toast) => {
 export const editStudentAccount = (formData,token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("PUT",EDIT_STUDENT_ACCOUNT_API,formData,{Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -777,7 +781,7 @@ export const editStudentAccount = (formData,token,toast) => {
 export const createNewStudentFirstYear = (formData,toast,token) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{ 
+        try{
             const response = await APIconnector("POST",CREATE_NEW_STUDENT_FIRST_YEAR_API,formData,{"Content-Type": "multipart/form-data", Authorization: `Bearer ${token}`});
             if(!response.data.success){
                 toast.dismiss(id);
@@ -801,7 +805,7 @@ export const createNewStudentFirstYear = (formData,toast,token) => {
 export const fetchFirstYearStudentApplications = (token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("GET",FETCH_FIRST_YEAR_STUDENTS_APPLICATIONS_API,null,{Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);
@@ -822,10 +826,101 @@ export const fetchFirstYearStudentApplications = (token,toast) => {
     }
 }
 
+// regenerate = true rebuilds the PDF
+const fetchStudentDocument = (url,fallbackErrorMessage) => (studentId,token,toast,regenerate = false) => {
+    return async() => {
+        let id = toast("Please Wait...");
+        try{
+            const response = await APIconnector("POST",url,{studentId,regenerate},{Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                throw new Error(response?.data?.message);
+            }
+
+            toast.dismiss(id);
+            return response?.data?.data;
+        }catch(e){
+            const errorMessage = e?.response?.data?.message || fallbackErrorMessage;
+            console.log(e);
+            toast.dismiss(id);
+            toast.error(errorMessage);
+            return null;
+        }
+    }
+}
+
+export const fetchStudentAllotmentLetter = fetchStudentDocument(FETCH_STUDENT_ALLOTMENT_LETTER_API,"Unable to fetch the allotment letter");
+
+export const fetchStudentMessIdCard = fetchStudentDocument(FETCH_STUDENT_MESS_ID_CARD_API,"Unable to fetch the mess ID card");
+
+export const fetchAllStudents = (query,token,toast) => {
+    return async() => {
+        let id = toast("Please Wait...");
+        try{
+            const response = await APIconnector("POST",FETCH_ALL_STUDENTS_API,query,{Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                throw new Error(response?.data?.message);
+            }
+
+            toast.dismiss(id);
+            return response?.data?.data;
+        }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to fetch students";
+            console.log(e);
+            toast.dismiss(id);
+            toast.error(errorMessage);
+            return null;
+        }
+    }
+}
+
+const readBlobErrorMessage = async (blob) => {
+    try{
+        const parsed = JSON.parse(await blob.text());
+        return parsed?.message || null;
+    }catch(e){
+        console.log("Unable to parse error response",e);
+        return null;
+    }
+}
+
+const triggerBrowserDownload = (blob,fileName) => {
+    const objectUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = objectUrl;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(objectUrl);
+}
+
+export const exportStudentsXlsxFile = (query,token,toast) => {
+    return async() => {
+        let id = toast("Preparing Export...");
+        try{
+            const response = await APIconnector("POST",EXPORT_STUDENTS_XLSX_API,query,{Authorization: `Bearer ${token}`},null,"blob");
+
+            const fileNameMatch = response?.headers?.["content-disposition"]?.match(/filename="(.+)"/);
+            triggerBrowserDownload(response?.data,fileNameMatch?.[1] || "Students.xlsx");
+
+            toast.dismiss(id);
+            toast.success("Export downloaded successfully");
+            return true;
+        }catch(e){
+            const responseBlob = e?.response?.data;
+            const errorMessage = (responseBlob instanceof Blob ? await readBlobErrorMessage(responseBlob) : null) || "Unable to export students";
+            console.log(e);
+            toast.dismiss(id);
+            toast.error(errorMessage);
+            return false;
+        }
+    }
+}
+
 export const allotRoomForStudentFirstYear = (formData,token,toast) => {
     return async() => {
         let id = toast("Please Wait...");
-        try{    
+        try{
             const response = await APIconnector("PUT",ALLOT_ROOM_FIRST_YEAR_STUDENT_API,formData,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.dismiss(id);

@@ -128,7 +128,7 @@ const ChangeStudentCot = () => {
       roomNo: null,
       status: null,
     });
-    navigate('/admin/manage-students');
+    navigate('/admin/search-student');
     setIsButtonDisabled(false);
   };
 

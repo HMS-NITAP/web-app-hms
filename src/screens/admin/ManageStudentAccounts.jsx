@@ -5,26 +5,31 @@ import {
   changeStudentProfilePhoto,
   deleteStudentAccount,
   editStudentAccount,
+  fetchStudentAllotmentLetter,
   fetchStudentByRollNoAndRegNo,
+  fetchStudentMessIdCard,
   sendAcknowledgementLetter,
 } from '../../services/operations/AdminAPI';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
 import MainButton from '../../components/common/MainButton';
 import { FiEdit } from 'react-icons/fi';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { MAX_PROFILE_IMAGE_SIZE } from '../../config/config';
 import { useForm } from 'react-hook-form';
-import { FaUserPlus } from 'react-icons/fa6';
-import { FaList  } from 'react-icons/fa6';
+// import { FaUserPlus } from 'react-icons/fa6';
+// import { FaList  } from 'react-icons/fa6';
 
 const ManageStudentAccounts = () => {
-  const [searchQuery, setSearchQuery] = useState('');
+  // "Manage Students" links here with ?id=<rollNo|regNo> to open a specific student straight away.
+  const [searchParams] = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('id') || '');
   const [studentData, setStudentData] = useState(null);
   const [tabChoice, setTabChoice] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
 
   const [sendAcknowledgementLetterModalVisible, setSendAcknowledgementLetterModalVisible] = useState(false);
   const [deleteStudentAccountModalVisible, setDeleteStudentAccountModalVisible] = useState(false);
+  const [regenerateMessIdCardModalVisible, setRegenerateMessIdCardModalVisible] = useState(false);
   const [changeProfilePicModalVisible, setChangeProfilePicModalVisible] = useState(false);
   const [editDetailsModalVisible, setEditDetailsModalVisible] = useState(false);
 
@@ -66,7 +71,10 @@ const ManageStudentAccounts = () => {
 
   const searchStudentWithId = async () => {
     setIsButtonDisabled(true);
-    if (searchQuery.length === 6 || searchQuery.length === 7) {
+
+    // Registration numbers are no longer a fixed width, so only digits are required here.
+    // As suggested by hostel office. (First year students can have larger registration numbers)
+    if (/^[0-9]+$/.test(searchQuery.trim())) {
       setStudentData(null);
       const response = await dispatch(fetchStudentByRollNoAndRegNo(searchQuery, token, toast));
       setStudentData(response);
@@ -82,6 +90,24 @@ const ManageStudentAccounts = () => {
     }
     // eslint-disable-next-line
   }, [token]);
+
+  const viewStudentDocument = async (fetchDocument, regenerate = false) => {
+    setIsButtonDisabled(true);
+
+    const documentTab = window.open('', '_blank');
+    const documentUrl = await dispatch(fetchDocument(studentData?.id, token, toast, regenerate));
+    if (documentUrl) {
+      documentTab.location.href = documentUrl;
+    } else {
+      documentTab?.close();
+    }
+    setIsButtonDisabled(false);
+  };
+
+  const regenerateMessIdCardHandler = async () => {
+    setRegenerateMessIdCardModalVisible(false);
+    await viewStudentDocument(fetchStudentMessIdCard, true);
+  };
 
   const sendAcknowledgementLetterHandler = async () => {
     setIsButtonDisabled(true);
@@ -154,22 +180,25 @@ const ManageStudentAccounts = () => {
       const result = await dispatch(editStudentAccount(payload, token, toast));
 
       if (result) {
-        setEditDetailsModalVisible(false); 
-        await searchStudentWithId(); 
+        setEditDetailsModalVisible(false);
+        await searchStudentWithId();
       }
-      
+
       setIsButtonDisabled(false);
   };
 
   return (
     <div className="w-full flex flex-col items-center px-4 py-6">
+      <h1 className="text-lg font-bold text-black text-center pb-5">Search Student</h1>
       <div className="w-full flex items-center justify-between gap-4">
         {/* Left / Center Group (Search input + Search button) */}
         <div className="flex items-center gap-4 w-full md:justify-center">
           <input
             className="w-full max-w-md border border-gray-400 rounded-lg p-2 text-black"
             placeholder="Search Student with Roll Number"
+            value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && searchStudentWithId()}
           />
           <button
             disabled={isButtonDisabled}
@@ -182,18 +211,20 @@ const ManageStudentAccounts = () => {
 
         {/* Right Group (User Plus buttons) */}
         <div className="flex items-center gap-5">
-          <button
+          {/* Moved to its own "Add New Student" entry in the sidebar */}
+          {/* <button
             className="bg-blue-900 hover:bg-blue-800 cursor-pointer p-2 rounded-md border border-black"
             onClick={() => navigate("/admin/create-students")}
           >
             <FaUserPlus size={20} color="white" />
-          </button>
-          <button
+          </button> */}
+          {/* Moved to its own "First Year Room Allotment" entry in the sidebar */}
+          {/* <button
             className="bg-blue-900 hover:bg-blue-800  cursor-pointer p-2 rounded-md border border-black"
             onClick={() => navigate("/admin/first-year-student-applications")}
           >
-            <FaList size={20} color='white'/>          
-          </button>
+            <FaList size={20} color='white'/>
+          </button> */}
         </div>
       </div>
 
@@ -292,6 +323,7 @@ const ManageStudentAccounts = () => {
               <span className="font-semibold text-black">Email: {studentData?.user?.email}</span>
               <span className="font-semibold text-black">Gender: {studentData?.gender === 'M' ? 'Male' : 'Female'}</span>
               <span className="font-semibold text-black">DOB: {new Date(studentData?.dob).toLocaleDateString()}</span>
+              <span className="font-semibold text-black">Date of Joining: {studentData?.dateOfJoining ? new Date(studentData.dateOfJoining).toLocaleDateString() : 'N/A'}</span>
               <span className="font-semibold text-black">Year: {studentData?.year}</span>
               <span className="font-semibold text-black">Branch: {studentData?.branch}</span>
               <span className="font-semibold text-black">Blood Group: {studentData?.bloodGroup}</span>
@@ -308,8 +340,8 @@ const ManageStudentAccounts = () => {
             </div>
           </div>
           <div className="w-full flex justify-center max-w-xl mb-4">
-             <MainButton 
-                text="Edit Student Details" 
+             <MainButton
+                text="Edit Student Details"
                 onPress={() => setEditDetailsModalVisible(true)}
                 textColor='text-white'
              />
@@ -517,6 +549,9 @@ const ManageStudentAccounts = () => {
       {/* Action Buttons */}
       {studentData && (studentData?.user?.status === 'ACTIVE' || studentData?.user?.status === 'ACTIVE1') && (
         <div className="mt-6 flex md:flex-row flex-col justify-center items-stretch w-[80%] gap-3">
+          <MainButton text="View Allotment Letter" isButtonDisabled={isButtonDisabled} onPress={() => viewStudentDocument(fetchStudentAllotmentLetter)} backgroundColor='bg-green-500' textColor='text-white' />
+          <MainButton text="View Mess ID Card" isButtonDisabled={isButtonDisabled} onPress={() => viewStudentDocument(fetchStudentMessIdCard)} backgroundColor='bg-blue-500' textColor='text-white' />
+          <MainButton text="Regenerate Mess ID Card" isButtonDisabled={isButtonDisabled} onPress={() => setRegenerateMessIdCardModalVisible(true)} backgroundColor='bg-orange-500' textColor='text-white' />
           <MainButton text="Re-send Acknowledgement Letter" isButtonDisabled={isButtonDisabled} onPress={() => setSendAcknowledgementLetterModalVisible(true)} backgroundColor='bg-yellow-500' textColor='text-black' />
           <MainButton text="Delete Student Account" isButtonDisabled={isButtonDisabled} onPress={() => setDeleteStudentAccountModalVisible(true)} backgroundColor='bg-red-500' textColor='text-black' />
           <MainButton text="Exchange Student Cot" isButtonDisabled={isButtonDisabled} onPress={changeStudentCotHandler} backgroundColor='bg-gray-300' textColor='text-black' />
@@ -532,6 +567,20 @@ const ManageStudentAccounts = () => {
             <div className="flex flex-row gap-4 w-full justify-center">
               <MainButton text="Continue" isButtonDisabled={isButtonDisabled} onPress={sendAcknowledgementLetterHandler} backgroundColor='bg-green-500' textColor='text-white' />
               <MainButton text="Cancel" isButtonDisabled={isButtonDisabled} onPress={() => setSendAcknowledgementLetterModalVisible(false)} backgroundColor='bg-gray-300' textColor='text-black' />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {regenerateMessIdCardModalVisible && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="bg-white flex justify-center flex-col gap-[1rem] backdrop-blur-lg border border-white/30 shadow-xl rounded-xl p-6 md:w-full w-[90%] max-w-md" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'}}>
+            <span className="text-lg font-semibold text-center">
+              This will build a fresh Mess ID Card with the student's current details and replace the existing one.
+            </span>
+            <div className="flex flex-row gap-4 w-full justify-center">
+              <MainButton text="Regenerate" isButtonDisabled={isButtonDisabled} onPress={regenerateMessIdCardHandler} backgroundColor='bg-orange-500' textColor='text-white' />
+              <MainButton text="Cancel" isButtonDisabled={isButtonDisabled} onPress={() => setRegenerateMessIdCardModalVisible(false)} backgroundColor='bg-gray-300' textColor='text-black' />
             </div>
           </div>
         </div>
@@ -588,7 +637,9 @@ const ManageStudentAccounts = () => {
                   <label htmlFor="rollNo" className="block text-sm font-medium text-gray-700">Roll No</label>
                   <input
                     id="rollNo"
-                    {...register('rollNo', { required: 'Roll number is required' })}
+                    {...register('rollNo', {
+                      pattern: { value: /^([0-9]{6})?$/, message: 'Roll number must be exactly 6 digits.' },
+                    })}
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   />
                   {errors.rollNo && <span className="text-xs text-red-600">{errors.rollNo.message}</span>}
@@ -613,7 +664,7 @@ const ManageStudentAccounts = () => {
                   />
                   {errors.name && <span className="text-xs text-red-600">{errors.name.message}</span>}
                 </div>
-                
+
                 <div>
                   <label htmlFor="aadhaarNumber" className="block text-sm font-medium text-gray-700">Aadhaar Number</label>
                   <input
@@ -623,7 +674,7 @@ const ManageStudentAccounts = () => {
                   />
                   {errors.aadhaarNumber && <span className="text-xs text-red-600">{errors.aadhaarNumber.message}</span>}
                 </div>
-                
+
                 <div>
                   <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Student Phone</label>
                   <input
@@ -695,7 +746,7 @@ const ManageStudentAccounts = () => {
                   textColor="text-black"
                 />
                 <MainButton
-                  type="submit" 
+                  type="submit"
                   text="Save Changes"
                   isButtonDisabled={isButtonDisabled}
                   backgroundColor="bg-green-500"

@@ -1,20 +1,8 @@
-// OLD SERVER (Backend)
-// const SERVER_BASE_URL = "https://backend-lxur.onrender.com/api/v1"
+const SERVER_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/+$/, "");
 
-// NEW SERVER (Backend1)
-// const SERVER_BASE_URL = "https://backend1-itzt.onrender.com/api/v1"
-
-// PURCHASED SERVER 
-// const SERVER_BASE_URL = "https://backend-c938.onrender.com/api/v1"
-
-// LOCALHOST SERVER
-// const SERVER_BASE_URL = "http://localhost:4000/api/v1"
-
-// PERSONAL AWS SERVER
-// const SERVER_BASE_URL = "http://ec2-15-207-247-90.ap-south-1.compute.amazonaws.com:4000/api/v1"
-
-// CLG AWS SERVER
-const SERVER_BASE_URL = "https://server.hmsnitap.in/api/v1"
+if (!SERVER_BASE_URL) {
+    throw new Error("Missing required environment variable: VITE_API_BASE_URL");
+}
 
 export const authEndPoints = {
     SENDOTP_API : SERVER_BASE_URL + "/auth/sendOTP",
@@ -24,6 +12,11 @@ export const authEndPoints = {
     RESET_PASSWORD : SERVER_BASE_URL + "/auth/resetPassword",
     VERIFY_OTP : SERVER_BASE_URL + "/auth/verifyOTP",
     CREATE_STUDENT_ACCOUNT_API : SERVER_BASE_URL + "/auth/createStudentAccount",
+}
+
+export const fixCorruptDocsEndPoints = {
+    FIX_DOC_LOGIN_API : SERVER_BASE_URL + "/reupload-fee-receipt/login",
+    FIX_DOC_UPLOAD_API : SERVER_BASE_URL + "/reupload-fee-receipt/upload",
 }
 
 export const studentEndPoints = {
@@ -111,6 +104,10 @@ export const adminEndPoints = {
     CREATE_OFFICIAL_ACCOUNT : SERVER_BASE_URL + '/admin/createOfficialAccount',
     DELETE_OFFICIAL_ACCOUNT : SERVER_BASE_URL + '/admin/deleteOfficialAccount',
     FETCH_STUDENT_BY_ROLL_OR_REG_NO_API : SERVER_BASE_URL + '/admin/fetchStudentByRollNoAndRegNo',
+    FETCH_ALL_STUDENTS_API : SERVER_BASE_URL + '/admin/fetchAllStudents',
+    FETCH_STUDENT_ALLOTMENT_LETTER_API : SERVER_BASE_URL + '/admin/fetchStudentAllotmentLetter',
+    FETCH_STUDENT_MESS_ID_CARD_API : SERVER_BASE_URL + '/admin/fetchStudentMessIdCard',
+    EXPORT_STUDENTS_XLSX_API : SERVER_BASE_URL + '/admin/exportStudentsXlsxFile',
     DELETE_STUDENT_ACCOUNT : SERVER_BASE_URL + '/admin/deleteStudentAccount',
     CHANGE_STUDENT_PROFILE_PHOTO_API : SERVER_BASE_URL + '/admin/changeStudentProfilePhoto',
     EDIT_STUDENT_ACCOUNT_API : SERVER_BASE_URL + '/admin/editStudentAccount',
